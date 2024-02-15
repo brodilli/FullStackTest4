@@ -1,5 +1,5 @@
 {
-  "name": "torrerio",
+  "name": "fullstacktest4",
   "version": "1.0.0",
   "description": "Delivery System",
   "main": "server.js",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aitiu0/TorreRioNew"
+    "url": "git+https://github.com/aitiu0/FullStackTest4New"
   },
   "author": "Aitiu",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/aitiu0/TorreRioNew/issues"
+    "url": "https://github.com/aitiu0/FullStackTest4New/issues"
   },
-  "homepage": "https://github.com/aitiu0/TorreRioNew#readme",
+  "homepage": "https://github.com/aitiu0/FullStackTest4New#readme",
   "dependencies": {
     "cloudinary": "^1.40.0",
     "colors": "^1.4.0",
