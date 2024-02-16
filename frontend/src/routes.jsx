@@ -112,36 +112,7 @@ export const routes = [
       },
     ],
   },
-  {
-    userType: "Admin",
-    layout: "admin",
-    pages: [
-      {
-        icon: <HomeIcon {...icon} />,
-        name: "dashboard",
-        path: "/home",
-        element: <Home />,
-      },
-      {
-        icon: <UserCircleIcon {...icon} />,
-        name: "Perfil y settings",
-        path: "/profile",
-        element: <Profile />,
-      },
-      {
-        icon: <TableCellsIcon {...icon} />,
-        name: "Tablas",
-        path: "/tables",
-        element: <Tables />,
-      },
-      {
-        icon: <BellIcon {...icon} />,
-        name: "notifactions",
-        path: "/notifactions",
-        element: <Notifications />,
-      },
-    ],
-  },
+
   {
     title: "CRUD",
     userType: "Admin",
@@ -329,113 +300,16 @@ export const routes = [
       },
     ],
   },
-  {
-    title: "Otros",
-    userType: "Admin",
-    layout: "admin",
-    pages: [
-      {
-        icon: <CalendarDaysIcon {...icon} />,
-        name: "Citas",
-        path: "/paqueterias",
-        element: <ParcelList />,
-        hiddenSub: true,
-        subpages: [
-          {
-            name: "Crear",
-            path: "/crear",
-            element: <ParcelList />,
-            hide: true,
-          },
-          {
-            name: "Editar",
-            path: "/:id/editar",
-            element: <ParcelList />,
-            hide: true,
-          },
-          {
-            name: "Eliminar",
-            path: "/:id/eliminar",
-            element: <ParcelList />,
-            hide: true,
-          },
-        ],
-      },
-      {
-        icon: <BuildingStorefrontIcon {...icon} />,
-        name: "Agencias",
-        path: "/marcas",
-        element: <BrandList />,
-        hiddenSub: true,
-        subpages: [
-          {
-            name: "Crear",
-            path: "/crear",
-            element: <BrandList />,
-            hide: true,
-          },
-          {
-            name: "Editar",
-            path: "/:id/editar",
-            element: <BrandList />,
-            hide: true,
-          },
-          {
-            name: "Eliminar",
-            path: "/:id/eliminar",
-            element: <BrandList />,
-            hide: true,
-          },
-        ],
-      },
-      {
-        icon: <BookmarkIcon {...icon} />,
-        name: "Seguimientos",
-        path: "/categorias",
-        element: <CategoryList />,
-        hiddenSub: true,
-        subpages: [
-          {
-            name: "Crear",
-            path: "/crear",
-            element: <CategoryList />,
-            hide: true,
-          },
-          {
-            name: "Editar",
-            path: "/:id/editar",
-            element: <CategoryList />,
-            hide: true,
-          },
-          {
-            name: "Eliminar",
-            path: "/:id/eliminar",
-            element: <CategoryList />,
-            hide: true,
-          },
-        ],
-      },
-    ],
-  },
+
   {
     title: "Reportes y Analisis",
     userType: "Admin",
     layout: "admin",
     pages: [
       {
-        icon: <CurrencyDollarIcon {...icon} />,
-        name: "Cortes",
-        path: "/cortes",
-      },
-      {
         icon: <DocumentTextIcon {...icon} />,
         name: "Reportes",
         path: "/reportes",
-      },
-      {
-        icon: <ChartBarIcon {...icon} />,
-        name: "Analisis",
-        path: "/analisis",
       },
     ],
   },
