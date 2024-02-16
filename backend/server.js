@@ -13,10 +13,9 @@ const bodyParser = require("body-parser");
 const { connectDB } = require("./config/db");
 const User = require("./models/userModel");
 const userRoutes = require("./routes/userRoutes");
-const productRoutes = require("./routes/productRoutes");
-const orderRoutes = require("./routes/orderRoutes");
+
 const adminRoutes = require("./routes/adminRoutes");
-const developmentRoutes = require("./routes/developmentRoutes");
+
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const { sessionOption } = require("./config/sessionOption");
 
@@ -66,9 +65,6 @@ passport.use(LocalStrategy);
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/developments", developmentRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirnames, "/frontend/build")));

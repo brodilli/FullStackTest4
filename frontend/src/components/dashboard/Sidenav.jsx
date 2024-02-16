@@ -228,7 +228,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
 }
 
 Sidenav.defaultProps = {
-  brandImg: "../../assets/TorreRioLogo.png",
+  brandImg: "../../assets/AitiuLogoBlanco.png",
   brandName: "AiTiU",
 };
 

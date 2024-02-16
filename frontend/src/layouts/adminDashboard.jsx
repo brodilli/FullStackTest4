@@ -9,8 +9,8 @@ import Footer from "../components/dashboard/footerDash";
 import Configurator from "../components/dashboard/configurator";
 import routes from "../routes";
 import { useMaterialTailwindController, setOpenConfigurator } from "../context";
-import Logo from "../assets/TorreRioLogo.png";
-import Logo2 from "../assets/TorreRioLogoNegro.png";
+import Logo from "../assets/AitiuLogoBlanco.png";
+import Logo2 from "../assets/AitiuLogo.png";
 import { getLoginData } from "../actions/userActions";
 
 export function AdminDashboard() {

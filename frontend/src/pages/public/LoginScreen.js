@@ -12,7 +12,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import InputAdornment from "@mui/material/InputAdornment";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Input from "@mui/material/Input";
-import Logo from "../../assets/TorreRioLogoNegro.png";
+import Logo from "../../assets/AitiuLogo.png";
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");

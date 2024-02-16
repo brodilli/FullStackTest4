@@ -23,7 +23,7 @@ if (process.env.NODE_ENV === "production") {
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: "Eyewear",
+    folder: "Examenes",
     allowed_formats: ["jpg", "jpeg", "png", "pdf"],
   },
 });

@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../assets/TorreRioLogoNegro.png";
+import Logo from "../assets/AitiuLogo.png";
 import PropTypes from "prop-types";
 const Footer = () => {
   const year = new Date().getFullYear();

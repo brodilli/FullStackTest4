@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { adminCreateAdviser } from "../../../../actions/adviserActions";
 import { getLoginData } from "../../../../actions/userActions";
 import { XMarkIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import { adminListDevelopments } from "../../../../actions/developmentActions";
+
 import ComboBox from "../../../../components/ComboBox";
 import { Input } from "../../../../components/elements/Inputs";
 import SuccessAlert from "../../../../components/alerts/SuccessAlert";
@@ -70,17 +70,6 @@ export function AdviserCreate() {
   const adminDevelopmentsList = useSelector(
     (state) => state.adminDevelopmentsList
   );
-  const {
-    loading: loadingDevelopments,
-    error: errorDevelopments,
-    success,
-    developments,
-  } = adminDevelopmentsList;
-
-  const [listDevelopments, setListDevelopments] = useState(
-    success ? developments : []
-  );
-  const [developmentsDict, setDevelopmentsDict] = useState({});
 
   const handleChange = (e) =>
     setAdviser((prevState) => ({
@@ -93,18 +82,7 @@ export function AdviserCreate() {
             }
           : e.target.value,
     }));
-  const handleChangeCombobox = (e) => {
-    var add = true;
-    adviser.developments.forEach((s) => {
-      if (s === e._id) return (add = false);
-    });
-    if (add) {
-      setAdviser((prevState) => ({
-        ...prevState,
-        developments: [...prevState["developments"], e._id],
-      }));
-    }
-  };
+
   const handleChangeCheckbox = (e) =>
     setAdviser((prevState) => ({
       ...prevState,
@@ -131,18 +109,7 @@ export function AdviserCreate() {
     } else if (userInfo.userType !== "Admin") {
       navigate(redirect);
     }
-    if (!success && !errorDevelopments) {
-      dispatch(adminListDevelopments("", "", "", "", "", true));
-    }
-    if (success) {
-      setListDevelopments(developments);
-      const developmentDictionary = developments.reduce((acc, development) => {
-        acc[development._id] = development;
-        return acc;
-      }, {});
-      setDevelopmentsDict(developmentDictionary);
-    }
-  }, [userInfo, messageCreateAdviser, success, errorDevelopments]);
+  }, [userInfo, messageCreateAdviser]);
   return (
     <div className="bg-slate-50 p-4">
       <h2 className="text-palette-primary text-xl font-bold">Agregar Asesor</h2>
@@ -296,52 +263,6 @@ export function AdviserCreate() {
             value={adviser.fiscalAddress?.country}
             setValue={handleChange}
           />
-          <Typography className="text-lg font-semibold  hover:text-gray-800">
-            Desarrollos
-          </Typography>
-          <ComboBox
-            data={listDevelopments}
-            name="developments"
-            setAction={handleChangeCombobox}
-          />
-          <div className="flex flex-col gap-3">
-            <span className="font-medium">Desarrollos seleccionadas:</span>
-            <div className="flex max-h-64 flex-col gap-3 overflow-hidden overflow-y-scroll rounded-md border-2 bg-white p-2">
-              {adviser.developments.length <= 0 && (
-                <p>No hay desarrollos en la lista</p>
-              )}
-              {adviser.developments.map((element, key) => (
-                <div
-                  className="text-slate-700 border-slate-200 group flex items-center justify-between rounded-full border-2 p-1 px-2 font-bold hover:border-blue-200 "
-                  key={key}
-                >
-                  <div className="w-2/3">
-                    <p>
-                      {developmentsDict[element]?.name > 42
-                        ? developmentsDict[element]?.name.substring(0, 41) +
-                          "..."
-                        : developmentsDict[element]?.name}
-                    </p>
-                  </div>
-
-                  <button
-                    className="text-slate-200 group-hover:text-red-500"
-                    onClick={() =>
-                      setAdviser((prevState) => ({
-                        ...prevState,
-                        developments: adviser.developments.filter(
-                          (e, index) => index !== key
-                        ),
-                      }))
-                    }
-                    type="button"
-                  >
-                    <XMarkIcon className="h-5 w-5" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
         <div className="col-span-full">
