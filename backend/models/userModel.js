@@ -70,12 +70,7 @@ const userSchema = mongoose.Schema(
         ref: "Order",
       },
     ],
-    developments: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Development",
-      },
-    ],
+
     deleted: {
       type: Boolean,
       default: false,
