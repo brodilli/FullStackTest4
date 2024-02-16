@@ -1,8 +1,4 @@
-import {
-  UserGroupIcon,
-  ClipboardDocumentListIcon,
-  PlusCircleIcon,
-} from "@heroicons/react/24/solid";
+import { UserGroupIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 import { AdviserList, AdviserCreate, AdviserEdit } from "./pages/user/admin";
 
 const icon = {

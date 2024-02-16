@@ -1,7 +1,6 @@
 const LocalStrategy = require("passport-local").Strategy;
 const dotenv = require("dotenv");
 const User = require("../models/userModel");
-const userController = require("../controllers/userController");
 
 dotenv.config();
 
