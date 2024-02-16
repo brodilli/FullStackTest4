@@ -1,8 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const dotenv = require("dotenv");
 const User = require("../models/userModel");
-const UserVerification = require("../models/userVerificationModel");
-const UserForgotPassword = require("../models/userForgotPasswordModel");
+
 const { v4: uuidv4 } = require("uuid");
 
 const { cloudinary } = require("../cloudinary");
