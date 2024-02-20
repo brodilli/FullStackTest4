@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ReCAPTCHA from "react-google-recaptcha";
-import { login, getLoginData } from "../../actions/userActions";
+import { login } from "../../actions/userActions";
 import Alert from "../../components/alerts/Alert";
 import AlertArray from "../../components/alerts/AlertArray";
 import SuccessAlert from "../../components/alerts/SuccessAlert";
-import ModalForgetPassword from "../../components/modals/ModalForgetPassword";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -19,7 +18,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [captchaMessage, setCaptchaMessage] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showForgetPassword, setShowForgetPassword] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -38,18 +37,6 @@ const LoginScreen = () => {
     error: errorVerify,
     userInfo: verifyInfo,
   } = userVerify;
-  const userForgotPassword = useSelector((state) => state.userForgotPassword);
-  const {
-    loading: loadingForgotPwd,
-    error: errorForgotPwd,
-    message,
-  } = userForgotPassword;
-  const userResetPassword = useSelector((state) => state.userResetPassword);
-  const {
-    loading: loadingResetPass,
-    error: errorResetPass,
-    message: messageResetPass,
-  } = userResetPassword;
 
   var invalidEmail;
 
@@ -98,16 +85,9 @@ const LoginScreen = () => {
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
-  const handleForgetPassword = () => {
-    setShowForgetPassword(!showForgetPassword);
-  };
 
   return (
     <>
-      {showForgetPassword && (
-        <ModalForgetPassword handler={handleForgetPassword} />
-      )}
-
       <div className="flex h-[calc(100vh-96px)]">
         <div className="mx-auto mt-16 w-full max-w-sm lg:w-96">
           <div>
@@ -130,30 +110,14 @@ const LoginScreen = () => {
                   text={verifyInfo.message}
                 />
               )}
-              {message && (
-                <SuccessAlert
-                  title="Recover Password Successful"
-                  text={message.message}
-                />
-              )}
-              {messageResetPass && (
-                <SuccessAlert
-                  title="Password Change Successful"
-                  text={message}
-                />
-              )}
+
               {error === "Unauthorized" && (
                 <Alert
                   title="Login failed"
                   text="Password or Username incorrect"
                 />
               )}
-              {errorForgotPwd && (
-                <Alert title="Recover Password Failed" text={errorForgotPwd} />
-              )}
-              {errorResetPass && (
-                <Alert title="Reset Password Failed" text={errorResetPass} />
-              )}
+
               {invalidEmail && (
                 <AlertArray title="Login failed" text={invalidEmail} />
               )}

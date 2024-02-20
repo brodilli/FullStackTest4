@@ -22,19 +22,7 @@ import {
   USER_PROFILE_UPDATE_REQUEST,
   USER_PROFILE_UPDATE_SUCCESS,
   USER_PROFILE_UPDATE_FAIL,
-  USER_ARTIST_TYPE_REQUEST,
-  USER_ARTIST_TYPE_FAIL,
-  USER_ARTIST_TYPE_SUCCESS,
   USER_PROFILE_UPDATE_RESET,
-  USER_FORGOT_PASSWORD_REQUEST,
-  USER_FORGOT_PASSWORD_SUCCESS,
-  USER_FORGOT_PASSWORD_FAIL,
-  USER_RESET_PASSWORD_REQUEST,
-  USER_RESET_PASSWORD_SUCCESS,
-  USER_RESET_PASSWORD_FAIL,
-  USER_FORGOT_STATUS_REQUEST,
-  USER_FORGOT_STATUS_SUCCESS,
-  USER_FORGOT_STATUS_FAIL,
   USER_DELETE_REQUEST,
   USER_DELETE_SUCCESS,
   USER_DELETE_FAIL,
@@ -49,98 +37,62 @@ import {
   USER_ADMIN_REGISTER_FAIL,
 } from "../constants/userConstants";
 
-
 export const userLoginReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_LOGIN_REQUEST:
-      return { loading: true }
+      return { loading: true };
     case USER_LOGIN_SUCCESS:
-      return { loading: false, userInfo: action.payload }
+      return { loading: false, userInfo: action.payload };
     case USER_LOGIN_FAIL:
-      return { loading: false, error: action.payload }
+      return { loading: false, error: action.payload };
     case USER_LOGOUT:
-      return {}
+      return {};
     default:
-      return state
+      return state;
   }
-}
+};
 
 export const userRegisterReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_REGISTER_REQUEST:
-      return { loading: true }
+      return { loading: true };
     case USER_REGISTER_SUCCESS:
-      return { loading: false, userInfo: action.payload }
+      return { loading: false, userInfo: action.payload };
     case USER_REGISTER_FAIL:
-      return { loading: false, error: action.payload }
+      return { loading: false, error: action.payload };
     default:
-      return state
+      return state;
   }
-}
+};
 export const userVerifyStatusReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_VERIFICATION_STATUS_REQUEST:
-      return { loading: true }
+      return { loading: true };
     case USER_VERIFICATION_STATUS_SUCCESS:
-      return { loading: false, status: action.payload }
+      return { loading: false, status: action.payload };
     case USER_VERIFICATION_STATUS_FAIL:
-      return { loading: false, error: action.payload }
+      return { loading: false, error: action.payload };
     default:
-      return state
+      return state;
   }
-}
+};
 export const userVerifyReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_VERIFICATION_REQUEST:
-      return { loading: true }
+      return { loading: true };
     case USER_VERIFICATION_SUCCESS:
-      return { loading: false, userInfo: action.payload }
+      return { loading: false, userInfo: action.payload };
     case USER_VERIFICATION_FAIL:
-      return { loading: false, error: action.payload }
-    default:
-      return state
-  }
-}
-export const userForgotPasswordReducer = (state = {}, action) => {
-  switch (action.type) {
-    case USER_FORGOT_PASSWORD_REQUEST:
-      return { loading: true }
-    case USER_FORGOT_PASSWORD_SUCCESS:
-      return { loading: false, message: action.payload }
-    case USER_FORGOT_PASSWORD_FAIL:
-      return { loading: false, error: action.payload }
-    default:
-      return state
-  }
-}
-export const userForgotStatusReducer = (state = {}, action) => {
-  switch (action.type) {
-    case USER_FORGOT_STATUS_REQUEST:
-      return { loading: true };
-    case USER_FORGOT_STATUS_SUCCESS:
-      return { loading: false, message: action.payload };
-    case USER_FORGOT_STATUS_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;
   }
 };
-export const userResetPasswordReducer = (state = {}, action) => {
-  switch (action.type) {
-    case USER_RESET_PASSWORD_REQUEST:
-      return { loading: true };
-    case USER_RESET_PASSWORD_SUCCESS:
-      return { loading: false, message: action.payload };
-    case USER_RESET_PASSWORD_FAIL:
-      return { loading: false, error: action.payload };
-    default:
-      return state;
-  }
-};
+
 export const userListReducer = (state = { users: [] }, action) => {
   switch (action.type) {
     case USER_LIST_REQUEST:
-      return { loading: true }
+      return { loading: true };
     case USER_LIST_SUCCESS:
       return {
         loading: false,
@@ -149,52 +101,39 @@ export const userListReducer = (state = { users: [] }, action) => {
         users: action.payload.users,
       };
     case USER_LIST_FAIL:
-      return { loading: false, error: action.payload }
+      return { loading: false, error: action.payload };
     case USER_LIST_RESET:
-      return { users: [] }
+      return { users: [] };
     default:
-      return state
+      return state;
   }
-}
+};
 export const userProfileReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_PROFILE_REQUEST:
-      return { loading: true }
+      return { loading: true };
     case USER_PROFILE_SUCCESS:
-      return { loading: false, user: action.payload }
+      return { loading: false, user: action.payload };
     case USER_PROFILE_FAIL:
-      return { loading: false, error: action.payload }
+      return { loading: false, error: action.payload };
     default:
-      return state
+      return state;
   }
-}
+};
 export const userUpdateProfileReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_PROFILE_UPDATE_REQUEST:
-      return { loading: true }
+      return { loading: true };
     case USER_PROFILE_UPDATE_SUCCESS:
-      return { loading: false, success: true, user: action.payload }
+      return { loading: false, success: true, user: action.payload };
     case USER_PROFILE_UPDATE_FAIL:
-      return { loading: false, error: action.payload }
+      return { loading: false, error: action.payload };
     case USER_PROFILE_UPDATE_RESET:
-      return {}
+      return {};
     default:
-      return state
+      return state;
   }
-}
-
-export const userChangeSuscriptionReducer = (state = {}, action) => {
-  switch (action.type) {
-    case USER_ARTIST_TYPE_REQUEST:
-      return { loading: true }
-    case USER_ARTIST_TYPE_SUCCESS:
-      return { loading: false, user: action.payload }
-    case USER_ARTIST_TYPE_FAIL:
-      return { loading: false, error: action.payload }
-    default:
-      return state
-  }
-}
+};
 
 export const userDeleteReducer = (state = {}, action) => {
   switch (action.type) {
@@ -237,12 +176,12 @@ export const adminUpdateUserProfileReducer = (state = {}, action) => {
 export const userAdminRegisterReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_ADMIN_REGISTER_REQUEST:
-      return { loading: true }
+      return { loading: true };
     case USER_ADMIN_REGISTER_SUCCESS:
-      return { loading: false, userRegister: action.payload }
+      return { loading: false, userRegister: action.payload };
     case USER_ADMIN_REGISTER_FAIL:
-      return { loading: false, error: action.payload }
+      return { loading: false, error: action.payload };
     default:
-      return state
+      return state;
   }
-}
+};

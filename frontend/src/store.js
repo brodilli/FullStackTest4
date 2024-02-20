@@ -7,9 +7,6 @@ import {
   userRegisterReducer,
   userVerifyReducer,
   userVerifyStatusReducer,
-  userForgotPasswordReducer,
-  userResetPasswordReducer,
-  userForgotStatusReducer,
 } from "./reducers/userReducer";
 
 import {
@@ -26,9 +23,6 @@ const reducers = combineReducers({
   userRegister: userRegisterReducer,
   userVerifyStatus: userVerifyStatusReducer,
   userVerify: userVerifyReducer,
-  userForgotPassword: userForgotPasswordReducer,
-  userResetPassword: userResetPasswordReducer,
-  userForgotStatus: userForgotStatusReducer,
 
   // ADVISER
   adminAdviserCreate: adminAdviserCreateReducer,

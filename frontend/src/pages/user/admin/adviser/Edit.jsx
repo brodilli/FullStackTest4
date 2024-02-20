@@ -6,28 +6,12 @@ import {
   adminUpdateAdviser,
 } from "../../../../actions/adviserActions";
 import { getLoginData } from "../../../../actions/userActions";
-import { XMarkIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import ComboBox from "../../../../components/ComboBox";
+
 import { Input } from "../../../../components/elements/Inputs";
-import SuccessAlert from "../../../../components/alerts/SuccessAlert";
+
 import Alert from "../../../../components/alerts/Alert";
-import { ADVISER_ADMIN_CREATE_RESET } from "../../../../constants/adviserConstants";
-import {
-  Avatar,
-  Button,
-  IconButton,
-  Typography,
-  Card,
-  List,
-  ListItem,
-  ListItemPrefix,
-  ListItemSuffix,
-  Chip,
-  Accordion,
-  AccordionHeader,
-  AccordionBody,
-  Switch,
-} from "@material-tailwind/react";
+
+import { Button, Typography } from "@material-tailwind/react";
 import { useMaterialTailwindController } from "../../../../context";
 
 export function AdviserEdit() {

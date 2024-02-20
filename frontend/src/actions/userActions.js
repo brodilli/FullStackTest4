@@ -79,9 +79,7 @@ export const login = (username, password, token) => async (dispatch) => {
     });
   }
 };
-export const loginGoogle = () => async () => {
-  const { data } = await axios.get("/api/users/auth/google");
-};
+
 export const getLoginData = () => async (dispatch) => {
   try {
     dispatch({
@@ -181,87 +179,7 @@ export const verifyUser = (id, verifyid) => async (dispatch) => {
     });
   }
 };
-export const userForgotPassword = (email) => async (dispatch) => {
-  try {
-    dispatch({
-      type: USER_FORGOT_PASSWORD_REQUEST,
-    });
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    const { data } = await axios.post(
-      "/api/users/forgotpassword",
-      { email },
-      config
-    );
-    dispatch({
-      type: USER_FORGOT_PASSWORD_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: USER_FORGOT_PASSWORD_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.response,
-    });
-  }
-};
-export const verifyForgotStatus = (id, verifyid) => async (dispatch) => {
-  try {
-    dispatch({
-      type: USER_FORGOT_STATUS_REQUEST,
-    });
-    const { data } = await axios.get(
-      `/api/users/forgotpassword/${id}/${verifyid}`
-    );
-    dispatch({
-      type: USER_FORGOT_STATUS_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: USER_FORGOT_STATUS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.response,
-    });
-  }
-};
-export const userResetPassword =
-  (id, verifyid, email, newPassword) => async (dispatch) => {
-    try {
-      dispatch({
-        type: USER_RESET_PASSWORD_REQUEST,
-      });
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      const { data } = await axios.put(
-        `/api/users/forgotpassword/${id}/${verifyid}`,
-        { email, newPassword },
-        config
-      );
-      dispatch({
-        type: USER_RESET_PASSWORD_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: USER_RESET_PASSWORD_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.response,
-      });
-    }
-  };
+
 export const getUserProfile = () => async (dispatch) => {
   try {
     dispatch({
@@ -308,40 +226,6 @@ export const updateUserProfile = (formData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_PROFILE_UPDATE_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.response,
-    });
-  }
-};
-export const changeUserSuscription = () => async (dispatch) => {
-  try {
-    dispatch({
-      type: USER_ARTIST_TYPE_REQUEST,
-    });
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    const { data } = await axios.put("/api/users/suscription", config);
-    dispatch({
-      type: USER_ARTIST_TYPE_SUCCESS,
-      payload: data,
-    });
-    dispatch({
-      type: USER_PROFILE_SUCCESS,
-      payload: data,
-    });
-    dispatch({
-      type: USER_LOGIN_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: USER_ARTIST_TYPE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

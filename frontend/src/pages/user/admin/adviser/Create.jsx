@@ -3,11 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { adminCreateAdviser } from "../../../../actions/adviserActions";
 import { getLoginData } from "../../../../actions/userActions";
-import { XMarkIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 
-import ComboBox from "../../../../components/ComboBox";
 import { Input } from "../../../../components/elements/Inputs";
-import SuccessAlert from "../../../../components/alerts/SuccessAlert";
+
 import Alert from "../../../../components/alerts/Alert";
 import { ADVISER_ADMIN_CREATE_RESET } from "../../../../constants/adviserConstants";
 import {
