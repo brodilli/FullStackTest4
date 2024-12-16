@@ -4,14 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { adminCreateGuest } from "../../../../actions/guestActions";
 import { getLoginData } from "../../../../actions/userActions";
 
-import { Input } from "../../../../components/elements/Inputs";
+import { Input, CheckBox } from "../../../../components/elements/Inputs";
 
 import Alert from "../../../../components/alerts/Alert";
 import { GUEST_ADMIN_CREATE_RESET } from "../../../../constants/guestConstants";
-import {
-  Button,
-  Typography,
-} from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
@@ -22,6 +19,7 @@ export function GuestCreate() {
     email: "",
     phone: "",
     tradename: "",
+    allowPlusOne: false,
   });
 
   const navigate = useNavigate();
@@ -40,6 +38,11 @@ export function GuestCreate() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setGuest((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setGuest((prevState) => ({ ...prevState, [name]: checked }));
   };
 
   const handlePhoneChange = (value) => {
@@ -65,7 +68,9 @@ export function GuestCreate() {
 
   return (
     <div className="bg-slate-50 p-4">
-      <h2 className="text-palette-primary text-xl font-bold">Agregar Asesor</h2>
+      <h2 className="text-palette-primary text-xl font-bold">
+        Agregar Invitado
+      </h2>
       <form
         className="mt-3 grid gap-6 md:grid-cols-2"
         onSubmit={(e) => {
@@ -119,6 +124,19 @@ export function GuestCreate() {
             required={true}
             value={guest.tradename}
             setValue={handleChange}
+          />
+        </div>
+        <div className="flex flex-col gap-3">
+          <Typography className="text-lg font-semibold hover:text-gray-800">
+            Datos de la invitación
+          </Typography>
+          <CheckBox
+            title="Permitir un acompañante"
+            name="allowPlusOne"
+            type="checkbox"
+            required={true}
+            value={guest.allowPlusOne}
+            setValue={handleCheckboxChange}
           />
         </div>
 

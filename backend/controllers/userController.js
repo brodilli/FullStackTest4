@@ -2,10 +2,6 @@ const asyncHandler = require("express-async-handler");
 const dotenv = require("dotenv");
 const User = require("../models/userModel");
 
-const { v4: uuidv4 } = require("uuid");
-
-const { cloudinary } = require("../cloudinary");
-
 dotenv.config();
 
 module.exports.getLoginData = asyncHandler(async (req, res) => {
@@ -48,3 +44,43 @@ module.exports.localPassport = (req, res) => {
     profileImage: user.profileImage,
   });
 };
+
+module.exports.inviteResponse = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    // Check if the user exists
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+    }
+    // Check if the user has already responded
+    if (user.status !== "Pending") {
+      res.status(400).json({ message: "User has already responded" });
+    }
+    // Acceptance flow
+    if (req.body.accept && req.body.accept === "Y") {
+      // If user have a plus one, check if the user has allowed a plus one
+      if (user.allowPlusOne === true && req.body.plusOne === "Y") {
+        user.plusOne = true;
+      } else {
+        user.plusOne = false;
+      }
+      // Add allergies if the user has any
+      if (req.body.allergies) {
+        user.allergies = req.body.allergies;
+      }
+      user.status = "Accepted";
+    } else if (req.body.accept && req.body.accept === "N") {
+      user.status = "Declined";
+      user.allergies = "";
+      user.plusOne = false;
+    }
+    // Save the user
+    const updatedUser = await user.save();
+    if (updatedUser) {
+      res.json({ message: "User updated successfully" });
+    }
+  } catch (error) {
+    // Handle other potential errors, e.g., database errors
+    res.status(500).json({ message: "Internal server error" });
+  }
+});

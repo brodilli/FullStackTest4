@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { adminDetailsGuest, adminUpdateGuest } from "../../../../actions/guestActions";
+import {
+  adminDetailsGuest,
+  adminUpdateGuest,
+} from "../../../../actions/guestActions";
 import { getLoginData } from "../../../../actions/userActions";
 
-import { Input } from "../../../../components/elements/Inputs";
+import {
+  Input,
+  Textarea,
+  CheckBox,
+} from "../../../../components/elements/Inputs";
 import Alert from "../../../../components/alerts/Alert";
 import { Button, Typography } from "@material-tailwind/react";
 import PhoneInput from "react-phone-input-2";
@@ -17,6 +24,10 @@ export function GuestEdit() {
     email: "",
     phone: "",
     tradename: "",
+    allowPlusOne: false,
+    plusOne: false,
+    allergies: "",
+    status: "Pending",
   });
 
   const { id } = useParams();
@@ -27,10 +38,19 @@ export function GuestEdit() {
   const { userInfo } = userLogin;
 
   const adminGuestDetails = useSelector((state) => state.adminGuestDetails);
-  const { loading: loadingDetails, error: errorDetails, guestDetails } = adminGuestDetails;
+  const {
+    loading: loadingDetails,
+    error: errorDetails,
+    guestDetails,
+    success: guestDetailsSuccess,
+  } = adminGuestDetails;
 
   const adminGuestUpdate = useSelector((state) => state.adminGuestUpdate);
-  const { loading: loadingUpdate, error: errorUpdate, messageUpdate } = adminGuestUpdate;
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    messageUpdate,
+  } = adminGuestUpdate;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,6 +59,10 @@ export function GuestEdit() {
 
   const handlePhoneChange = (value) => {
     setGuest((prevState) => ({ ...prevState, phone: value }));
+  };
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setGuest((prevState) => ({ ...prevState, [name]: checked }));
   };
 
   const submitHandler = () => {
@@ -63,13 +87,19 @@ export function GuestEdit() {
         email: guestDetails.email || "",
         phone: guestDetails.phone || "",
         tradename: guestDetails.tradename || "",
+        allowPlusOne: guestDetails.allowPlusOne || false,
+        plusOne: guestDetails.plusOne || false,
+        allergies: guestDetails.allergies || "",
+        status: guestDetails.status || "Pending",
       });
     }
   }, [dispatch, userInfo, guestDetails, id, messageUpdate]);
 
   return (
     <div className="bg-slate-50 p-4">
-      <h2 className="text-palette-primary text-xl font-bold">Editar Asesor</h2>
+      <h2 className="text-palette-primary text-xl font-bold">
+        Editar Invitado
+      </h2>
       {loadingDetails ? (
         <p>Cargando datos...</p>
       ) : errorDetails ? (
@@ -127,6 +157,46 @@ export function GuestEdit() {
               type="text"
               required={true}
               value={guest.tradename}
+              setValue={handleChange}
+            />
+          </div>
+          <div className="flex flex-col gap-3">
+            <Typography className="text-lg font-semibold hover:text-gray-800">
+              Datos de la invitación
+            </Typography>
+            {guestDetailsSuccess && (
+              <CheckBox
+                title="Permitir un acompañante"
+                name="allowPlusOne"
+                type="checkbox"
+                required={true}
+                checked={guestDetails.allowPlusOne}
+                setValue={handleCheckboxChange}
+              />
+            )}
+            {guest.allowPlusOne && (
+              <Input
+                title="Confirmación de Acompañante"
+                name="plusOne"
+                type="text"
+                value={
+                  guest.status === "Pending"
+                    ? "Aún no ha respondido"
+                    : guest.plusOne
+                    ? "Aceptó"
+                    : "Rechazó"
+                }
+                disabled={true}
+              />
+            )}
+
+            <Textarea
+              title="Nombre"
+              name="name"
+              type="text"
+              required={true}
+              value={guest.name}
+              disab
               setValue={handleChange}
             />
           </div>

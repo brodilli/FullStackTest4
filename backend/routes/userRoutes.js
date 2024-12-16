@@ -21,5 +21,7 @@ router.post(
 router.get("/islogged", isLoggedIn, userController.getLoginData);
 // Logout
 router.get("/logout", userController.logout);
+// Accept/Decline invitation
+router.post("/invite-response/:id", userController.inviteResponse);
 
 module.exports = router;

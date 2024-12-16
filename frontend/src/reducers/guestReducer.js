@@ -68,6 +68,7 @@ export const adminGuestDetailsReducer = (state = {}, action) => {
       return {
         loading: false,
         guestDetails: action.payload,
+        success: true,
       };
     case GUEST_ADMIN_DETAILS_FAIL:
       return { loading: false, error: action.payload };

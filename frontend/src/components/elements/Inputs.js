@@ -5,31 +5,34 @@ import Modal from "../Modal";
 import { XMarkIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 
 export const CheckBox = (props) => {
-  const [check, setCheck] = useState(props.checked);
+  const [check, setCheck] = useState(props.checked); // Local state for checkbox
   const input = useRef();
+
+  // Sync check state with props.checked
+  useEffect(() => {
+    setCheck(props.checked);
+  }, [props.checked]);
 
   return (
     <div className="flex w-full items-center justify-center gap-2">
-      <span className="font-medium ">{props.title}:</span>
+      <span className="font-medium">{props.title}:</span>
       <input
         type="checkbox"
-        hidden={true}
+        className="hidden" // Ensure it's fully hidden
         name={props.name}
         value={props.value}
         ref={input}
         defaultChecked={props.checked}
         onChange={(e) => {
           setCheck(e.target.checked);
-          props.setValue(e);
+          props.setValue(e); // Notify parent about the change
         }}
       />
       <div
-        className={`flex h-5  w-10 cursor-pointer items-center rounded-full p-1 transition-all duration-300 ${
-          check
-            ? "bg-palette-primary justify-end "
-            : "justify-start bg-gray-400"
+        className={`flex h-5 w-10 cursor-pointer items-center rounded-full p-1 transition-all duration-300 ${
+          check ? "justify-end bg-blue-500" : "justify-start bg-gray-400"
         }`}
-        onClick={() => input.current.click()}
+        onClick={() => input.current.click()} // Trigger the hidden checkbox click
       >
         <div className="h-3 w-3 rounded-full bg-white"></div>
       </div>
@@ -86,6 +89,7 @@ export const Input = ({
   step,
   value,
   setValue,
+  disabled = false,
 }) => {
   return (
     <div className={"flex flex-col gap-2 " + classDiv}>
@@ -100,6 +104,7 @@ export const Input = ({
         step={step}
         value={value}
         onChange={setValue}
+        disabled={disabled}
         className={
           "focus:border-palette-primary rounded-md border-2 p-2 outline-none" +
           classInput

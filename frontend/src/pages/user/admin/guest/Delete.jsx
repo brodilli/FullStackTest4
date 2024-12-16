@@ -34,14 +34,14 @@ export function GuestDelete({ closeAction, id }) {
       dispatch(adminDetailsGuest(id));
     }
     if (message) {
-      navigate("/admin/asesores");
+      navigate("/admin/invitados");
     }
   }, [guestDetails, message]);
   const submitHandler = () => {
     dispatch(adminDeleteGuest(id));
   };
   const closeHandler = () => {
-    navigate("/admin/asesores");
+    navigate("/admin/invitados");
   };
   return (
     <>

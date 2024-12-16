@@ -13,12 +13,15 @@ const { PassThrough } = require("stream");
 // GUEST
 //GUEST CRUD
 module.exports.createGuest = asyncHandler(async (req, res) => {
+  // Find the current user
+  const currentUser = await User.findById(req.user._id);
+  // Fetch Guest data from the request body
   const data = req.body.guest;
+  console.log(data);
   data.userType = "Guest";
   data.deleted = false;
   data.username = data.email;
-  const currentUser = await User.findById(req.user._id);
-  data.user = currentUser;
+  data.createdBy = currentUser;
   await User.create(data);
   res.status(201).json({ message: "Guest created" });
 });
@@ -50,8 +53,17 @@ module.exports.viewGuests = asyncHandler(async (req, res) => {
   const order = req.query.order === "ascending" ? 1 : -1; // Orden (1: ascendente, -1: descendente)
 
   // Validar el campo de ordenamiento
-  const validSortFields = ["name", "lastName", "email", "phone", "username", "tradename"];
-  const sortCondition = validSortFields.includes(sortField) ? { [sortField]: order } : {};
+  const validSortFields = [
+    "name",
+    "lastName",
+    "email",
+    "phone",
+    "username",
+    "tradename",
+  ];
+  const sortCondition = validSortFields.includes(sortField)
+    ? { [sortField]: order }
+    : {};
 
   // Filtrado por palabra clave (name, lastName, email, tradename)
   const keyword = req.query.keyword
@@ -121,7 +133,6 @@ module.exports.viewCategories = asyncHandler(async (req, res) => {
 /* ---------------------------- BRAND CRUD ----------------------------- */
 // --------------- Create Brand ---------------
 module.exports.createBrand = asyncHandler(async (req, res) => {
-  
   const data = req.body;
   const currentUser = await User.findById(req.user._id);
   data.user = currentUser;
@@ -140,7 +151,7 @@ module.exports.viewBrands = asyncHandler(async (req, res) => {
 // --------------- Create Product ---------------
 module.exports.createProduct = asyncHandler(async (req, res) => {
   const data = JSON.parse(req.body.product);
-  
+
   //  product
   const newProduct = new Product(data);
   const currentUser = await User.findById(req.user._id);
