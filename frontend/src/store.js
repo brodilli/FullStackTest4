@@ -10,12 +10,36 @@ import {
 } from "./reducers/userReducer";
 
 import {
-  adminAdviserCreateReducer,
-  adminAdviserDetailsReducer,
-  adminAdviserUpdateReducer,
-  adminAdviserDeleteReducer,
-  adminAdviserListReducer,
-} from "./reducers/adviserReducer";
+  adminGuestCreateReducer,
+  adminGuestDetailsReducer,
+  adminGuestUpdateReducer,
+  adminGuestDeleteReducer,
+  adminGuestListReducer,
+} from "./reducers/guestReducer";
+import {
+  adminProductCreateReducer,
+  adminProductDeleteReducer,
+  adminProductUpdateReducer,
+  adminProductDetailsReducer,
+  adminProductsListReducer,
+  productsListReducer,
+  productSearchReducer,
+  productLimitsReducer,
+} from "./reducers/productReducer";
+import {
+  adminBrandCreateReducer,
+  adminBrandDetailsReducer,
+  adminBrandUpdateReducer,
+  adminBrandDeleteReducer,
+  adminBrandListReducer,
+} from "./reducers/brandReducer";
+import {
+  adminCategoryCreateReducer,
+  adminCategoryDetailsReducer,
+  adminCategoryUpdateReducer,
+  adminCategoryDeleteReducer,
+  adminCategoryListReducer,
+} from "./reducers/categoryReducer";
 
 const reducers = combineReducers({
   // USER
@@ -24,12 +48,34 @@ const reducers = combineReducers({
   userVerifyStatus: userVerifyStatusReducer,
   userVerify: userVerifyReducer,
 
-  // ADVISER
-  adminAdviserCreate: adminAdviserCreateReducer,
-  adminAdviserDetails: adminAdviserDetailsReducer,
-  adminAdviserUpdate: adminAdviserUpdateReducer,
-  adminAdviserDelete: adminAdviserDeleteReducer,
-  adminAdviserList: adminAdviserListReducer,
+  // GUEST
+  adminGuestCreate: adminGuestCreateReducer,
+  adminGuestDetails: adminGuestDetailsReducer,
+  adminGuestUpdate: adminGuestUpdateReducer,
+  adminGuestDelete: adminGuestDeleteReducer,
+  adminGuestList: adminGuestListReducer,
+ // PRODUCT
+ adminProductCreate: adminProductCreateReducer,
+ adminProductDelete: adminProductDeleteReducer,
+ adminProductUpdate: adminProductUpdateReducer,
+ adminProductDetails: adminProductDetailsReducer,
+ adminProductsList: adminProductsListReducer,
+ productsList: productsListReducer,
+ productSearch: productSearchReducer,
+ productLimits: productLimitsReducer,
+  // CATEGORY
+  adminCategoryCreate: adminCategoryCreateReducer,
+  adminCategoryDetails: adminCategoryDetailsReducer,
+  adminCategoryUpdate: adminCategoryUpdateReducer,
+  adminCategoryDelete: adminCategoryDeleteReducer,
+  adminCategoryList: adminCategoryListReducer,
+  // BRAND
+  adminBrandCreate: adminBrandCreateReducer,
+  adminBrandDetails: adminBrandDetailsReducer,
+  adminBrandUpdate: adminBrandUpdateReducer,
+  adminBrandDelete: adminBrandDeleteReducer,
+  adminBrandList: adminBrandListReducer,
+  
 });
 
 const initialState = {

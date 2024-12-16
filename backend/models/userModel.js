@@ -27,42 +27,11 @@ const userSchema = mongoose.Schema(
     },
     userType: {
       type: String,
-      enum: ["Adviser", "Admin"],
-      default: "Adviser",
-    },
-    profileImage: {
-      url: String,
-      filename: String,
+      enum: ["Guest", "Admin"],
+      default: "Guest",
     },
     tradename: {
       type: String,
-    },
-    rfc: {
-      type: String,
-    },
-    fiscalAddress: {
-      address: { type: String },
-      district: { type: String },
-      postalCode: { type: String },
-      city: { type: String },
-      state: { type: String },
-      country: { type: String },
-    },
-
-    payment: {
-      cuenta: {
-        type: String,
-      },
-      banco: {
-        type: String,
-        default: "",
-      },
-      comision: {
-        type: String,
-      },
-      salario: {
-        type: String,
-      },
     },
     orders: [
       {

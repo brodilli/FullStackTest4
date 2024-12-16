@@ -5,40 +5,40 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoginData } from "../../../../actions/userActions";
 import {
-  adminDeleteAdviser,
-  adminDetailsAdviser,
-} from "../../../../actions/adviserActions";
+  adminDeleteGuest,
+  adminDetailsGuest,
+} from "../../../../actions/guestActions";
 import Loader from "../../../../components/Loader";
 
-export function AdviserDelete({ closeAction, id }) {
+export function GuestDelete({ closeAction, id }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
-  const adminAdviserDetails = useSelector((state) => state.adminAdviserDetails);
+  const adminGuestDetails = useSelector((state) => state.adminGuestDetails);
   const {
     loading: loadingDetails,
     error: errorDetails,
-    adviserDetails,
-  } = adminAdviserDetails;
-  const adminAdviserDelete = useSelector((state) => state.adminAdviserDelete);
+    guestDetails,
+  } = adminGuestDetails;
+  const adminGuestDelete = useSelector((state) => state.adminGuestDelete);
   const {
     loading: loadingDelete,
     error: errorDelete,
     message,
-  } = adminAdviserDelete;
+  } = adminGuestDelete;
 
   useEffect(() => {
-    if ((id && !adviserDetails) || (id && adviserDetails._id !== id)) {
-      dispatch(adminDetailsAdviser(id));
+    if ((id && !guestDetails) || (id && guestDetails._id !== id)) {
+      dispatch(adminDetailsGuest(id));
     }
     if (message) {
       navigate("/admin/asesores");
     }
-  }, [adviserDetails, message]);
+  }, [guestDetails, message]);
   const submitHandler = () => {
-    dispatch(adminDeleteAdviser(id));
+    dispatch(adminDeleteGuest(id));
   };
   const closeHandler = () => {
     navigate("/admin/asesores");
@@ -82,7 +82,7 @@ export function AdviserDelete({ closeAction, id }) {
                   <div className="mx-3 flex w-1/2 justify-center">
                     <input
                       className="mx-2 flex w-full rounded-md border-2 p-2 text-center font-bold outline-none focus:border-blue-500"
-                      defaultValue={adviserDetails?.name}
+                      defaultValue={guestDetails?.name}
                       disabled
                     />
                   </div>
@@ -108,4 +108,4 @@ export function AdviserDelete({ closeAction, id }) {
   );
 }
 
-export default AdviserDelete;
+export default GuestDelete;

@@ -1,5 +1,5 @@
-import { UserGroupIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
-import { AdviserList, AdviserCreate, AdviserEdit } from "./pages/user/admin";
+import { UserGroupIcon, PlusCircleIcon, BuildingStorefrontIcon, BuildingOfficeIcon} from "@heroicons/react/24/solid";
+import { GuestList, GuestCreate, GuestEdit, CategoryList, BrandList, ProductCreate, ProductEdit, ProductList} from "./pages/user/admin";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -7,8 +7,8 @@ const icon = {
 
 export const routes = [
   {
-    userType: "Adviser",
-    layout: "adviser",
+    userType: "Guest",
+    layout: "guest",
     pages: [],
   },
 
@@ -19,33 +19,119 @@ export const routes = [
     pages: [
       {
         icon: <UserGroupIcon {...icon} />,
-        name: "Proveedores",
-        path: "/Proveedores",
+        name: "Invitados",
+        path: "/invitados",
         isList: true,
-        element: <AdviserList />,
+        element: <GuestList />,
         subpages: [
           {
             icon: <PlusCircleIcon {...icon} />,
             name: "Crear",
             path: "/crear",
-            element: <AdviserCreate />,
+            element: <GuestCreate />,
           },
           {
             icon: <UserGroupIcon {...icon} />,
             name: "Editar",
             path: "/:id/editar",
-            element: <AdviserEdit />,
+            element: <GuestEdit />,
             hide: true,
           },
           {
             icon: <UserGroupIcon {...icon} />,
             name: "Eliminar",
             path: "/:id/eliminar",
-            element: <AdviserList />,
+            element: <GuestList />,
             hide: true,
           },
         ],
       },
+      {
+        icon: <BuildingOfficeIcon {...icon} />,
+        name: "Producto",
+        path: "/productos",
+        isList: true,
+        element: <ProductList />,
+        subpages: [
+          {
+            icon: <PlusCircleIcon {...icon} />,
+            name: "Crear",
+            path: "/crear",
+            element: <ProductCreate />,
+          },
+          {
+            icon: <BuildingStorefrontIcon {...icon} />,
+            name: "Editar",
+            path: "/:id/editar",
+            element: <ProductEdit />,
+            hide: true,
+          },
+          {
+            icon: <BuildingStorefrontIcon {...icon} />,
+            name: "Eliminar",
+            path: "/:id/eliminar",
+            element: <ProductList />,
+            hide: true,
+          },
+        ],
+      },
+      {
+        icon: <BuildingStorefrontIcon {...icon} />,
+        name: "Categorias",
+        path: "/categorias",
+        element: <CategoryList />,
+        isList: true,
+        hiddenSub: true,
+        subpages: [
+          {
+            name: "Crear",
+            path: "/crear",
+            element: <CategoryList />,
+            hide: true,
+          },
+          {
+            name: "Editar",
+            path: "/:id/editar",
+            element: <CategoryList />,
+            hide: true,
+          },
+          {
+            name: "Eliminar",
+            path: "/:id/eliminar",
+            element: <CategoryList />,
+            hide: true,
+          },
+        ],
+      },
+      {
+        icon: <BuildingStorefrontIcon {...icon} />,
+        name: "Marcas",
+        path: "/marcas",
+        element: <BrandList />,
+        isList: true,
+        hiddenSub: true,
+        subpages: [
+          {
+            name: "Crear",
+            path: "/crear",
+            element: <BrandList />,
+            hide: true,
+          },
+          {
+            name: "Editar",
+            path: "/:id/editar",
+            element: <BrandList />,
+            hide: true,
+          },
+          {
+            name: "Eliminar",
+            path: "/:id/eliminar",
+            element: <BrandList />,
+            hide: true,
+          },
+        ],
+      },
+      
     ],
   },
 ];

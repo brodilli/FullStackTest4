@@ -49,11 +49,11 @@ const LoginScreen = () => {
       navigate("/admin");
     }
     if (
-      (userInfo && userInfo.userType === "Adviser") ||
+      (userInfo && userInfo.userType === "Guest") ||
       (searchParams.get("username") &&
-        searchParams.get("userType") === "Adviser")
+        searchParams.get("userType") === "Guest")
     ) {
-      navigate("/adviser/ordenes");
+      navigate("/guest/ordenes");
     }
     /*if (!userInfo && !error) {
       dispatch(getLoginData());

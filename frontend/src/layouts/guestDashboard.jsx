@@ -12,7 +12,7 @@ import { useMaterialTailwindController, setOpenConfigurator } from "../context";
 import Logo from "../assets/logo.png";
 import { getLoginData } from "../actions/userActions";
 
-export function AdviserDashboard() {
+export function GuestDashboard() {
   const [controller, setController] = useMaterialTailwindController();
   const { sidenavType } = controller;
 
@@ -54,7 +54,7 @@ export function AdviserDashboard() {
         <Routes>
           {routes?.map(
             ({ layout, pages }) =>
-              layout === "adviser" &&
+              layout === "guest" &&
               pages.map(({ path, element, subpages, isList }) => (
                 <>
                   <Route exact path={path} element={element} />
@@ -117,6 +117,6 @@ export function AdviserDashboard() {
   );
 }
 
-AdviserDashboard.displayName = "/src/layout/adviserDashboard.jsx";
+GuestDashboard.displayName = "/src/layout/guestDashboard.jsx";
 
-export default AdviserDashboard;
+export default GuestDashboard;

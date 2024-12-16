@@ -1,3 +1,3 @@
 export * from "./adminDashboard";
-export * from "./adviserDashboard";
+export * from "./guestDashboard";
 //export * from "./auth";
