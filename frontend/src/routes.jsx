@@ -6,12 +6,12 @@ import {
 } from "@heroicons/react/24/solid";
 import {
   GuestList,
-  GuestCreate,
   GuestEdit,
   LookupList,
   ProductCreate,
   ProductEdit,
   ProductList,
+  UserCreate,
 } from "./pages/user/admin";
 
 const icon = {
@@ -41,7 +41,7 @@ export const routes = [
             icon: <PlusCircleIcon {...icon} />,
             name: "Crear",
             path: "/crear",
-            element: <GuestCreate />,
+            element: <UserCreate />,
           },
           {
             icon: <UserGroupIcon {...icon} />,
