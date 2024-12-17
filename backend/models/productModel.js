@@ -57,7 +57,7 @@ const productSchema = mongoose.Schema(
     taxesIncluded: {
       type: Boolean,
     },
-    
+
     onSale: {
       type: Boolean,
     },

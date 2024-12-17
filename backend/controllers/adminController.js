@@ -1,18 +1,15 @@
 const asyncHandler = require("express-async-handler");
 const dotenv = require("dotenv");
 const User = require("../models/userModel");
-const Category = require("../models/categoryModel");
-const Brand = require("../models/brandModel");
+const Lookup = require("../models/lookupModel");
 const Product = require("../models/productModel");
 
 const { cloudinary } = require("../cloudinary");
 const { unlink } = require("node:fs/promises");
-const Excel = require("exceljs");
-const { PassThrough } = require("stream");
 
 // GUEST
 //GUEST CRUD
-module.exports.createGuest = asyncHandler(async (req, res) => {
+module.exports.createUser = asyncHandler(async (req, res) => {
   // Find the current user
   const currentUser = await User.findById(req.user._id);
   // Fetch Guest data from the request body
@@ -25,13 +22,13 @@ module.exports.createGuest = asyncHandler(async (req, res) => {
   await User.create(data);
   res.status(201).json({ message: "Guest created" });
 });
-module.exports.deleteGuest = asyncHandler(async (req, res) => {
+module.exports.deleteUser = asyncHandler(async (req, res) => {
   const guest = await User.findById(req.params.id);
   guest.deleted = true;
   await guest.save();
   res.json({ message: "Guest deleted" });
 });
-module.exports.editGuest = asyncHandler(async (req, res) => {
+module.exports.editUser = asyncHandler(async (req, res) => {
   const data = req.body.guest;
   data.username = data.email;
   const password = req.body.password;
@@ -39,7 +36,7 @@ module.exports.editGuest = asyncHandler(async (req, res) => {
   await guest.save();
   res.status(201).json(guest);
 });
-module.exports.viewGuests = asyncHandler(async (req, res) => {
+module.exports.viewUsers = asyncHandler(async (req, res) => {
   // Si se pasa el parámetro `all`, devolver todos los invitados
   if (req.query.all) {
     const guests = await User.find({ userType: "Guest" });
@@ -103,7 +100,7 @@ module.exports.viewGuests = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports.viewGuest = asyncHandler(async (req, res) => {
+module.exports.viewUser = asyncHandler(async (req, res) => {
   const guest = await User.findById(req.params.id);
   if (guest) {
     res.json(guest);
@@ -270,3 +267,57 @@ module.exports.viewProduct = asyncHandler(async (req, res) => {
   }
 });
 /* -------------------------- END PRODUCT CRUD ---------------------------- */
+
+/* -------------------------- START LOOKUP CRUD ---------------------------- */
+// Create Lookup
+module.exports.createLookup = asyncHandler(async (req, res) => {
+  // Get current user
+  const currentUser = await User.findById(req.user._id);
+  // Get data from request body
+  const data = req.body;
+  // Create new lookup
+  const lookup = new Lookup(data);
+  // Assign current user to lookup
+  lookup.user = currentUser;
+  // Save lookup
+  await lookup.save();
+  // Send response
+  res.status(201).json({ message: "Lookup created" });
+});
+// View Lookups
+module.exports.viewLookups = asyncHandler(async (req, res) => {
+  // Get parameters
+  const attribeGroup = req.query.attribeGroup || "";
+  // Get lookups
+  const lookups = await Lookup.find({ attribeGroup });
+  // Send response
+  res.json({ lookups });
+});
+// Edit Lookup
+module.exports.editLookup = asyncHandler(async (req, res) => {
+  // Get data from request body
+  const data = req.body;
+  // Update lookup
+  const lookup = await Lookup.findOneAndUpdate({ _id: req.params.id }, data);
+  // Save lookup
+  await lookup.save();
+  // Send response
+  res.status(204).json({ message: "Lookup updated" });
+});
+// Delete Lookup
+module.exports.deleteLookup = asyncHandler(async (req, res) => {
+  // Get lookup
+  const lookup = await Lookup.findById(req.params.id);
+  // Delete lookup
+  await lookup.remove();
+  // Send response
+  res.json({ message: "Lookup deleted" });
+});
+// View Lookup
+module.exports.viewLookup = asyncHandler(async (req, res) => {
+  // Get lookup
+  const lookup = await Lookup.findById(req.params.id);
+  // Send response
+  res.json(lookup);
+});
+/* -------------------------- END LOOKUP CRUD ---------------------------- */

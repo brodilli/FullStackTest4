@@ -4,22 +4,22 @@ import { AiOutlineWarning } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoginData } from "../../../../actions/userActions";
-import { adminCreateCategory } from "../../../../actions/categoryActions";
+import { adminCreateCategory } from "../../../../actions/lookupActions";
 import SuccessAlert from "../../../../components/alerts/SuccessAlert";
 import { Input } from "../../../../components/elements/Inputs";
 import { useMaterialTailwindController } from "../../../../context";
-import { CATEGORY_ADMIN_CREATE_RESET } from "../../../../constants/categoryConstants";
+import { CATEGORY_ADMIN_CREATE_RESET } from "../../../../constants/lookupConstants";
 import { Switch } from "@material-tailwind/react";
 
-export function CategoryCreate({ closeAction }) {
+export function LookupCreate({ closeAction }) {
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
-  const adminCategoryCreate = useSelector((state) => state.adminCategoryCreate);
+  const adminLookupCreate = useSelector((state) => state.adminLookupCreate);
   const {
     loading: loadingCreateCategory,
     error: errorCreateCategory,
     message: messageCategory,
-  } = adminCategoryCreate;
+  } = adminLookupCreate;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [controller, setController] = useMaterialTailwindController();
@@ -136,4 +136,4 @@ export function CategoryCreate({ closeAction }) {
   );
 }
 
-export default CategoryCreate;
+export default LookupCreate;

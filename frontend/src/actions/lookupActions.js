@@ -1,32 +1,32 @@
 import axios from "axios";
 import {
-  CATEGORY_ADMIN_CREATE_FAIL,
-  CATEGORY_ADMIN_CREATE_REQUEST,
-  CATEGORY_ADMIN_CREATE_SUCCESS,
-  CATEGORY_ADMIN_DELETE_FAIL,
-  CATEGORY_ADMIN_DELETE_REQUEST,
-  CATEGORY_ADMIN_DELETE_SUCCESS,
-  CATEGORY_ADMIN_DETAILS_FAIL,
-  CATEGORY_ADMIN_DETAILS_REQUEST,
-  CATEGORY_ADMIN_DETAILS_RESET,
-  CATEGORY_ADMIN_DETAILS_SUCCESS,
-  CATEGORY_ADMIN_LIST_FAIL,
-  CATEGORY_ADMIN_LIST_REQUEST,
-  CATEGORY_ADMIN_LIST_RESET,
-  CATEGORY_ADMIN_LIST_SUCCESS,
-  CATEGORY_ADMIN_UPDATE_FAIL,
-  CATEGORY_ADMIN_UPDATE_REQUEST,
-  CATEGORY_ADMIN_UPDATE_SUCCESS,
-  CATEGORY_LIST_FAIL,
-  CATEGORY_LIST_REQUEST,
-  CATEGORY_LIST_RESET,
-  CATEGORY_LIST_SUCCESS,
-} from "../constants/categoryConstants";
+  LOOKUP_ADMIN_CREATE_FAIL,
+  LOOKUP_ADMIN_CREATE_REQUEST,
+  LOOKUP_ADMIN_CREATE_SUCCESS,
+  LOOKUP_ADMIN_DELETE_FAIL,
+  LOOKUP_ADMIN_DELETE_REQUEST,
+  LOOKUP_ADMIN_DELETE_SUCCESS,
+  LOOKUP_ADMIN_DETAILS_FAIL,
+  LOOKUP_ADMIN_DETAILS_REQUEST,
+  LOOKUP_ADMIN_DETAILS_RESET,
+  LOOKUP_ADMIN_DETAILS_SUCCESS,
+  LOOKUP_ADMIN_LIST_FAIL,
+  LOOKUP_ADMIN_LIST_REQUEST,
+  LOOKUP_ADMIN_LIST_RESET,
+  LOOKUP_ADMIN_LIST_SUCCESS,
+  LOOKUP_ADMIN_UPDATE_FAIL,
+  LOOKUP_ADMIN_UPDATE_REQUEST,
+  LOOKUP_ADMIN_UPDATE_SUCCESS,
+  LOOKUP_LIST_FAIL,
+  LOOKUP_LIST_REQUEST,
+  LOOKUP_LIST_RESET,
+  LOOKUP_LIST_SUCCESS,
+} from "../constants/lookupConstants";
 
 export const adminCreateCategory = (category) => async (dispatch) => {
   try {
     dispatch({
-      type: CATEGORY_ADMIN_CREATE_REQUEST,
+      type: LOOKUP_ADMIN_CREATE_REQUEST,
     });
     const config = {
       headers: {
@@ -34,24 +34,21 @@ export const adminCreateCategory = (category) => async (dispatch) => {
       },
     };
     const { data } = await axios.post(
-      "/api/admin/categories",
+      "/api/admin/lookups",
       { category },
       config
     );
 
     dispatch({
-      type: CATEGORY_ADMIN_CREATE_SUCCESS,
+      type: LOOKUP_ADMIN_CREATE_SUCCESS,
       payload: data,
     });
     dispatch({
-      type: CATEGORY_ADMIN_LIST_RESET,
-    });
-    dispatch({
-      type: CATEGORY_LIST_RESET,
+      type: LOOKUP_ADMIN_LIST_RESET,
     });
   } catch (error) {
     dispatch({
-      type: CATEGORY_ADMIN_CREATE_FAIL,
+      type: LOOKUP_ADMIN_CREATE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -62,16 +59,16 @@ export const adminCreateCategory = (category) => async (dispatch) => {
 export const adminDetailsCategory = (id) => async (dispatch) => {
   try {
     dispatch({
-      type: CATEGORY_ADMIN_DETAILS_REQUEST,
+      type: LOOKUP_ADMIN_DETAILS_REQUEST,
     });
-    const { data } = await axios.get(`/api/admin/categories/${id}`);
+    const { data } = await axios.get(`/api/admin/lookups/${id}`);
     dispatch({
-      type: CATEGORY_ADMIN_DETAILS_SUCCESS,
+      type: LOOKUP_ADMIN_DETAILS_SUCCESS,
       payload: data,
     });
   } catch (error) {
     dispatch({
-      type: CATEGORY_ADMIN_DETAILS_FAIL,
+      type: LOOKUP_ADMIN_DETAILS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -79,10 +76,10 @@ export const adminDetailsCategory = (id) => async (dispatch) => {
     });
   }
 };
-export const adminUpdateCategory = (id, category) => async (dispatch) => {
+export const adminUpdateLookup = (id, lookup) => async (dispatch) => {
   try {
     dispatch({
-      type: CATEGORY_ADMIN_UPDATE_REQUEST,
+      type: LOOKUP_ADMIN_UPDATE_REQUEST,
     });
 
     const config = {
@@ -91,24 +88,24 @@ export const adminUpdateCategory = (id, category) => async (dispatch) => {
       },
     };
     const { data } = await axios.put(
-      `/api/admin/categories/${id}`,
-      { category },
+      `/api/admin/lookups/${id}`,
+      { lookup },
       config
     );
     dispatch({
-      type: CATEGORY_ADMIN_UPDATE_SUCCESS,
+      type: LOOKUP_ADMIN_UPDATE_SUCCESS,
       payload: data,
     });
     dispatch({
-      type: CATEGORY_ADMIN_DETAILS_RESET,
+      type: LOOKUP_ADMIN_DETAILS_RESET,
       payload: data,
     });
     dispatch({
-      type: CATEGORY_ADMIN_LIST_RESET,
+      type: LOOKUP_ADMIN_LIST_RESET,
     });
   } catch (error) {
     dispatch({
-      type: CATEGORY_ADMIN_UPDATE_FAIL,
+      type: LOOKUP_ADMIN_UPDATE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -116,22 +113,22 @@ export const adminUpdateCategory = (id, category) => async (dispatch) => {
     });
   }
 };
-export const adminDeleteCategory = (id) => async (dispatch) => {
+export const adminDeleteLookup = (id) => async (dispatch) => {
   try {
     dispatch({
-      type: CATEGORY_ADMIN_DELETE_REQUEST,
+      type: LOOKUP_ADMIN_DELETE_REQUEST,
     });
-    const { data } = await axios.delete(`/api/admin/categories/${id}`);
+    const { data } = await axios.delete(`/api/admin/lookups/${id}`);
     dispatch({
-      type: CATEGORY_ADMIN_DELETE_SUCCESS,
+      type: LOOKUP_ADMIN_DELETE_SUCCESS,
       payload: data,
     });
     dispatch({
-      type: CATEGORY_ADMIN_LIST_RESET,
+      type: LOOKUP_ADMIN_LIST_RESET,
     });
   } catch (error) {
     dispatch({
-      type: CATEGORY_ADMIN_DELETE_FAIL,
+      type: LOOKUP_ADMIN_DELETE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -139,7 +136,7 @@ export const adminDeleteCategory = (id) => async (dispatch) => {
     });
   }
 };
-export const adminListCategories =
+export const adminListLookups =
   (
     keyword = "",
     pageNumber = "",
@@ -151,18 +148,18 @@ export const adminListCategories =
   async (dispatch) => {
     try {
       dispatch({
-        type: CATEGORY_ADMIN_LIST_REQUEST,
+        type: LOOKUP_ADMIN_LIST_REQUEST,
       });
       const { data } = await axios.get(
-        `/api/admin/categories?keyword=${keyword}&pageNumber=${pageNumber}&pageSize=${pageSize}&sort=${sort}&order=${order}&all=${all}`
+        `/api/admin/lookups?keyword=${keyword}&pageNumber=${pageNumber}&pageSize=${pageSize}&sort=${sort}&order=${order}&all=${all}`
       );
       dispatch({
-        type: CATEGORY_ADMIN_LIST_SUCCESS,
+        type: LOOKUP_ADMIN_LIST_SUCCESS,
         payload: data,
       });
     } catch (error) {
       dispatch({
-        type: CATEGORY_ADMIN_LIST_FAIL,
+        type: LOOKUP_ADMIN_LIST_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message

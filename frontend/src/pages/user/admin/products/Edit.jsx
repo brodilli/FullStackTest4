@@ -23,7 +23,7 @@ import {
 import {
   adminCreateCategory,
   adminListCategories,
-} from "../../../../actions/categoryActions";
+} from "../../../../actions/lookupActions";
 
 import {
   Avatar,
@@ -138,7 +138,6 @@ export function ProductEdit() {
     (state) => state.adminGenericNameList
   );
 
-
   const submitBrandHandler = () => {
     dispatch(adminCreateBrand(newBrand));
   };
@@ -163,8 +162,6 @@ export function ProductEdit() {
       [e.target.name]: e.target.value,
     }));
   };
-
-
 
   const handleChange = (e) =>
     setProduct((prevState) => ({
@@ -218,7 +215,6 @@ export function ProductEdit() {
       dispatch(adminDetailsProduct(id));
       dispatch(adminListBrands());
       dispatch(adminListCategories());
-      
     }
     if (productDetails) {
       setProduct(productDetails);
@@ -448,7 +444,6 @@ export function ProductEdit() {
                   </span>
                 </div>
               </ComboBoxSingle>
-              
 
               <Typography className="text-lg font-semibold  hover:text-gray-800">
                 Macro Nutrientes

@@ -13,21 +13,21 @@ import {
   Progress,
 } from "@material-tailwind/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
-import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
 //import Empty from "../../../components/Admin/Empty";
 //import SearchBox from "../../../components/SearchBox";
+import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
 import Loader from "../../../../components/Loader";
 import Paginate from "../../../../components/Paginate";
 import {
-  BRAND_ADMIN_LIST_RESET,
-  BRAND_ADMIN_DELETE_RESET,
-} from "../../../../constants/brandConstants";
-import { adminListBrands } from "../../../../actions/brandActions";
+  CATEGORY_ADMIN_LIST_RESET,
+  CATEGORY_ADMIN_DELETE_RESET,
+} from "../../../../constants/lookupConstants";
+import { adminListCategories } from "../../../../actions/lookupActions";
 import Delete from "./Delete";
 import Edit from "./Edit";
 import Create from "./Create";
 
-export function BrandList() {
+export function CategoryList() {
   const keyword = useParams().keyword;
   const pageNumber = useParams().pageNumber || 1;
   const sort = useParams().sort;
@@ -46,25 +46,25 @@ export function BrandList() {
 
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
-  const adminBrandList = useSelector((state) => state.adminBrandList);
+  const adminCategoryList = useSelector((state) => state.adminCategoryList);
   const {
-    loading: loadingBrands,
-    error: errorBrands,
+    loading: loadingCategories,
+    error: errorCategories,
     success,
-    brands,
+    categories,
     page,
     pages,
-  } = adminBrandList;
-  const [listArticle, setListArticle] = useState(brands ? brands : []);
+  } = adminCategoryList;
+  const [listArticle, setListArticle] = useState(categories ? categories : []);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const { id } = useParams();
   const submitSearch = () => {
-    dispatch({ type: BRAND_ADMIN_LIST_RESET });
+    dispatch({ type: CATEGORY_ADMIN_LIST_RESET });
     setPrevSearch(true);
     if (keywordSearch.trim()) {
-      navigate(`/admin/marcas/search/${keywordSearch}`);
+      navigate(`/admin/categorias/search/${keywordSearch}`);
     }
   };
   const handleKeyDown = (event) => {
@@ -73,7 +73,7 @@ export function BrandList() {
     }
   };
   const submitSort = (field) => {
-    dispatch({ type: BRAND_ADMIN_LIST_RESET });
+    dispatch({ type: CATEGORY_ADMIN_LIST_RESET });
     const newSort = field;
     const newOrder =
       field === sortField
@@ -83,33 +83,31 @@ export function BrandList() {
         : "ascending";
     setSortField(newSort);
     setSortOrder(newOrder);
-    if (keywordSearch) {
+    if (keyword) {
       navigate(
-        `/admin/marcas/search/${keywordSearch}/sort/${newSort}/order/${newOrder}`
+        `/admin/categorias/search/${keyword}/sort/${newSort}/order/${newOrder}`
       );
     } else {
-      navigate(`/admin/marcas/sort/${newSort}/order/${newOrder}`);
+      navigate(`/admin/categorias/sort/${newSort}/order/${newOrder}`);
     }
   };
   const newSize = (size) => {
     setPageSize(size);
-    dispatch({ type: BRAND_ADMIN_LIST_RESET });
-    navigate("/admin/marcas");
+    dispatch({ type: CATEGORY_ADMIN_LIST_RESET });
+    navigate("/admin/categorias");
   };
 
   const redirect = "/login";
   useEffect(() => {
-    let newArray = brands;
+    let newArray = categories;
     if (search.length > 0) {
       //funcion de busqueda
-      newArray = brands.filter((element) =>
+      newArray = categories.filter((element) =>
         element.name.toLowerCase().includes(search)
       );
     }
-    if (!success && !errorBrands) {
-      dispatch(
-        adminListBrands(keywordSearch, pageNumber, pageSize, sort, order)
-      );
+    if (!success && !errorCategories) {
+      dispatch(adminListCategories(keyword, pageNumber, pageSize, sort, order));
     }
     var link = location.pathname.split("/");
     if (link[link.length - 1] === "eliminar") {
@@ -121,11 +119,11 @@ export function BrandList() {
     } else {
       setViewModal(false);
       dispatch({
-        type: BRAND_ADMIN_DELETE_RESET,
+        type: CATEGORY_ADMIN_DELETE_RESET,
       });
     }
     setListArticle(newArray ? newArray : []);
-  }, [countView, search, brands, id, location]);
+  }, [countView, search, categories, id, location]);
 
   const actionOpenDeleteModal = () => {
     setViewModal("delete");
@@ -142,7 +140,7 @@ export function BrandList() {
         <Delete
           closeAction={() => {
             setViewModal(false);
-            navigate("/admin/marcas");
+            navigate("/admin/categorias");
           }}
           id={id}
         />
@@ -151,7 +149,7 @@ export function BrandList() {
         <Edit
           closeAction={() => {
             setViewModal(false);
-            navigate("/admin/marcas");
+            navigate("/admin/categorias");
           }}
           id={id}
         />
@@ -160,7 +158,7 @@ export function BrandList() {
         <Create
           closeAction={() => {
             setViewModal(false);
-            navigate("/admin/marcas");
+            navigate("/admin/categorias");
           }}
         />
       )}
@@ -168,11 +166,11 @@ export function BrandList() {
         <CardHeader variant="gradient" color="blue" className="mb-8 p-6">
           <div className="flex items-center">
             <Typography variant="h6" color="white">
-              MARCAS
+              Categorias
             </Typography>
 
             <div className="flex w-full flex-wrap items-center justify-end  gap-3">
-              <Link to="/admin/marcas/crear" className="justify-end">
+              <Link to="/admin/categorias/crear" className="justify-end">
                 <Button variant="gradient" color="white">
                   Crear
                 </Button>
@@ -195,7 +193,7 @@ export function BrandList() {
           </div>
         </CardHeader>
         <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
-          {loadingBrands ? (
+          {loadingCategories ? (
             <div className="flex w-full justify-center">
               <Loader />
             </div>
@@ -271,7 +269,7 @@ export function BrandList() {
                         </td>
 
                         <td className={className}>
-                          <Link to={`/admin/marcas/${_id}/editar`}>
+                          <Link to={`/admin/categorias/${_id}/editar`}>
                             <Typography
                               as="a"
                               href="#"
@@ -280,7 +278,7 @@ export function BrandList() {
                               Editar
                             </Typography>
                           </Link>
-                          <Link to={`/admin/marcas/${_id}/eliminar`}>
+                          <Link to={`/admin/categorias/${_id}/eliminar`}>
                             <Typography
                               as="a"
                               className="text-xs font-semibold text-blue-gray-600 hover:text-red-500"
@@ -303,11 +301,11 @@ export function BrandList() {
           <Paginate
             page={page}
             pages={pages}
-            baseRoute="/admin/marcas"
+            baseRoute="/admin/categorias"
             keyword={keywordSearch}
             sort={sort}
             order={order}
-            constant={BRAND_ADMIN_LIST_RESET}
+            constant={CATEGORY_ADMIN_LIST_RESET}
           />
         )}
       </div>
@@ -315,4 +313,4 @@ export function BrandList() {
   );
 }
 
-export default BrandList;
+export default CategoryList;

@@ -5,43 +5,45 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoginData } from "../../../../actions/userActions";
 import {
-  adminDeleteBrand,
-  adminDetailsBrand,
-} from "../../../../actions/brandActions";
+  adminDeleteCategory,
+  adminDetailsCategory,
+} from "../../../../actions/lookupActions";
 import Loader from "../../../../components/Loader";
 
-export function BrandDelete({ closeAction, id }) {
+export function CategoryDelete({ closeAction, id }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
-  const adminBrandDetails = useSelector((state) => state.adminBrandDetails);
+  const adminCategoryDetails = useSelector(
+    (state) => state.adminCategoryDetails
+  );
   const {
     loading: loadingDetails,
     error: errorDetails,
-    brandDetails,
-  } = adminBrandDetails;
-  const adminBrandDelete = useSelector((state) => state.adminBrandDelete);
+    categoryDetails,
+  } = adminCategoryDetails;
+  const adminCategoryDelete = useSelector((state) => state.adminCategoryDelete);
   const {
     loading: loadingDelete,
     error: errorDelete,
     message,
-  } = adminBrandDelete;
+  } = adminCategoryDelete;
 
   useEffect(() => {
-    if ((id && !brandDetails) || (id && brandDetails._id !== id)) {
-      dispatch(adminDetailsBrand(id));
+    if ((id && !categoryDetails) || (id && categoryDetails._id !== id)) {
+      dispatch(adminDetailsCategory(id));
     }
     if (message) {
-      navigate("/admin/marcas");
+      navigate("/admin/categorias");
     }
-  }, [brandDetails, message]);
+  }, [categoryDetails, message]);
   const submitHandler = () => {
-    dispatch(adminDeleteBrand(id));
+    dispatch(adminDeleteCategory(id));
   };
   const closeHandler = () => {
-    navigate("/admin/marcas");
+    navigate("/admin/categorias");
   };
   return (
     <>
@@ -51,7 +53,7 @@ export function BrandDelete({ closeAction, id }) {
         ) : (
           <div className="relative max-h-[90%]  w-11/12 overflow-hidden rounded-md bg-white shadow lg:w-1/2 2xl:w-2/6">
             <div className="flex w-full items-center justify-between rounded-t-md bg-blue-gray-800 p-2 px-4 text-white">
-              <h2 className="text-2xl  text-white">Eliminar Marca</h2>
+              <h2 className="text-2xl  text-white">Eliminar Categoria</h2>
               <button
                 type="button"
                 onClick={closeHandler}
@@ -72,7 +74,7 @@ export function BrandDelete({ closeAction, id }) {
                   <AiOutlineWarning className="h-24 w-24 fill-red-600" />
                 </div>
                 <div className="my-3 flex justify-center">
-                  ¿Seguro que deseas eliminar esta Marca?
+                  ¿Seguro que deseas eliminar este producto?
                 </div>
 
                 <div className="flex w-full justify-center px-6 text-2xl">
@@ -82,7 +84,7 @@ export function BrandDelete({ closeAction, id }) {
                   <div className="mx-3 flex w-1/2 justify-center">
                     <input
                       className="mx-2 flex w-full rounded-md border-2 p-2 text-center font-bold outline-none focus:border-blue-500"
-                      defaultValue={brandDetails?.name}
+                      defaultValue={categoryDetails?.name}
                       disabled
                     />
                   </div>
@@ -108,4 +110,4 @@ export function BrandDelete({ closeAction, id }) {
   );
 }
 
-export default BrandDelete;
+export default CategoryDelete;

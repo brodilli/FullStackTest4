@@ -1,5 +1,19 @@
-import { UserGroupIcon, PlusCircleIcon, BuildingStorefrontIcon, BuildingOfficeIcon} from "@heroicons/react/24/solid";
-import { GuestList, GuestCreate, GuestEdit, CategoryList, BrandList, ProductCreate, ProductEdit, ProductList} from "./pages/user/admin";
+import {
+  UserGroupIcon,
+  PlusCircleIcon,
+  BuildingStorefrontIcon,
+  BuildingOfficeIcon,
+} from "@heroicons/react/24/solid";
+import {
+  GuestList,
+  GuestCreate,
+  GuestEdit,
+  CategoryList,
+  BrandList,
+  ProductCreate,
+  ProductEdit,
+  ProductList,
+} from "./pages/user/admin";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -13,7 +27,7 @@ export const routes = [
   },
 
   {
-    title: "CRUD",
+    title: "Admin",
     userType: "Admin",
     layout: "admin",
     pages: [
@@ -75,63 +89,41 @@ export const routes = [
           },
         ],
       },
+    ],
+  },
+  {
+    title: "Utils",
+    userType: "Admin",
+    layout: "admin",
+    pages: [
       {
         icon: <BuildingStorefrontIcon {...icon} />,
-        name: "Categorias",
-        path: "/categorias",
-        element: <CategoryList />,
+        name: "Lookups",
+        path: "/lookups",
+        element: <LookupList />,
         isList: true,
         hiddenSub: true,
         subpages: [
           {
             name: "Crear",
             path: "/crear",
-            element: <CategoryList />,
+            element: <LookupList />,
             hide: true,
           },
           {
             name: "Editar",
             path: "/:id/editar",
-            element: <CategoryList />,
+            element: <LookupList />,
             hide: true,
           },
           {
             name: "Eliminar",
             path: "/:id/eliminar",
-            element: <CategoryList />,
+            element: <LookupList />,
             hide: true,
           },
         ],
       },
-      {
-        icon: <BuildingStorefrontIcon {...icon} />,
-        name: "Marcas",
-        path: "/marcas",
-        element: <BrandList />,
-        isList: true,
-        hiddenSub: true,
-        subpages: [
-          {
-            name: "Crear",
-            path: "/crear",
-            element: <BrandList />,
-            hide: true,
-          },
-          {
-            name: "Editar",
-            path: "/:id/editar",
-            element: <BrandList />,
-            hide: true,
-          },
-          {
-            name: "Eliminar",
-            path: "/:id/eliminar",
-            element: <BrandList />,
-            hide: true,
-          },
-        ],
-      },
-      
     ],
   },
 ];

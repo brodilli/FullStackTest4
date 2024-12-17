@@ -9,49 +9,48 @@ const upload = multer({ dest: "uploads/" });
 // Guest Routes
 router
   .route("/guest")
-  .get(isLoggedIn, isAdmin, adminController.viewGuests)
-  .post(isLoggedIn, isAdmin, adminController.createGuest);
+  .get(isLoggedIn, isAdmin, adminController.viewUsers)
+  .post(isLoggedIn, isAdmin, adminController.createUser);
 
 router
   .route("/guests/:id")
-  .get(isLoggedIn, isAdmin, adminController.viewGuest)
-  .put(isLoggedIn, isAdmin, adminController.editGuest)
-  .delete(isLoggedIn, isAdmin, adminController.deleteGuest);
+  .get(isLoggedIn, isAdmin, adminController.viewUser)
+  .put(isLoggedIn, isAdmin, adminController.editUser)
+  .delete(isLoggedIn, isAdmin, adminController.deleteUser);
 
-  /* ------------------------------- Product Routes ------------------------------------ */
+/* ------------------------------- Product Routes ------------------------------------ */
 router
-.route("/products")
-.get(isLoggedIn, isAdmin, wrapAsync(adminController.viewProducts))
-.post(
-  isLoggedIn,
-  isAdmin,
-  upload.array("files", 1),
-  wrapAsync(adminController.createProduct)
-);
+  .route("/products")
+  .get(isLoggedIn, isAdmin, wrapAsync(adminController.viewProducts))
+  .post(
+    isLoggedIn,
+    isAdmin,
+    upload.array("files", 1),
+    wrapAsync(adminController.createProduct)
+  );
 router
-.route("/products/:id")
-.get(isLoggedIn, isAdmin, wrapAsync(adminController.viewProduct))
-.put(
-  isLoggedIn,
-  isAdmin,
-  upload.array("files", 1),
-  wrapAsync(adminController.editProduct)
-)
-.delete(isLoggedIn, isAdmin, adminController.deleteProduct);
+  .route("/products/:id")
+  .get(isLoggedIn, isAdmin, wrapAsync(adminController.viewProduct))
+  .put(
+    isLoggedIn,
+    isAdmin,
+    upload.array("files", 1),
+    wrapAsync(adminController.editProduct)
+  )
+  .delete(isLoggedIn, isAdmin, adminController.deleteProduct);
 /* ------------------------------- End Product Routes ------------------------------------ */
 
-/* ------------------------------- Category Routes ------------------------------------ */
+/* ------------------------------- Lookups Routes ------------------------------------ */
 router
-  .route("/categories")
-  .get(isLoggedIn, isAdmin, wrapAsync(adminController.viewCategories))
-  .post(isLoggedIn, isAdmin, wrapAsync(adminController.createCategory));
-/* ------------------------------- End Category Routes ------------------------------------ */
+  .route("/lookups")
+  .get(isLoggedIn, isAdmin, wrapAsync(adminController.viewLookups))
+  .post(isLoggedIn, isAdmin, wrapAsync(adminController.createLookup));
 
-/* ------------------------------- Brand Routes ------------------------------------ */
 router
-  .route("/brands")
-  .get(isLoggedIn, isAdmin, wrapAsync(adminController.viewBrands))
-  .post(isLoggedIn, isAdmin, wrapAsync(adminController.createBrand));
-/* ------------------------------- End Brand Routes ------------------------------------ */
+  .route("/lookups/:id")
+  .get(isLoggedIn, isAdmin, wrapAsync(adminController.viewLookup))
+  .put(isLoggedIn, isAdmin, wrapAsync(adminController.editLookup))
+  .delete(isLoggedIn, isAdmin, wrapAsync(adminController.deleteLookup));
+/* ------------------------------- End Lookups Routes ------------------------------------ */
 
 module.exports = router;
