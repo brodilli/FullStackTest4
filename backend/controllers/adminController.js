@@ -13,12 +13,12 @@ const { unlink } = require("node:fs/promises");
 //PAYMENT METHOD CRUD
 module.exports.createPaymentMethod = asyncHandler(async (req, res) => {
   console.log("Creating Payment Method");
-  const data = req.body.paymentMethod;
+  const data = req.body;
+ 
   const currentUser = await User.findById(req.user._id);
+  data.user = currentUser;
+
   const paymentMethod = new PaymentMethod(data);
-  console.log("Payment Method :", paymentMethod);
-  paymentMethod.user = currentUser;
-  console.log("paymentMethod.user :", paymentMethod);
   await paymentMethod.save();
   res.status(201).json({ message: "Payment Method created" });
 }
@@ -35,9 +35,49 @@ module.exports.editPaymentMethod = asyncHandler(async (req, res) => {
   await paymentMethod.save();
   res.status(201).json(paymentMethod);
 });
+// --------------- View Payment Methods ---------------
 module.exports.viewPaymentMethods = asyncHandler(async (req, res) => {
-  const paymentMethods = await PaymentMethod.find({});
-  res.json({ paymentMethods });
+  const pageSize = Number(req.query.pageSize) || 10; // Tamaño de página por defecto
+  const page = Number(req.query.pageNumber) || 1; // Página actual
+  const sort = req.query.sort; // Campo para ordenar
+  const order = req.query.order === "ascending" ? 1 : -1; // Orden: ascendente o descendente
+
+  // Condición de ordenamiento
+  const sortCondition = sort ? { [sort]: order } : {};
+
+  // Filtro por palabra clave (busca en alias, titular, banco)
+  const keyword = req.query.keyword
+    ? {
+        $or: [
+          { alias: { $regex: req.query.keyword, $options: "i" } },
+          { holder: { $regex: req.query.keyword, $options: "i" } },
+          { bank: { $regex: req.query.keyword, $options: "i" } },
+        ],
+      }
+    : {};
+
+  // Contar total de métodos de pago (filtrando eliminados)
+  const count = await PaymentMethod.countDocuments({
+    deleted: false,
+    ...keyword,
+  });
+
+  // Obtener métodos de pago con paginación, ordenamiento y filtros
+  const paymentMethods = await PaymentMethod.find({
+    deleted: false,
+    ...keyword,
+  })
+    .sort(sortCondition)
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+
+  // Respuesta al cliente
+  res.json({
+    paymentMethods,
+    page,
+    pages: Math.ceil(count / pageSize),
+    totalPaymentMethods: count,
+  });
 });
 module.exports.viewPaymentMethod = asyncHandler(async (req, res) => {
   const paymentMethod = await PaymentMethod.findById(req.params.id);

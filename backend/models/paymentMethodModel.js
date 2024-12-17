@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const PaymentMethodSchema = new mongoose.Schema({
-  type: { 
+  tipo: { 
     type: String, 
     enum: ['Cash', 'Transfer', 'Credit Card'], 
     required: true 

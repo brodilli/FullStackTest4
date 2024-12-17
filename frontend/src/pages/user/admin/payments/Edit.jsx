@@ -16,7 +16,7 @@ import { Button, Typography } from "@material-tailwind/react";
 export function PaymentMethodEdit() {
   const { id } = useParams();
   const [paymentMethod, setPaymentMethod] = useState({
-    type: "Cash", // Default value
+    tipo: "Cash", // Default value
     alias: "",
     clabe: "",
     accountNumber: "",
@@ -56,14 +56,29 @@ export function PaymentMethodEdit() {
   useEffect(() => {
     if (messageUpdate) {
       dispatch({ type: PAYMENT_METHOD_ADMIN_UPDATE_RESET });
-      navigate("/admin/payment-methods");
+      navigate("/admin/metodosDePago");
     }
+
     if (!userInfo) {
       dispatch(getLoginData());
     } else if (!paymentMethodDetails || paymentMethodDetails._id !== id) {
       dispatch(adminDetailsPaymentMethod(id));
     } else {
-      setPaymentMethod(paymentMethodDetails);
+      // Asegurar que los detalles del método de pago coincidan con el estado inicial
+      setPaymentMethod({
+        tipo: paymentMethodDetails.type || "Cash",
+        alias: paymentMethodDetails.alias || "",
+        clabe: paymentMethodDetails.clabe || "",
+        accountNumber: paymentMethodDetails.accountNumber || "",
+        holder: paymentMethodDetails.holder || "",
+        bank: paymentMethodDetails.bank || "",
+        priority: paymentMethodDetails.priority || 0,
+        maxAmount: paymentMethodDetails.maxAmount || 0,
+        maxPercentage: paymentMethodDetails.maxPercentage || 0,
+        paymentDate: paymentMethodDetails.paymentDate
+          ? paymentMethodDetails.paymentDate.split("T")[0] // Formato YYYY-MM-DD
+          : "",
+      });
     }
   }, [dispatch, userInfo, paymentMethodDetails, id, messageUpdate, navigate]);
 
@@ -84,8 +99,8 @@ export function PaymentMethodEdit() {
         <div className="col-span-full">
           <label className="block text-sm font-medium">Tipo</label>
           <select
-            name="type"
-            value={paymentMethod.type}
+            name="tipo"
+            value={paymentMethod.tipo}
             onChange={handleChange}
             className="w-full rounded-md border p-2"
             required
@@ -97,133 +112,80 @@ export function PaymentMethodEdit() {
         </div>
 
         {/* Campos dinámicos */}
-        {paymentMethod.type === "Cash" && (
+        {paymentMethod.tipo === "Cash" && (
           <>
             <Input
               title="Monto Máximo"
               name="maxAmount"
               type="number"
-              value={paymentMethod.maxAmount || ""}
+              value={paymentMethod.maxAmount}
               setValue={handleChange}
             />
             <Input
               title="Porcentaje Máximo"
               name="maxPercentage"
               type="number"
-              value={paymentMethod.maxPercentage || ""}
+              value={paymentMethod.maxPercentage}
               setValue={handleChange}
             />
           </>
         )}
 
-        {paymentMethod.type === "Transfer" && (
+        {paymentMethod.tipo === "Transfer" && (
           <>
-            <Input
-              title="Alias"
-              name="alias"
-              value={paymentMethod.alias || ""}
-              setValue={handleChange}
-            />
-            <Input
-              title="CLABE"
-              name="clabe"
-              value={paymentMethod.clabe || ""}
-              setValue={handleChange}
-            />
+            <Input title="Alias" name="alias" value={paymentMethod.alias} setValue={handleChange} />
+            <Input title="CLABE" name="clabe" value={paymentMethod.clabe} setValue={handleChange} />
             <Input
               title="Número de Cuenta"
               name="accountNumber"
-              value={paymentMethod.accountNumber || ""}
+              value={paymentMethod.accountNumber}
               setValue={handleChange}
             />
             <Input
               title="Titular"
               name="holder"
-              value={paymentMethod.holder || ""}
+              value={paymentMethod.holder}
               setValue={handleChange}
             />
-            <Input
-              title="Banco"
-              name="bank"
-              value={paymentMethod.bank || ""}
-              setValue={handleChange}
-            />
+            <Input title="Banco" name="bank" value={paymentMethod.bank} setValue={handleChange} />
             <Input
               title="Prioridad"
               name="priority"
               type="number"
-              value={paymentMethod.priority || ""}
-              setValue={handleChange}
-            />
-            <Input
-              title="Monto Máximo"
-              name="maxAmount"
-              type="number"
-              value={paymentMethod.maxAmount || ""}
-              setValue={handleChange}
-            />
-            <Input
-              title="Porcentaje Máximo"
-              name="maxPercentage"
-              type="number"
-              value={paymentMethod.maxPercentage || ""}
+              value={paymentMethod.priority}
               setValue={handleChange}
             />
             <Input
               title="Fecha de Pago"
               name="paymentDate"
               type="date"
-              value={paymentMethod.paymentDate || ""}
+              value={paymentMethod.paymentDate}
               setValue={handleChange}
             />
           </>
         )}
 
-        {paymentMethod.type === "Credit Card" && (
+        {paymentMethod.tipo === "Credit Card" && (
           <>
-            <Input
-              title="Alias"
-              name="alias"
-              value={paymentMethod.alias || ""}
-              setValue={handleChange}
-            />
+            <Input title="Alias" name="alias" value={paymentMethod.alias} setValue={handleChange} />
             <Input
               title="Número de Cuenta"
               name="accountNumber"
-              value={paymentMethod.accountNumber || ""}
+              value={paymentMethod.accountNumber}
               setValue={handleChange}
             />
             <Input
               title="Titular"
               name="holder"
-              value={paymentMethod.holder || ""}
+              value={paymentMethod.holder}
               setValue={handleChange}
             />
-            <Input
-              title="Banco"
-              name="bank"
-              value={paymentMethod.bank || ""}
-              setValue={handleChange}
-            />
+            <Input title="Banco" name="bank" value={paymentMethod.bank} setValue={handleChange} />
             <Input
               title="Prioridad"
               name="priority"
               type="number"
-              value={paymentMethod.priority || ""}
-              setValue={handleChange}
-            />
-            <Input
-              title="Monto Máximo"
-              name="maxAmount"
-              type="number"
-              value={paymentMethod.maxAmount || ""}
-              setValue={handleChange}
-            />
-            <Input
-              title="Porcentaje Máximo"
-              name="maxPercentage"
-              type="number"
-              value={paymentMethod.maxPercentage || ""}
+              value={paymentMethod.priority}
               setValue={handleChange}
             />
           </>

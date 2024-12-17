@@ -12,7 +12,7 @@ import { Button, Typography } from "@material-tailwind/react";
 
 export function PaymentMethodCreate() {
   const [paymentMethod, setPaymentMethod] = useState({
-    type: "Cash", // Default value
+    tipo: "Cash", // Default value
     alias: "",
     clabe: "",
     accountNumber: "",
@@ -49,7 +49,7 @@ export function PaymentMethodCreate() {
   useEffect(() => {
     if (messageCreate) {
       dispatch({ type: PAYMENT_METHOD_ADMIN_CREATE_RESET });
-      navigate("/admin/payment-methods");
+      navigate("/admin/metodosDePago");
     }
     if (!userInfo) {
       dispatch(getLoginData());
@@ -73,8 +73,8 @@ export function PaymentMethodCreate() {
         <div className="col-span-full">
           <label className="block text-sm font-medium">Tipo</label>
           <select
-            name="type"
-            value={paymentMethod.type}
+            name="tipo"
+            value={paymentMethod.tipo}
             onChange={handleChange}
             className="w-full rounded-md border p-2"
             required
@@ -86,7 +86,7 @@ export function PaymentMethodCreate() {
         </div>
 
         {/* Campos dinámicos */}
-        {paymentMethod.type === "Cash" && (
+        {paymentMethod.tipo === "Cash" && (
           <>
             <Input
               title="Monto Máximo"
@@ -105,7 +105,7 @@ export function PaymentMethodCreate() {
           </>
         )}
 
-        {paymentMethod.type === "Transfer" && (
+        {paymentMethod.tipo === "Transfer" && (
           <>
             <Input
               title="Alias"
@@ -168,7 +168,7 @@ export function PaymentMethodCreate() {
           </>
         )}
 
-        {paymentMethod.type === "Credit Card" && (
+        {paymentMethod.tipo === "Credit Card" && (
           <>
             <Input
               title="Alias"

@@ -7,14 +7,12 @@ import {
   CardHeader,
   CardBody,
   Typography,
-  Avatar,
 } from "@material-tailwind/react";
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
 import Loader from "../../../../components/Loader";
 import Paginate from "../../../../components/Paginate";
 import {
   PAYMENT_METHOD_ADMIN_DELETE_RESET,
-  PAYMENT_METHOD_ADMIN_LIST_RESET,
 } from "../../../../constants/paymentMethodConstants";
 import { adminListPaymentMethods } from "../../../../actions/paymentMethodActions";
 import Delete from "./Delete";
@@ -26,15 +24,17 @@ export function PaymentMethodList() {
   const order = useParams().order;
   const [keywordSearch, setKeywordSearch] = useState("");
   const [pageSize, setPageSize] = useState(10);
-  const [sortField, setSortField] = useState(sort || "name");
+  const [sortField, setSortField] = useState(sort || "alias");
   const [sortOrder, setSortOrder] = useState(order || "ascending");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const adminPaymentMethodsList = useSelector((state) => state.adminPaymentMethodsList);
-  const { loading, error, paymentMethods, page, pages, success } = adminPaymentMethodsList;
+  const adminPaymentMethodsList = useSelector(
+    (state) => state.adminPaymentMethodsList
+  );
+  const { loading, error, paymentMethods, page, pages } = adminPaymentMethodsList;
 
   useEffect(() => {
     dispatch({ type: PAYMENT_METHOD_ADMIN_DELETE_RESET });
@@ -49,14 +49,6 @@ export function PaymentMethodList() {
     );
   }, [dispatch, keywordSearch, pageNumber, pageSize, sortField, sortOrder]);
 
-  useEffect(() => {
-    if (!loading && !error && !success) {
-      dispatch(
-        adminListPaymentMethods(keyword, pageNumber, pageSize, sortField, sortOrder)
-      );
-    }
-  }, [dispatch, loading, error, success]);
-
   const submitSort = (field) => {
     const newOrder =
       field === sortField
@@ -66,12 +58,12 @@ export function PaymentMethodList() {
         : "ascending";
     setSortField(field);
     setSortOrder(newOrder);
-    navigate(`/admin/paymentMethodos/sort/${field}/order/${newOrder}`);
+    navigate(`/admin/metodosDePago/sort/${field}/order/${newOrder}`);
   };
 
   const handleSearch = (e) => {
     if (e.key === "Enter") {
-      navigate(`/admin/paymentMethodos/search/${keywordSearch}`);
+      navigate(`/admin/metodosDePago/search/${keywordSearch}`);
     }
   };
 
@@ -82,12 +74,12 @@ export function PaymentMethodList() {
         <CardHeader variant="gradient" color="blue" className="mb-8 p-6">
           <div className="flex items-center justify-between">
             <Typography variant="h6" color="white">
-              Metodos de Pago
+              Métodos de Pago
             </Typography>
             <div className="flex gap-3">
               <input
                 type="text"
-                placeholder="Buscar paymentMethodos..."
+                placeholder="Buscar métodos..."
                 className="rounded-md p-2 text-sm"
                 value={keywordSearch}
                 onChange={(e) => setKeywordSearch(e.target.value)}
@@ -95,7 +87,7 @@ export function PaymentMethodList() {
               />
               <Link to="/admin/metodosDePago/crear">
                 <Button variant="gradient" color="white">
-                  Crear Metodo
+                  Crear Método
                 </Button>
               </Link>
             </div>
@@ -109,12 +101,14 @@ export function PaymentMethodList() {
               <thead>
                 <tr>
                   {[
-                    { field: "image", text: "Imagen" },
-                    { field: "name", text: "Nombre" },
-                    { field: "type", text: "Tipo" },
-                    { field: "appearance", text: "Apariencia" },
-                    { field: "category", text: "Categoría" },
-                    { field: "code", text: "Código" },
+                    { field: "alias", text: "Alias" },
+                    { field: "holder", text: "Titular" },
+                    { field: "bank", text: "Banco" },
+                    { field: "tipo", text: "Tipo" },
+                    { field: "priority", text: "Prioridad" },
+                    { field: "maxAmount", text: "Monto Máximo" },
+                    { field: "maxPercentage", text: "Porcentaje Máximo" },
+                    { field: "paymentDate", text: "Fecha de Pago" },
                     { field: null, text: "Acciones" },
                   ].map((el) => (
                     <th
@@ -147,33 +141,21 @@ export function PaymentMethodList() {
                     key={paymentMethod._id}
                     className="border-b border-blue-gray-50"
                   >
-                    {/* PaymentMethod Image */}
+                    <td className="py-3 px-5">{paymentMethod.alias}</td>
+                    <td className="py-3 px-5">{paymentMethod.holder}</td>
+                    <td className="py-3 px-5">{paymentMethod.bank}</td>
+                    <td className="py-3 px-5">{paymentMethod.tipo}</td>
+                    <td className="py-3 px-5">{paymentMethod.priority}</td>
+                    <td className="py-3 px-5">{paymentMethod.maxAmount}</td>
+                    <td className="py-3 px-5">{paymentMethod.maxPercentage}%</td>
                     <td className="py-3 px-5">
-                      <img
-                        src={paymentMethod.image?.url || "/placeholder.png"} // Fallback image if URL is missing
-                        alt={paymentMethod.name}
-                        className="h-12 w-12 rounded object-cover shadow-md"
-                      />
+                      {new Date(paymentMethod.paymentDate).toLocaleDateString()}
                     </td>
-
-                    {/* PaymentMethod Name */}
-                    <td className="py-3 px-5">{paymentMethod.name}</td>
-
-                    {/* PaymentMethod Type */}
-                    <td className="py-3 px-5">{paymentMethod.type}</td>
-
-                    {/* PaymentMethod Appearance */}
-                    <td className="py-3 px-5">{paymentMethod.appearance}</td>
-
-                    {/* PaymentMethod Category */}
-                    <td className="py-3 px-5">{paymentMethod.category}</td>
-
-                    {/* PaymentMethod Code */}
-                    <td className="py-3 px-5">{paymentMethod.code}</td>
-
                     {/* Actions */}
                     <td className="flex flex-col py-3 px-5">
-                      <Link to={`/admin/metodosDePago/${paymentMethod._id}/editar`}>
+                      <Link
+                        to={`/admin/metodosDePago/${paymentMethod._id}/editar`}
+                      >
                         <Typography
                           as="a"
                           className="text-blue-500 hover:underline"
@@ -181,7 +163,9 @@ export function PaymentMethodList() {
                           Editar
                         </Typography>
                       </Link>
-                      <Link to={`/admin/metodosDePago/${paymentMethod._id}/eliminar`}>
+                      <Link
+                        to={`/admin/metodosDePago/${paymentMethod._id}/eliminar`}
+                      >
                         <Typography
                           as="a"
                           className="text-red-500 hover:underline"
