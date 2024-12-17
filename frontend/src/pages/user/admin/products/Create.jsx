@@ -9,10 +9,6 @@ import SuccessAlert from "../../../../components/alerts/SuccessAlert";
 import ComboBoxSingle from "../../../../components/elements/ComboBoxSingle";
 
 import { PRODUCT_ADMIN_CREATE_RESET } from "../../../../constants/productConstants";
-import {
-  adminCreateLookup,
-  adminListLookups,
-} from "../../../../actions/lookupActions";
 import { adminCreateProduct } from "../../../../actions/productActions";
 
 import { Button, Typography, Switch } from "@material-tailwind/react";
@@ -95,12 +91,6 @@ export function ProductCreate() {
     dispatch(adminCreateProduct(formData));
   };
 
-  const submitCategoryHandler = () => {
-    dispatch(adminCreateLookup(newCategory));
-    setNewCategory({ name: "" });
-    setShowSuccessCategory(true);
-  };
-
   useEffect(() => {
     if (messageCreateProduct) {
       dispatch({ type: PRODUCT_ADMIN_CREATE_RESET });
@@ -108,8 +98,6 @@ export function ProductCreate() {
     }
     if (!userInfo) {
       dispatch(getLoginData());
-    } else {
-      dispatch(adminListLookups());
     }
   }, [dispatch, userInfo, messageCreateProduct, navigate]);
 

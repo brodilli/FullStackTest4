@@ -16,14 +16,6 @@ import {
   Textarea,
 } from "../../../../components/elements/Inputs";
 import ComboBox from "../../../../components/elements/ComboBox";
-import {
-  adminCreateBrand,
-  adminListBrands,
-} from "../../../../actions/brandActions";
-import {
-  adminCreateLookup,
-  adminListLookups,
-} from "../../../../actions/lookupActions";
 
 import {
   Avatar,
@@ -138,28 +130,10 @@ export function ProductEdit() {
     (state) => state.adminGenericNameList
   );
 
-  const submitBrandHandler = () => {
-    dispatch(adminCreateBrand(newBrand));
-  };
-  const handleBrandChange = (e) => {
-    setNewBrand((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
   const handleComboboxChange = (name, value) => {
     setProduct((prevState) => ({
       ...prevState,
       [name]: value,
-    }));
-  };
-  const submitCategoryHandler = () => {
-    dispatch(adminCreateLookup(newCategory));
-  };
-  const handleCategoryChange = (e) => {
-    setNewCategory((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
     }));
   };
 
@@ -213,43 +187,11 @@ export function ProductEdit() {
       navigate(redirect);
     } else if (id && (!productDetails || productDetails._id !== id)) {
       dispatch(adminDetailsProduct(id));
-      dispatch(adminListBrands());
-      dispatch(adminListLookups());
     }
     if (productDetails) {
       setProduct(productDetails);
     }
-
-    if (messageBrand) {
-      setNewBrand("");
-      setShowSuccessBrand(true);
-      setTimeout(() => {
-        setShowSuccessBrand(false);
-      }, 3000);
-    }
-    if (messageCategory) {
-      setNewCategory("");
-      setShowSuccessCategory(true);
-      setTimeout(() => {
-        setShowSuccessCategory(false);
-      }, 3000);
-    }
-    if (messageGenericName) {
-      setNewGenericName("");
-      setShowSuccessGenericName(true);
-      setTimeout(() => {
-        setShowSuccessGenericName(false);
-      }, 3000);
-    }
-  }, [
-    userInfo,
-    messageUpdate,
-    productDetails,
-    errorUpdate,
-    messageBrand,
-    messageCategory,
-    messageGenericName,
-  ]);
+  }, [userInfo, messageUpdate, productDetails, errorUpdate]);
   return (
     <div className="bg-slate-50 flex min-h-[85vh] flex-col p-4">
       {showErrorMessage && (
@@ -327,47 +269,9 @@ export function ProductEdit() {
               <ComboBoxSingle
                 title="Marca"
                 name="brand"
-                createOptionModal={"Crear Etapa"}
                 selectedItem={product.brand}
                 data={brands}
                 setAction={handleComboboxChange}
-                childrenModal={
-                  <form
-                    className="flex flex-col gap-3 bg-white p-4"
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      submitBrandHandler();
-                    }}
-                  >
-                    {showSuccessBrand && <SuccessAlert title="Marca Creada" />}
-
-                    <Input
-                      title="Nombre de etapa"
-                      name="name"
-                      type="text"
-                      required={true}
-                      value={newBrand.name}
-                      setValue={handleBrandChange}
-                    />
-
-                    <div className="col-span-full text-center">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          submitBrandHandler();
-                        }}
-                        className={
-                          "bg-" +
-                          (sidenavColor ? sidenavColor : "black") +
-                          "-500 w-full rounded-md p-2 px-4 text-lg font-bold text-white hover:bg-opacity-90"
-                        }
-                      >
-                        Crear
-                      </button>
-                    </div>
-                  </form>
-                }
               >
                 {/* Children */}
                 {/* Show selected item */}
@@ -386,47 +290,9 @@ export function ProductEdit() {
               <ComboBoxSingle
                 title="Categoria"
                 name="category"
-                createOptionModal={"Crear Categoria"}
                 data={categories}
                 selectedItem={product.category}
                 setAction={handleComboboxChange}
-                childrenModal={
-                  <form
-                    className="flex flex-col gap-3 bg-white p-4"
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      submitCategoryHandler();
-                    }}
-                  >
-                    {showSuccessCategory && (
-                      <SuccessAlert title="Categoria Creada" />
-                    )}
-                    <Input
-                      title="Nombre de Categoria"
-                      name="name"
-                      type="text"
-                      required={true}
-                      value={newCategory.name}
-                      setValue={handleCategoryChange}
-                    />
-                    <div className="col-span-full text-center">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          submitCategoryHandler();
-                        }}
-                        className={
-                          "bg-" +
-                          (sidenavColor ? sidenavColor : "black") +
-                          "-500 w-full rounded-md p-2 px-4 text-lg font-bold text-white hover:bg-opacity-90"
-                        }
-                      >
-                        Crear
-                      </button>
-                    </div>
-                  </form>
-                }
               >
                 <div className="mt-2 flex items-center justify-between rounded-md bg-white p-3 shadow-md">
                   <span className="flex font-medium">

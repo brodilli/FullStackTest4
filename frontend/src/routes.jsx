@@ -95,7 +95,7 @@ export const routes = [
     userType: "Admin",
     layout: "admin",
     pages: [
-      {
+      /*{
         icon: <BuildingStorefrontIcon {...icon} />,
         name: "Lookups",
         path: "/lookups",
@@ -122,7 +122,7 @@ export const routes = [
             hide: true,
           },
         ],
-      },
+      },*/
     ],
   },
 ];
