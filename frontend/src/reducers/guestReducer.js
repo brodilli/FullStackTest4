@@ -1,99 +1,99 @@
 import {
-  GUEST_ADMIN_CREATE_FAIL,
-  GUEST_ADMIN_CREATE_REQUEST,
-  GUEST_ADMIN_CREATE_RESET,
-  GUEST_ADMIN_CREATE_SUCCESS,
-  GUEST_ADMIN_DELETE_FAIL,
-  GUEST_ADMIN_DELETE_REQUEST,
-  GUEST_ADMIN_DELETE_RESET,
-  GUEST_ADMIN_DELETE_SUCCESS,
-  GUEST_ADMIN_DETAILS_FAIL,
-  GUEST_ADMIN_DETAILS_REQUEST,
-  GUEST_ADMIN_DETAILS_RESET,
-  GUEST_ADMIN_DETAILS_SUCCESS,
-  GUEST_ADMIN_LIST_FAIL,
-  GUEST_ADMIN_LIST_REQUEST,
-  GUEST_ADMIN_LIST_RESET,
-  GUEST_ADMIN_LIST_SUCCESS,
-  GUEST_ADMIN_UPDATE_FAIL,
-  GUEST_ADMIN_UPDATE_REQUEST,
-  GUEST_ADMIN_UPDATE_SUCCESS,
-} from "../constants/guestConstants";
+  USER_ADMIN_CREATE_FAIL,
+  USER_ADMIN_CREATE_REQUEST,
+  USER_ADMIN_CREATE_RESET,
+  USER_ADMIN_CREATE_SUCCESS,
+  USER_ADMIN_DELETE_FAIL,
+  USER_ADMIN_DELETE_REQUEST,
+  USER_ADMIN_DELETE_RESET,
+  USER_ADMIN_DELETE_SUCCESS,
+  USER_ADMIN_DETAILS_FAIL,
+  USER_ADMIN_DETAILS_REQUEST,
+  USER_ADMIN_DETAILS_RESET,
+  USER_ADMIN_DETAILS_SUCCESS,
+  USER_ADMIN_LIST_FAIL,
+  USER_ADMIN_LIST_REQUEST,
+  USER_ADMIN_LIST_RESET,
+  USER_ADMIN_LIST_SUCCESS,
+  USER_ADMIN_UPDATE_FAIL,
+  USER_ADMIN_UPDATE_REQUEST,
+  USER_ADMIN_UPDATE_SUCCESS,
+} from "../constants/userConstants";
 
-export const adminGuestCreateReducer = (state = {}, action) => {
+export const adminUserCreateReducer = (state = {}, action) => {
   switch (action.type) {
-    case GUEST_ADMIN_CREATE_REQUEST:
+    case USER_ADMIN_CREATE_REQUEST:
       return { loading: true };
-    case GUEST_ADMIN_CREATE_SUCCESS:
+    case USER_ADMIN_CREATE_SUCCESS:
       return { loading: false, message: action.payload.message };
-    case GUEST_ADMIN_CREATE_FAIL:
+    case USER_ADMIN_CREATE_FAIL:
       return { loading: false, error: action.payload };
-    case GUEST_ADMIN_CREATE_RESET:
+    case USER_ADMIN_CREATE_RESET:
       return {};
     default:
       return state;
   }
 };
-export const adminGuestDeleteReducer = (state = {}, action) => {
+export const adminUserDeleteReducer = (state = {}, action) => {
   switch (action.type) {
-    case GUEST_ADMIN_DELETE_REQUEST:
+    case USER_ADMIN_DELETE_REQUEST:
       return { loading: true };
-    case GUEST_ADMIN_DELETE_SUCCESS:
+    case USER_ADMIN_DELETE_SUCCESS:
       return { loading: false, message: action.payload };
-    case GUEST_ADMIN_DELETE_FAIL:
+    case USER_ADMIN_DELETE_FAIL:
       return { loading: false, error: action.payload };
-    case GUEST_ADMIN_DELETE_RESET:
+    case USER_ADMIN_DELETE_RESET:
       return {};
     default:
       return state;
   }
 };
-export const adminGuestUpdateReducer = (state = {}, action) => {
+export const adminUserUpdateReducer = (state = {}, action) => {
   switch (action.type) {
-    case GUEST_ADMIN_UPDATE_REQUEST:
+    case USER_ADMIN_UPDATE_REQUEST:
       return { loading: true };
-    case GUEST_ADMIN_UPDATE_SUCCESS:
+    case USER_ADMIN_UPDATE_SUCCESS:
       return { loading: false, message: action.payload };
-    case GUEST_ADMIN_UPDATE_FAIL:
+    case USER_ADMIN_UPDATE_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;
   }
 };
-export const adminGuestDetailsReducer = (state = {}, action) => {
+export const adminUserDetailsReducer = (state = {}, action) => {
   switch (action.type) {
-    case GUEST_ADMIN_DETAILS_REQUEST:
+    case USER_ADMIN_DETAILS_REQUEST:
       return { loading: true };
-    case GUEST_ADMIN_DETAILS_SUCCESS:
+    case USER_ADMIN_DETAILS_SUCCESS:
       return {
         loading: false,
-        guestDetails: action.payload,
+        userDetails: action.payload,
         success: true,
       };
-    case GUEST_ADMIN_DETAILS_FAIL:
+    case USER_ADMIN_DETAILS_FAIL:
       return { loading: false, error: action.payload };
-    case GUEST_ADMIN_DETAILS_RESET:
+    case USER_ADMIN_DETAILS_RESET:
       return {};
     default:
       return state;
   }
 };
-export const adminGuestListReducer = (state = { users: [] }, action) => {
+export const adminUserListReducer = (state = { users: [] }, action) => {
   switch (action.type) {
-    case GUEST_ADMIN_LIST_REQUEST:
+    case USER_ADMIN_LIST_REQUEST:
       return { loading: true };
-    case GUEST_ADMIN_LIST_SUCCESS:
+    case USER_ADMIN_LIST_SUCCESS:
       return {
         loading: false,
-        users: action.payload.guests,
+        users: action.payload.users,
         page: action.payload.page,
         pages: action.payload.pages,
         success: true,
       };
-    case GUEST_ADMIN_LIST_FAIL:
+    case USER_ADMIN_LIST_FAIL:
       return { loading: false, error: action.payload };
-    case GUEST_ADMIN_LIST_RESET:
-      return { guests: [] };
+    case USER_ADMIN_LIST_RESET:
+      return { users: [] };
     default:
       return state;
   }

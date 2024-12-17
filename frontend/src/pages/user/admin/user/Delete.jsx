@@ -5,40 +5,40 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoginData } from "../../../../actions/userActions";
 import {
-  adminDeleteGuest,
-  adminDetailsGuest,
-} from "../../../../actions/guestActions";
+  adminDeleteUser,
+  adminDetailsUser,
+} from "../../../../actions/userActions";
 import Loader from "../../../../components/Loader";
 
-export function GuestDelete({ closeAction, id }) {
+export function UserDelete({ closeAction, id }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
-  const adminGuestDetails = useSelector((state) => state.adminGuestDetails);
+  const adminUserDetails = useSelector((state) => state.adminUserDetails);
   const {
     loading: loadingDetails,
     error: errorDetails,
-    guestDetails,
-  } = adminGuestDetails;
-  const adminGuestDelete = useSelector((state) => state.adminGuestDelete);
+    userDetails,
+  } = adminUserDetails;
+  const adminUserDelete = useSelector((state) => state.adminUserDelete);
   const {
     loading: loadingDelete,
     error: errorDelete,
     message,
-  } = adminGuestDelete;
+  } = adminUserDelete;
 
   useEffect(() => {
-    if ((id && !guestDetails) || (id && guestDetails._id !== id)) {
-      dispatch(adminDetailsGuest(id));
+    if ((id && !userDetails) || (id && userDetails._id !== id)) {
+      dispatch(adminDetailsUser(id));
     }
     if (message) {
       navigate("/admin/invitados");
     }
-  }, [guestDetails, message]);
+  }, [userDetails, message]);
   const submitHandler = () => {
-    dispatch(adminDeleteGuest(id));
+    dispatch(adminDeleteUser(id));
   };
   const closeHandler = () => {
     navigate("/admin/invitados");
@@ -82,7 +82,7 @@ export function GuestDelete({ closeAction, id }) {
                   <div className="mx-3 flex w-1/2 justify-center">
                     <input
                       className="mx-2 flex w-full rounded-md border-2 p-2 text-center font-bold outline-none focus:border-blue-500"
-                      defaultValue={guestDetails?.name}
+                      defaultValue={userDetails?.name}
                       disabled
                     />
                   </div>
@@ -108,4 +108,4 @@ export function GuestDelete({ closeAction, id }) {
   );
 }
 
-export default GuestDelete;
+export default UserDelete;

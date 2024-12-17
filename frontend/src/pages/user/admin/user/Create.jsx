@@ -2,12 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { adminCreateGuest } from "../../../../actions/guestActions";
+import { adminCreateUser } from "../../../../actions/userActions";
 import { getLoginData } from "../../../../actions/userActions";
 
 import { Input, CheckBox } from "../../../../components/elements/Inputs";
 import Alert from "../../../../components/alerts/Alert";
-import { GUEST_ADMIN_CREATE_RESET } from "../../../../constants/guestConstants";
+import { USER_ADMIN_CREATE_RESET } from "../../../../constants/userConstants";
 import { Button, Typography } from "@material-tailwind/react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -58,8 +58,8 @@ export function UserCreate() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const adminGuestCreate = useSelector((state) => state.adminGuestCreate);
-  const { loading: loadingCreateUser, error: errorCreateUser, message: messageCreateUser } = adminGuestCreate;
+  const adminUserCreate = useSelector((state) => state.adminUserCreate);
+  const { loading: loadingCreateUser, error: errorCreateUser, message: messageCreateUser } = adminUserCreate;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -96,12 +96,12 @@ export function UserCreate() {
   };
 
   const submitHandler = () => {
-    dispatch(adminCreateGuest(user, password));
+    dispatch(adminCreateUser(user, password));
   };
 
   useEffect(() => {
     if (messageCreateUser) {
-      dispatch({ type: GUEST_ADMIN_CREATE_RESET });
+      dispatch({ type: USER_ADMIN_CREATE_RESET });
       navigate("/admin/invitados");
     }
     if (!userInfo) {

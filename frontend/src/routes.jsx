@@ -5,7 +5,7 @@ import {
   BuildingOfficeIcon,
 } from "@heroicons/react/24/solid";
 import {
-  GuestEdit,
+  UserEdit,
   LookupList,
   ProductCreate,
   ProductEdit,
@@ -20,8 +20,8 @@ const icon = {
 
 export const routes = [
   {
-    userType: "Guest",
-    layout: "guest",
+    userType: "User",
+    layout: "user",
     pages: [],
   },
 
@@ -47,7 +47,7 @@ export const routes = [
             icon: <UserGroupIcon {...icon} />,
             name: "Editar",
             path: "/:id/editar",
-            element: <GuestEdit />,
+            element: <UserEdit />,
             hide: true,
           },
           {

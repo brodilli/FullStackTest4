@@ -10,10 +10,10 @@ import {
 } from "@material-tailwind/react";
 import Loader from "../../../../components/Loader";
 import {
-  GUEST_ADMIN_DELETE_RESET,
-  GUEST_ADMIN_LIST_RESET,
-} from "../../../../constants/guestConstants";
-import { adminListGuests } from "../../../../actions/guestActions";
+  USER_ADMIN_DELETE_RESET,
+  USER_ADMIN_LIST_RESET,
+} from "../../../../constants/userConstants";
+import { adminListUsers } from "../../../../actions/userActions";
 import Delete from "./Delete";
 
 export function UserList() {
@@ -25,21 +25,21 @@ export function UserList() {
   const [pageSize, setPageSize] = useState(10);
   const [viewModal, setViewModal] = useState(false);
 
-  const adminGuestList = useSelector((state) => state.adminGuestList);
+  const adminUserList = useSelector((state) => state.adminUserList);
   const {
-    loading: loadingGuests,
-    error: errorGuests,
+    loading: loadingUsers,
+    error: errorUsers,
     users,
     page,
     pages,
-  } = adminGuestList;
+  } = adminUserList;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
 
   const submitSearch = () => {
-    dispatch({ type: GUEST_ADMIN_LIST_RESET });
+    dispatch({ type: USER_ADMIN_LIST_RESET });
     if (keywordSearch.trim()) {
       navigate(`/admin/users/search/${keywordSearch}`);
     } else {
@@ -54,7 +54,7 @@ export function UserList() {
   };
 
   const submitSort = (field) => {
-    dispatch({ type: GUEST_ADMIN_LIST_RESET });
+    dispatch({ type: USER_ADMIN_LIST_RESET });
     const newOrder = order === "ascending" ? "descending" : "ascending";
     if (keyword) {
       navigate(`/admin/users/search/${keyword}/sort/${field}/order/${newOrder}`);
@@ -65,7 +65,7 @@ export function UserList() {
 
   const newSize = (size) => {
     setPageSize(size);
-    dispatch({ type: GUEST_ADMIN_LIST_RESET });
+    dispatch({ type: USER_ADMIN_LIST_RESET });
     navigate("/admin/users");
   };
 
@@ -74,8 +74,8 @@ export function UserList() {
   };
 
   useEffect(() => {
-    if (!errorGuests) {
-      dispatch(adminListGuests(keyword, pageNumber, pageSize, sort, order));
+    if (!errorUsers) {
+      dispatch(adminListUsers(keyword, pageNumber, pageSize, sort, order));
     }
     if (id) {
       const link = document.location.href.split("/");
@@ -84,7 +84,7 @@ export function UserList() {
       }
     } else {
       setViewModal(false);
-      dispatch({ type: GUEST_ADMIN_DELETE_RESET });
+      dispatch({ type: USER_ADMIN_DELETE_RESET });
     }
   }, [keyword, pageNumber, pageSize, sort, order, id]);
 
@@ -123,7 +123,7 @@ export function UserList() {
           </div>
         </CardHeader>
         <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
-          {loadingGuests ? (
+          {loadingUsers ? (
             <div className="flex w-full justify-center">
               <Loader />
             </div>

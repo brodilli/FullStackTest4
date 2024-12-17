@@ -6,14 +6,14 @@ const wrapAsync = require("../errors/wrapAsync");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
-// Guest Routes
+// User Routes
 router
-  .route("/guest")
+  .route("/user")
   .get(isLoggedIn, isAdmin, adminController.viewUsers)
   .post(isLoggedIn, isAdmin, adminController.createUser);
 
 router
-  .route("/guests/:id")
+  .route("/users/:id")
   .get(isLoggedIn, isAdmin, adminController.viewUser)
   .put(isLoggedIn, isAdmin, adminController.editUser)
   .delete(isLoggedIn, isAdmin, adminController.deleteUser);
