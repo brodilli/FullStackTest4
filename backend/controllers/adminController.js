@@ -13,13 +13,13 @@ module.exports.createUser = asyncHandler(async (req, res) => {
   // Find the current user
   const currentUser = await User.findById(req.user._id);
   // Fetch Guest data from the request body
-  const data = req.body.guest;
+  const data = req.body.user;
+  const password = req.body.password;
   console.log(data);
-  data.userType = "Guest";
   data.deleted = false;
   data.username = data.email;
   data.createdBy = currentUser;
-  await User.create(data);
+  await User.register(data, password);
   res.status(201).json({ message: "Guest created" });
 });
 module.exports.deleteUser = asyncHandler(async (req, res) => {

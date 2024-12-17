@@ -19,7 +19,7 @@ export function UserCreate() {
     email: "",
     phone: "",
     tradename: "",
-    userType: "Guest",
+    userType: "Client",
     shippingAddress: {
       street: "",
       number: "",
@@ -92,11 +92,11 @@ export function UserCreate() {
 
   const generatePassword = () => {
     const randomPassword = Math.random().toString(36).slice(-8);
-    setUser((prevState) => ({ ...prevState, password: randomPassword }));
+    setPassword(randomPassword);
   };
 
   const submitHandler = () => {
-    dispatch(adminCreateGuest(user));
+    dispatch(adminCreateGuest(user, password));
   };
 
   useEffect(() => {
@@ -128,9 +128,20 @@ export function UserCreate() {
           <PhoneInput country="mx" value={user.phone} onChange={(value) => setUser((prev) => ({ ...prev, phone: value }))} inputStyle={{ width: "100%" }} />
           <Input title="Alias" name="tradename" value={user.tradename} setValue={handleChange} />
 
-          {/* Generador de Contraseña */}
-          <Input title="Contraseña" name="password" value={password} setValue={handleChange} />
-          <Button onClick={generatePassword} className="w-1/2 bg-blue-500 text-white rounded">Generar Contraseña</Button>
+         {/* Generador de Contraseña */}
+<Input
+  title="Contraseña"
+  name="password"
+  value={password}
+  setValue={(e) => setPassword(e.target.value)}
+/>
+<Button
+  type="button"
+  onClick={generatePassword}
+  className="w-1/2 bg-blue-500 text-white rounded"
+>
+  Generar Contraseña
+</Button>
 
           {/* Tipo de Usuario */}
           <div>

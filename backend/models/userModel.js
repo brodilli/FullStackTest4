@@ -24,6 +24,14 @@ const userSchema = mongoose.Schema(
       lowercase: true,
       unique: true,
     },
+    requiresInvoice: {
+      type: Boolean,
+      default: false,
+    },
+    useShippingAsBilling: {
+      type: Boolean,
+      default: true,
+    },
     billing: {
       taxId: { type: String }, // RFC
       businessName: { type: String }, // Razón Social
@@ -61,28 +69,10 @@ const userSchema = mongoose.Schema(
     userType: {
       type: String,
       enum: ["Client", "Admin", "Supplier"],
-      default: "Guest",
     },
     tradename: {
       type: String,
       default: "",
-    },
-    allowPlusOne: {
-      type: Boolean,
-      default: false,
-    },
-    plusOne: {
-      type: Boolean,
-      default: false,
-    },
-    allergies: {
-      type: String,
-      default: "",
-    },
-    status: {
-      type: String,
-      enum: ["Pending", "Accepted", "Declined"],
-      default: "Pending",
     },
     deleted: {
       type: Boolean,

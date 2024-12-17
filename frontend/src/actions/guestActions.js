@@ -64,9 +64,10 @@ export const adminDetailsGuest = (id) => async (dispatch) => {
   }
 };
 
-export const adminCreateGuest = (guest) => async (dispatch) => {
-  console.log(guest);
-  console.log("adminCreateGuest");
+export const adminCreateGuest = (user, password) => async (dispatch) => {
+ 
+  console.log("user", user);
+  console.log("password", password);
   try {
     dispatch({
       type: GUEST_ADMIN_CREATE_REQUEST,
@@ -78,7 +79,7 @@ export const adminCreateGuest = (guest) => async (dispatch) => {
     };
     const { data } = await axios.post(
       "/api/admin/guest",
-      { guest },
+      { user, password },
       config
     );
 
