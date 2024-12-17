@@ -1,458 +1,346 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  adminDetailsProduct,
-  adminUpdateProduct,
-} from "../../../../actions/productActions";
+
 import { getLoginData } from "../../../../actions/userActions";
-import ComboBoxSingle from "../../../../components/elements/ComboBoxSingle";
-import { XMarkIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import {
-  InputFile,
-  Input,
-  CheckBox,
-  InputSelect,
-  Textarea,
-} from "../../../../components/elements/Inputs";
-import ComboBox from "../../../../components/elements/ComboBox";
-
-import {
-  Avatar,
-  Button,
-  IconButton,
-  Typography,
-  Card,
-  List,
-  ListItem,
-  ListItemPrefix,
-  ListItemSuffix,
-  Chip,
-  Accordion,
-  AccordionHeader,
-  AccordionBody,
-  Switch,
-} from "@material-tailwind/react";
-import SuccessAlert from "../../../../components/alerts/SuccessAlert";
+import { Input, InputFile } from "../../../../components/elements/Inputs";
 import Alert from "../../../../components/alerts/Alert";
+import SuccessAlert from "../../../../components/alerts/SuccessAlert";
+import ComboBoxSingle from "../../../../components/elements/ComboBoxSingle";
 
-import { useMaterialTailwindController } from "../../../../context";
-import Loader from "../../../../components/Loader";
+import {
+  adminUpdateProduct,
+  adminDetailsProduct,
+} from "../../../../actions/productActions";
+import { PRODUCT_ADMIN_UPDATE_RESET } from "../../../../constants/productConstants";
+
+import { Button, Typography, Switch } from "@material-tailwind/react";
 
 export function ProductEdit() {
+  const { id } = useParams();
   const [product, setProduct] = useState({
     name: "",
-    brand: "",
-    category: "",
-    macros: {
-      proteins: 0,
-      carbohydrates: 0,
-      fats: 0,
-      calories: 0,
-    },
-    portion: 100,
-    type: "gramos",
-    description: "",
-    status: "Disponible",
-    onSale: true,
+    type: "Tubo", // Default enum value
+    appearance: "Color", // Default enum value
+    category: "Economico", // Default enum value
+    diameter: 0,
+    thickness: 0,
+    length: 1.5, // Default value
+    initialQuantity: 0,
+    piecesPerBox: 0,
+    weightPerBox: 0,
+    tubeQuantityPerBox: 0,
+    minimumQuantity: 0,
+    unitOfMeasure: "Pieza", // Default enum value
+    code: "",
+    taxesIncluded: false,
+    onSale: false,
+    image: null, // For the product image file
   });
-  const { id } = useParams();
+
   const [selectedImages, setSelectedImages] = useState();
-  const [newBrand, setNewBrand] = useState({
-    name: "",
-  });
-  const [newCategory, setNewCategory] = useState({
-    name: "",
-  });
-  const [newGenericName, setNewGenericName] = useState({
-    name: "",
-  });
-  const [showSuccessBrand, setShowSuccessBrand] = useState(false);
-  const [showSuccessCategory, setShowSuccessCategory] = useState(false);
-  const [showSuccessGenericName, setShowSuccessGenericName] = useState(false);
-  const desarollosImage = useRef();
-  const productInputImage = useRef();
+  const [showImageAlert, setShowImageAlert] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [controller, setController] = useMaterialTailwindController();
-  const { sidenavColor, sidenavType, openSidenav } = controller;
 
   const userLogin = useSelector((state) => state.userLogin);
-  const { loading, error, userInfo } = userLogin;
+  const { userInfo } = userLogin;
 
   const adminProductUpdate = useSelector((state) => state.adminProductUpdate);
   const {
-    loading: loadingUpdate,
-    error: errorUpdate,
-    message: messageUpdate,
+    error: errorUpdateProduct,
+    message: messageUpdateProduct,
+    loading: loadingUpdateProduct,
+    success: successUpdateProduct,
   } = adminProductUpdate;
 
   const adminProductDetails = useSelector((state) => state.adminProductDetails);
   const {
-    loading: loadingDetails,
-    error: errorDetails,
+    loadiing: loadingDetailsProduct,
+    error: errorDetailsProduct,
     productDetails,
+    success: successDetailsProduct,
   } = adminProductDetails;
-  const adminBrandCreate = useSelector((state) => state.adminBrandCreate);
-  const {
-    loading: loadingCreateBrand,
-    error: errorCreateBrand,
-    message: messageBrand,
-  } = adminBrandCreate;
-  const adminBrandList = useSelector((state) => state.adminBrandList);
-  const {
-    loading: loadingBrandList,
-    error: errorBrandList,
-    brands,
-  } = adminBrandList;
-  const adminCategoryCreate = useSelector((state) => state.adminCategoryCreate);
-  const {
-    loading: loadingCreateCategory,
-    error: errorCreateCategory,
-    message: messageCategory,
-  } = adminCategoryCreate;
-  const adminCategoryList = useSelector((state) => state.adminCategoryList);
-  const {
-    loading: loadingCategoryList,
-    error: errorCategoryList,
-    categories,
-  } = adminCategoryList;
-  const adminGenericNameCreate = useSelector(
-    (state) => state.adminGenericNameCreate
-  );
-  const {
-    loading: loadingCreateGenericName,
-    error: errorCreateGenericName,
-    message: messageGenericName,
-  } = adminGenericNameCreate;
-  const adminGenericNameList = useSelector(
-    (state) => state.adminGenericNameList
-  );
-
-  const handleComboboxChange = (name, value) => {
-    setProduct((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+  // Handlers
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProduct((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleChange = (e) =>
-    setProduct((prevState) => ({
-      ...prevState,
-      [e.target.name.split(".")[0]]:
-        e.target.name.split(".").length === 2
-          ? {
-              ...prevState[e.target.name.split(".")[0]],
-              [e.target.name.split(".")[1]]: e.target.value,
-            }
-          : e.target.value,
-    }));
-  const handleChangeCheckbox = (e) =>
-    setProduct((prevState) => ({
-      ...prevState,
-      [e.target.name.split(".")[0]]:
-        e.target.name.split(".").length === 2
-          ? {
-              ...prevState[e.target.name.split(".")[0]],
-              [e.target.name.split(".")[1]]: e.target.checked,
-            }
-          : e.target.checked,
-    }));
+  const handleComboboxChange = (name, value) => {
+    setProduct((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setProduct((prev) => ({ ...prev, [name]: checked }));
+  };
 
   const submitHandler = () => {
+    setShowImageAlert(false);
     setShowErrorMessage(false);
+
     const formData = new FormData();
     formData.append("product", JSON.stringify(product));
 
     if (selectedImages) {
       formData.append("files", selectedImages, "image");
+    } else {
+      setShowImageAlert(true);
+      return;
     }
-    if (id) dispatch(adminUpdateProduct(id, formData));
+
+    dispatch(adminUpdateProduct(formData));
   };
-  const redirect = "/login";
+
   useEffect(() => {
-    if (messageUpdate) {
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "smooth",
-      });
-    } else if (errorUpdate) {
-      setShowErrorMessage(true);
+    if (messageUpdateProduct) {
+      dispatch({ type: PRODUCT_ADMIN_UPDATE_RESET });
     }
     if (!userInfo) {
       dispatch(getLoginData());
-    } else if (userInfo.userType !== "Admin") {
-      navigate(redirect);
-    } else if (id && (!productDetails || productDetails._id !== id)) {
+    } else if (
+      (!successDetailsProduct &&
+        !errorDetailsProduct &&
+        !loadingDetailsProduct) ||
+      (productDetails?._id && productDetails._id !== id)
+    ) {
       dispatch(adminDetailsProduct(id));
     }
-    if (productDetails) {
+    if (successDetailsProduct) {
       setProduct(productDetails);
     }
-  }, [userInfo, messageUpdate, productDetails, errorUpdate]);
+    console.log(productDetails);
+  }, [
+    dispatch,
+    userInfo,
+    messageUpdateProduct,
+    successDetailsProduct,
+    productDetails,
+    id,
+    navigate,
+  ]);
+
   return (
-    <div className="bg-slate-50 flex min-h-[85vh] flex-col p-4">
+    <div className="bg-slate-50 p-4">
       {showErrorMessage && (
-        <div className="fixed bottom-0 left-0 right-0 z-10 flex items-end justify-center p-4">
-          <div
-            id="toast-danger"
-            className="mb-4 flex w-full max-w-xs items-center justify-between rounded-lg bg-red-100 p-4 text-gray-800 shadow dark:bg-gray-800 dark:text-gray-400"
-            role="alert"
-          >
-            <div className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-white text-red-500 dark:bg-red-800 dark:text-red-200">
-              <svg
-                className="h-5 w-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
+        <Alert title="Error" text="No se pudo crear el producto." />
+      )}
+      <h2 className="text-palette-primary text-xl font-bold">
+        Agregar Producto
+      </h2>
+      <form
+        className=""
+        onSubmit={(e) => {
+          e.preventDefault();
+          submitHandler();
+        }}
+      >
+        <div className="grid grid-cols-2 gap-6">
+          {/* Column 1 */}
+          <div className="flex flex-col gap-3">
+            <Input
+              title="Nombre"
+              name="name"
+              value={product?.name}
+              setValue={handleChange}
+              required
+            />
+
+            {/* Select for Tipo */}
+            <div>
+              <label className="mb-1 block text-sm font-medium">Tipo</label>
+              <select
+                name="type"
+                value={product?.type}
+                onChange={handleChange}
+                className="w-full rounded-md border p-2"
+                required
               >
-                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 11.793a1 1 0 1 1-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 0 1-1.414-1.414L8.586 10 6.293 7.707a1 1 0 0 1 1.414-1.414L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414L11.414 10l2.293 2.293Z" />
-              </svg>
-              <span className="sr-only">Error icon</span>
+                <option value="Tubo">Tubo</option>
+                <option value="Varilla">Varilla</option>
+              </select>
             </div>
-            <div className="ms-3 px-3 text-sm font-normal">
-              {errorUpdate ? errorUpdate : ""}
-            </div>
-            <button
-              type="button"
-              className="ms-auto  -mx-1.5 -my-1.5 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-red-200 p-1.5 text-white hover:bg-gray-100 hover:text-red-900 focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-gray-500 dark:hover:bg-gray-700 dark:hover:text-white"
-              data-dismiss-target="#toast-danger"
-              aria-label="Close"
-              onClick={() => setShowErrorMessage(false)}
-            >
-              <span className="sr-only">Close</span>
-              <svg
-                className="h-3 w-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 14"
+
+            {/* Select for Apariencia */}
+            <div>
+              <label className="mb-1 block text-sm font-medium">
+                Apariencia
+              </label>
+              <select
+                name="appearance"
+                value={product?.appearance}
+                onChange={handleChange}
+                className="w-full rounded-md border p-2"
+                required
               >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                />
-              </svg>
-            </button>
+                <option value="Color">Color</option>
+                <option value="Transparente">Transparente</option>
+              </select>
+            </div>
+
+            {/* Select for Categoría */}
+            <div>
+              <label className="mb-1 block text-sm font-medium">
+                Categoría
+              </label>
+              <select
+                name="category"
+                value={product?.category}
+                onChange={handleChange}
+                className="w-full rounded-md border p-2"
+                required
+              >
+                <option value="Economico">Económico</option>
+                <option value="Premiun">Premium</option>
+              </select>
+            </div>
+
+            <Input
+              title="Diámetro"
+              name="diameter"
+              type="number"
+              value={product?.diameter}
+              setValue={handleChange}
+              required
+            />
+
+            <Input
+              title="Espesor"
+              name="thickness"
+              type="number"
+              value={product?.thickness}
+              setValue={handleChange}
+              required
+            />
+
+            <Input
+              title="Longitud"
+              name="length"
+              type="number"
+              value={product?.length}
+              setValue={handleChange}
+              required
+            />
+          </div>
+
+          {/* Column 2 */}
+          <div className="flex flex-col gap-3">
+            <Input
+              title="Cantidad Inicial"
+              name="initialQuantity"
+              type="number"
+              value={product?.initialQuantity}
+              setValue={handleChange}
+              required
+            />
+
+            <Input
+              title="Piezas por Caja"
+              name="piecesPerBox"
+              type="number"
+              value={product?.piecesPerBox}
+              setValue={handleChange}
+              required
+            />
+
+            <Input
+              title="Peso por Caja"
+              name="weightPerBox"
+              type="number"
+              value={product?.weightPerBox}
+              setValue={handleChange}
+              required
+            />
+
+            <Input
+              title="Tubos por Caja"
+              name="tubeQuantityPerBox"
+              type="number"
+              value={product?.tubeQuantityPerBox}
+              setValue={handleChange}
+              required
+            />
+
+            <Input
+              title="Cantidad Mínima"
+              name="minimumQuantity"
+              type="number"
+              value={product?.minimumQuantity}
+              setValue={handleChange}
+              required
+            />
+
+            {/* Select for Unidad de Medida */}
+            <div>
+              <label className="mb-1 block text-sm font-medium">
+                Unidad de Medida
+              </label>
+              <select
+                name="unitOfMeasure"
+                value={product?.unitOfMeasure}
+                onChange={handleChange}
+                className="w-full rounded-md border p-2"
+                required
+              >
+                <option value="Kg">Kg</option>
+                <option value="Pieza">Pieza</option>
+              </select>
+            </div>
+
+            <Input
+              title="Código"
+              name="code"
+              value={product?.code}
+              setValue={handleChange}
+              required
+            />
           </div>
         </div>
-      )}
-      <h2 className="text-xl font-bold">Editar Producto</h2>
-      {loadingDetails ? (
-        <div className="flex h-[75vh] w-full items-center justify-center">
-          <Loader />
+
+        {/* Full-width Row for Image */}
+        <div className="mt-6 flex flex-col gap-3">
+          {/* Show current image */}
+          {product?.image && (
+            <div className="flex justify-center">
+              <img
+                src={product?.image?.url}
+                alt="Vista previa"
+                className="max-h-40 w-auto rounded-md shadow-md"
+              />
+            </div>
+          )}
+
+          {/* Input for Image */}
+          <InputFile
+            name="product_image"
+            title="Imagen del Producto"
+            setValue={setSelectedImages}
+          />
+          {selectedImages && (
+            <div className="mt-2 flex justify-center">
+              <img
+                src={URL.createObjectURL(selectedImages)}
+                alt="Vista previa"
+                className="max-h-40 w-auto rounded-md shadow-md"
+              />
+            </div>
+          )}
         </div>
-      ) : (
-        <>
-          <form
-            className="grid  gap-2 md:grid-cols-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              submitHandler();
-            }}
+
+        {/* Contenedor Sticky para el Botón */}
+        <div className="bg-slate-50 sticky bottom-0 col-span-full p-4 shadow-md">
+          <Button
+            type="submit"
+            fullWidth
+            className="rounded-md p-2 px-4 text-lg font-normal text-white hover:bg-opacity-90"
           >
-            <div className="flex flex-col gap-3">
-              <Input
-                title="Nombre"
-                name="name"
-                type="text"
-                required={true}
-                value={product.name}
-                setValue={handleChange}
-              />
-              <ComboBoxSingle
-                title="Marca"
-                name="brand"
-                selectedItem={product.brand}
-                data={brands}
-                setAction={handleComboboxChange}
-              >
-                {/* Children */}
-                {/* Show selected item */}
-                <div className="mt-2 flex items-center justify-between rounded-md bg-white p-3 shadow-md">
-                  <span className="flex font-medium">Marca seleccionada:</span>
-                  <span className="flex items-center">
-                    {brands?.map(
-                      (brand) =>
-                        brand._id === product.brand && (
-                          <span key={brand?._id}>{brand?.name}</span>
-                        )
-                    )}
-                  </span>
-                </div>
-              </ComboBoxSingle>
-              <ComboBoxSingle
-                title="Categoria"
-                name="category"
-                data={categories}
-                selectedItem={product.category}
-                setAction={handleComboboxChange}
-              >
-                <div className="mt-2 flex items-center justify-between rounded-md bg-white p-3 shadow-md">
-                  <span className="flex font-medium">
-                    Categoria seleccionada:
-                  </span>
-                  <span className="flex items-center">
-                    {categories?.map(
-                      (category) =>
-                        category._id === product.category && (
-                          <option value={category._id} key={category._id}>
-                            {category.name}
-                          </option>
-                        )
-                    )}
-                  </span>
-                </div>
-              </ComboBoxSingle>
-
-              <Typography className="text-lg font-semibold  hover:text-gray-800">
-                Macro Nutrientes
-              </Typography>
-              <Input
-                title="Proteina"
-                name="macros.proteins"
-                type="number"
-                required={true}
-                value={product.macros?.proteins}
-                setValue={handleChange}
-              />
-              <Input
-                title="Carbohidratos"
-                name="macros.carbohydrates"
-                type="number"
-                required={true}
-                value={product.macros?.carbohydrates}
-                setValue={handleChange}
-              />
-              <Input
-                title="Grasas"
-                name="macros.fats"
-                type="number"
-                required={true}
-                value={product.macros?.fats}
-                setValue={handleChange}
-              />
-              <Input
-                title="Calorias"
-                name="macros.calories"
-                type="number"
-                required={true}
-                value={product.macros?.calories}
-                setValue={handleChange}
-              />
-              <Input
-                title="Porcion"
-                name="portion"
-                type="number"
-                required={true}
-                value={product.portion}
-                setValue={handleChange}
-              />
-              <InputSelect
-                title="Tipo de Porcion"
-                name="type"
-                value={product.type}
-                setValue={handleChange}
-              >
-                <option disabled value="">
-                  Seleccione una opcion
-                </option>
-                <option value="gramos">Gramos</option>
-                <option value="mililitros">Mililitros</option>
-              </InputSelect>
-
-              <Input
-                title="Beneficios"
-                name="benefits"
-                type="text"
-                required={true}
-                value={product.benefits}
-                setValue={handleChange}
-              />
-
-              <Input
-                title="status"
-                name="status"
-                type="text"
-                required={true}
-                value={product.status}
-                setValue={handleChange}
-              />
-
-              <div className="flex justify-center">
-                <Switch
-                  key={"onSale"}
-                  id={"onSale"}
-                  name={"onSale"}
-                  label="En venta"
-                  defaultChecked={product.onSale}
-                  labelProps={{
-                    className: "text-sm font-medium text-black",
-                  }}
-                  onChange={handleChangeCheckbox}
-                />
-              </div>
-            </div>
-
-            <div className="group flex flex-col  gap-2">
-              <span className="block font-medium">Imagen del Producto:</span>
-              <div className="group relative flex h-max items-center justify-center">
-                <img
-                  src={product?.images ? product.images[0].url : ""}
-                  alt={"currentLogo"}
-                  ref={desarollosImage}
-                  className="aspect-square mx-auto w-full rounded-md border-2 shadow"
-                />
-                <input
-                  type="file"
-                  hidden
-                  name="desarollosImage"
-                  className="h-full"
-                  ref={productInputImage}
-                  onChange={(e) => {
-                    let url = URL.createObjectURL(e.target.files[0]);
-                    productInputImage.current.src = url;
-                    setSelectedImages(e.target.files[0]);
-                  }}
-                />
-                <button
-                  className="aspect-square absolute top-0 hidden h-full w-full items-center justify-center rounded-md bg-black/20 font-bold text-white drop-shadow group-hover:flex"
-                  type="button"
-                  onClick={() => productInputImage.current.click()}
-                >
-                  Subir nueva imagen
-                </button>
-              </div>
-            </div>
-
-            <div className="col-span-full">
-              <div className="col-span-full flex justify-center text-center"></div>
-              <div className="col-span-full flex justify-center text-center">
-                <Button
-                  type="onSubmit"
-                  color={sidenavColor}
-                  className="mt-6 flex justify-center rounded-md p-2 px-4 text-center text-lg font-normal text-white hover:bg-opacity-90"
-                  fullWidth
-                >
-                  {loadingUpdate && (
-                    <img
-                      src="/assets/loader.svg"
-                      className="my-auto mr-3 h-6 w-6"
-                    />
-                  )}
-                  {loadingUpdate ? "Modificando..." : "Modificar"}
-                </Button>
-              </div>
-            </div>
-          </form>
-        </>
-      )}
+            Crear Producto
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }

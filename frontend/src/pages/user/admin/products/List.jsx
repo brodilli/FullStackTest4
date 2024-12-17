@@ -34,9 +34,10 @@ export function ProductList() {
   const location = useLocation();
 
   const adminProductsList = useSelector((state) => state.adminProductsList);
-  const { loading, error, products, page, pages } = adminProductsList;
+  const { loading, error, products, page, pages, success } = adminProductsList;
 
   useEffect(() => {
+    dispatch({ type: PRODUCT_ADMIN_DELETE_RESET });
     dispatch(
       adminListProducts(
         keywordSearch,
@@ -47,6 +48,14 @@ export function ProductList() {
       )
     );
   }, [dispatch, keywordSearch, pageNumber, pageSize, sortField, sortOrder]);
+
+  useEffect(() => {
+    if (!loading && !error && !success) {
+      dispatch(
+        adminListProducts(keyword, pageNumber, pageSize, sortField, sortOrder)
+      );
+    }
+  }, [dispatch, loading, error, success]);
 
   const submitSort = (field) => {
     const newOrder =
@@ -68,6 +77,7 @@ export function ProductList() {
 
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
+      {location.pathname.includes("eliminar") && <Delete />}
       <Card>
         <CardHeader variant="gradient" color="blue" className="mb-8 p-6">
           <div className="flex items-center justify-between">

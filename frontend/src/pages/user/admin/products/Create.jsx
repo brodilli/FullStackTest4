@@ -35,10 +35,6 @@ export function ProductCreate() {
   });
 
   const [selectedImages, setSelectedImages] = useState();
-  const [newBrand, setNewBrand] = useState({ name: "" });
-  const [newCategory, setNewCategory] = useState({ name: "" });
-  const [showSuccessBrand, setShowSuccessBrand] = useState(false);
-  const [showSuccessCategory, setShowSuccessCategory] = useState(false);
   const [showImageAlert, setShowImageAlert] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
@@ -71,14 +67,6 @@ export function ProductCreate() {
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     setProduct((prev) => ({ ...prev, [name]: checked }));
-  };
-
-  const handleBrandChange = (e) => {
-    setNewBrand({ name: e.target.value });
-  };
-
-  const handleCategoryChange = (e) => {
-    setNewCategory({ name: e.target.value });
   };
 
   const submitHandler = () => {
