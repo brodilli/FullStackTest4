@@ -47,6 +47,14 @@ router
   .post(isLoggedIn, isAdmin, wrapAsync(adminController.createLookup));
 
 router
+  .route("/lookups-groups")
+  .get(
+    isLoggedIn,
+    isAdmin,
+    wrapAsync(adminController.viewLookupsAttributeGroups)
+  );
+
+router
   .route("/lookups/:id")
   .get(isLoggedIn, isAdmin, wrapAsync(adminController.viewLookup))
   .put(isLoggedIn, isAdmin, wrapAsync(adminController.editLookup))

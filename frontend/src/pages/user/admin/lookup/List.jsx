@@ -12,7 +12,10 @@ import {
   Tooltip,
   Progress,
 } from "@material-tailwind/react";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import {
+  EllipsisVerticalIcon,
+  CheckBadgeIcon,
+} from "@heroicons/react/24/outline";
 //import Empty from "../../../components/Admin/Empty";
 //import SearchBox from "../../../components/SearchBox";
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
@@ -46,16 +49,16 @@ export function LookupList() {
 
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
-  const adminCategoryList = useSelector((state) => state.adminCategoryList);
+  const adminLookupList = useSelector((state) => state.adminLookupList);
   const {
-    loading: loadingCategories,
-    error: errorCategories,
+    loading: loadingLookups,
+    error: errorLookups,
     success,
-    categories,
+    lookups,
     page,
     pages,
-  } = adminCategoryList;
-  const [listArticle, setListArticle] = useState(categories ? categories : []);
+  } = adminLookupList;
+  const [listArticle, setListArticle] = useState(lookups ? lookups : []);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -64,7 +67,7 @@ export function LookupList() {
     dispatch({ type: LOOKUP_ADMIN_LIST_RESET });
     setPrevSearch(true);
     if (keywordSearch.trim()) {
-      navigate(`/admin/categorias/search/${keywordSearch}`);
+      navigate(`/admin/lookups/search/${keywordSearch}`);
     }
   };
   const handleKeyDown = (event) => {
@@ -85,28 +88,28 @@ export function LookupList() {
     setSortOrder(newOrder);
     if (keyword) {
       navigate(
-        `/admin/categorias/search/${keyword}/sort/${newSort}/order/${newOrder}`
+        `/admin/lookups/search/${keyword}/sort/${newSort}/order/${newOrder}`
       );
     } else {
-      navigate(`/admin/categorias/sort/${newSort}/order/${newOrder}`);
+      navigate(`/admin/lookups/sort/${newSort}/order/${newOrder}`);
     }
   };
   const newSize = (size) => {
     setPageSize(size);
     dispatch({ type: LOOKUP_ADMIN_LIST_RESET });
-    navigate("/admin/categorias");
+    navigate("/admin/lookups");
   };
 
   const redirect = "/login";
   useEffect(() => {
-    let newArray = categories;
+    let newArray = lookups;
     if (search.length > 0) {
       //funcion de busqueda
-      newArray = categories.filter((element) =>
+      newArray = lookups.filter((element) =>
         element.name.toLowerCase().includes(search)
       );
     }
-    if (!success && !errorCategories) {
+    if (!success && !errorLookups) {
       dispatch(adminListLookups(keyword, pageNumber, pageSize, sort, order));
     }
     var link = location.pathname.split("/");
@@ -123,7 +126,7 @@ export function LookupList() {
       });
     }
     setListArticle(newArray ? newArray : []);
-  }, [countView, search, categories, id, location]);
+  }, [countView, search, lookups, id, location]);
 
   const actionOpenDeleteModal = () => {
     setViewModal("delete");
@@ -140,7 +143,7 @@ export function LookupList() {
         <Delete
           closeAction={() => {
             setViewModal(false);
-            navigate("/admin/categorias");
+            navigate("/admin/lookups");
           }}
           id={id}
         />
@@ -149,7 +152,7 @@ export function LookupList() {
         <Edit
           closeAction={() => {
             setViewModal(false);
-            navigate("/admin/categorias");
+            navigate("/admin/lookups");
           }}
           id={id}
         />
@@ -158,7 +161,7 @@ export function LookupList() {
         <Create
           closeAction={() => {
             setViewModal(false);
-            navigate("/admin/categorias");
+            navigate("/admin/lookups");
           }}
         />
       )}
@@ -166,11 +169,11 @@ export function LookupList() {
         <CardHeader variant="gradient" color="blue" className="mb-8 p-6">
           <div className="flex items-center">
             <Typography variant="h6" color="white">
-              Categorias
+              Lookups
             </Typography>
 
             <div className="flex w-full flex-wrap items-center justify-end  gap-3">
-              <Link to="/admin/categorias/crear" className="justify-end">
+              <Link to="/admin/lookups/crear" className="justify-end">
                 <Button variant="gradient" color="white">
                   Crear
                 </Button>
@@ -193,7 +196,7 @@ export function LookupList() {
           </div>
         </CardHeader>
         <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
-          {loadingCategories ? (
+          {loadingLookups ? (
             <div className="flex w-full justify-center">
               <Loader />
             </div>
@@ -204,7 +207,10 @@ export function LookupList() {
                   <tr>
                     {[
                       { field: "number", text: "#" },
-                      { field: "name", text: "Nombre" },
+                      { field: "code", text: "Codigo" },
+                      { field: "meaning", text: "Significado" },
+                      { field: "description", text: "Description" },
+                      { field: "isAttributeGroup", text: "Grupo" },
                       { field: null, text: "Acciones" },
                     ]?.map((el) => (
                       <th
@@ -241,55 +247,100 @@ export function LookupList() {
 
                 <tbody>
                   {" "}
-                  {listArticle?.map(({ _id, name }, key) => {
-                    const className = `py-3 px-5 ${
-                      key === listArticle.length - 1
-                        ? ""
-                        : "border-b border-blue-gray-50"
-                    }`;
-                    return (
-                      <tr key={name}>
-                        <td className={className}>
-                          <Typography className="text-xs font-semibold text-blue-gray-600">
-                            {key + 1}
-                          </Typography>
-                        </td>
-                        <td className={className}>
-                          <div className="flex items-center gap-4">
-                            <div>
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-semibold"
-                              >
-                                {name}
-                              </Typography>
+                  {listArticle?.map(
+                    (
+                      { _id, code, meaning, description, isAttributeGroup },
+                      key
+                    ) => {
+                      const className = `py-3 px-5 ${
+                        key === listArticle.length - 1
+                          ? ""
+                          : "border-b border-blue-gray-50"
+                      }`;
+                      return (
+                        <tr key={code}>
+                          <td className={className}>
+                            <Typography className="text-xs font-semibold text-blue-gray-600">
+                              {key + 1}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <div className="flex items-center gap-4">
+                              <div>
+                                <Typography
+                                  variant="small"
+                                  color="blue-gray"
+                                  className="font-semibold"
+                                >
+                                  {code}
+                                </Typography>
+                              </div>
                             </div>
-                          </div>
-                        </td>
+                          </td>
+                          <td className={className}>
+                            <div className="flex items-center gap-4">
+                              <div>
+                                <Typography
+                                  variant="small"
+                                  color="blue-gray"
+                                  className="font-semibold"
+                                >
+                                  {meaning}
+                                </Typography>
+                              </div>
+                            </div>
+                          </td>
+                          <td className={className}>
+                            <div className="flex items-center gap-4">
+                              <div>
+                                <Typography
+                                  variant="small"
+                                  color="blue-gray"
+                                  className="font-semibold"
+                                >
+                                  {description}
+                                </Typography>
+                              </div>
+                            </div>
+                          </td>
+                          <td className={className}>
+                            <div className="flex items-center gap-4">
+                              <div>
+                                {isAttributeGroup ? (
+                                  <CheckBadgeIcon
+                                    className="ml-2 h-5 w-5 text-green-500"
+                                    aria-hidden="true"
+                                  />
+                                ) : (
+                                  <></>
+                                )}
+                              </div>
+                            </div>
+                          </td>
 
-                        <td className={className}>
-                          <Link to={`/admin/categorias/${_id}/editar`}>
-                            <Typography
-                              as="a"
-                              href="#"
-                              className="text-xs font-semibold text-blue-gray-600 hover:text-blue-500"
-                            >
-                              Editar
-                            </Typography>
-                          </Link>
-                          <Link to={`/admin/categorias/${_id}/eliminar`}>
-                            <Typography
-                              as="a"
-                              className="text-xs font-semibold text-blue-gray-600 hover:text-red-500"
-                            >
-                              Eliminar
-                            </Typography>
-                          </Link>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                          <td className={className}>
+                            <Link to={`/admin/lookups/${_id}/editar`}>
+                              <Typography
+                                as="a"
+                                href="#"
+                                className="text-xs font-semibold text-blue-gray-600 hover:text-blue-500"
+                              >
+                                Editar
+                              </Typography>
+                            </Link>
+                            <Link to={`/admin/lookups/${_id}/eliminar`}>
+                              <Typography
+                                as="a"
+                                className="text-xs font-semibold text-blue-gray-600 hover:text-red-500"
+                              >
+                                Eliminar
+                              </Typography>
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    }
+                  )}
                 </tbody>
               </table>
             </>
@@ -301,7 +352,7 @@ export function LookupList() {
           <Paginate
             page={page}
             pages={pages}
-            baseRoute="/admin/categorias"
+            baseRoute="/admin/lookups"
             keyword={keywordSearch}
             sort={sort}
             order={order}

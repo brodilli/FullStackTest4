@@ -7,10 +7,6 @@ const lookupSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
-    name: {
-      type: String,
-      required: true,
-    },
     code: {
       type: String,
       unique: true,

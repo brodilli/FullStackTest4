@@ -6,37 +6,55 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLoginData } from "../../../../actions/userActions";
 import { adminCreateLookup } from "../../../../actions/lookupActions";
 import SuccessAlert from "../../../../components/alerts/SuccessAlert";
-import { Input } from "../../../../components/elements/Inputs";
+import {
+  Input,
+  Textarea,
+  InputSelect,
+} from "../../../../components/elements/Inputs";
 import { useMaterialTailwindController } from "../../../../context";
 import { LOOKUP_ADMIN_CREATE_RESET } from "../../../../constants/lookupConstants";
 import { Switch } from "@material-tailwind/react";
+import { act } from "react";
 
 export function LookupCreate({ closeAction }) {
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
   const adminLookupCreate = useSelector((state) => state.adminLookupCreate);
   const {
-    loading: loadingCreateCategory,
-    error: errorCreateCategory,
-    message: messageCategory,
+    loading: loadingCreateLookup,
+    error: errorCreateLookup,
+    message: messageLookup,
   } = adminLookupCreate;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [controller, setController] = useMaterialTailwindController();
   const { sidenavColor, sidenavType, openSidenav } = controller;
 
-  const [newCategory, setNewCategory] = useState({ name: "" });
-  const [showSuccessCategory, setShowSuccessCategory] = useState(false);
+  const [newLookup, setNewLookup] = useState({
+    code: "",
+    meaning: "",
+    description: "",
+    isAttributeGroup: false,
+    attributeGroup: "",
+    active: true,
+  });
+  const [showSuccessLookup, setShowSuccessLookup] = useState(false);
   const [keepCreating, setKeepCreating] = useState(false);
 
-  const submitCategoryHandler = () => {
-    dispatch(adminCreateLookup(newCategory));
+  const submitLookupHandler = () => {
+    dispatch(adminCreateLookup(newLookup));
   };
-  const handleCategoryChange = (e) => {
-    setNewCategory(e.target.value);
+  const handleCheckboxChange = (e) => {
+    setNewLookup((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.checked,
+    }));
+  };
+  const handleLookupChange = (e) => {
+    setNewLookup(e.target.value);
   };
   const handleChange = (e) =>
-    setNewCategory((prevState) => ({
+    setNewLookup((prevState) => ({
       ...prevState,
       [e.target.name.split(".")[0]]:
         e.target.name.split(".").length === 2
@@ -47,15 +65,15 @@ export function LookupCreate({ closeAction }) {
           : e.target.value,
     }));
   useEffect(() => {
-    if (messageCategory) {
-      setShowSuccessCategory(true);
+    if (messageLookup) {
+      setShowSuccessLookup(true);
       setTimeout(() => {
         dispatch({ type: LOOKUP_ADMIN_CREATE_RESET });
         if (!keepCreating) {
-          navigate("/admin/categorias");
+          navigate("/admin/lookups");
         }
-        setNewCategory("");
-        setShowSuccessCategory(false);
+        setNewLookup("");
+        setShowSuccessLookup(false);
       }, 1000);
     }
     if (!userInfo) {
@@ -63,13 +81,13 @@ export function LookupCreate({ closeAction }) {
     } else if (userInfo.userType !== "Admin") {
       navigate("/login");
     }
-  }, [userInfo, messageCategory]);
+  }, [userInfo, messageLookup]);
   return (
     <>
       <div className="fixed top-0 left-0 z-50 flex min-h-screen w-full items-center justify-center bg-black/30">
         <div className="relative max-h-[90%]  w-11/12 overflow-hidden rounded-md bg-white shadow lg:w-1/2 2xl:w-2/6">
           <div className="flex w-full items-center justify-between rounded-t-md bg-blue-gray-800 p-2 px-4 text-white">
-            <h2 className="text-2xl  text-white">Crear Categoria</h2>
+            <h2 className="text-2xl  text-white">Crear Lookup</h2>
             <button
               type="button"
               onClick={closeAction}
@@ -82,19 +100,62 @@ export function LookupCreate({ closeAction }) {
             className="flex flex-col gap-3 bg-white p-4"
             onSubmit={(e) => {
               e.preventDefault();
-              submitCategoryHandler();
+              submitLookupHandler();
             }}
           >
-            {showSuccessCategory && <SuccessAlert title="Categoria creada" />}
-
+            {showSuccessLookup && <SuccessAlert title="Categoria creada" />}
+            <div className="justify-stat flex">
+              <Switch
+                key={"isAttributeGroup"}
+                id={"isAttributeGroup"}
+                name={"isAttributeGroup"}
+                label="Es grupo de attributos"
+                value={newLookup.isAttributeGroup}
+                labelProps={{
+                  className: "text-sm font-medium text-black",
+                }}
+                onChange={handleCheckboxChange}
+              />
+            </div>
             <Input
-              title="Nombre de categoria"
-              name="name"
+              title="Codigo"
+              name="code"
               type="text"
               required={true}
-              value={newCategory.name}
+              value={newLookup.code}
               setValue={handleChange}
             />
+            <Input
+              title="Significado"
+              name="meaning"
+              type="text"
+              required={true}
+              value={newLookup.meaning}
+              setValue={handleChange}
+            />
+            <Textarea
+              title="Descripcion"
+              name="description"
+              type="text"
+              required={true}
+              value={newLookup.description}
+              setValue={handleChange}
+            />
+            {
+              /* Only render when isAttributeGroup === false */
+              !newLookup.isAttributeGroup && (
+                <InputSelect
+                  title="Grupo de atributos"
+                  name="attributeGroup"
+                  value={newLookup.attributeGroup}
+                  setValue={handleChange}
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                </InputSelect>
+              )
+            }
             <div className="flex justify-center">
               <Switch
                 key={"keepCreating"}
@@ -112,7 +173,7 @@ export function LookupCreate({ closeAction }) {
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
-                  submitCategoryHandler();
+                  submitLookupHandler();
                 }}
                 className={
                   "bg-" +
@@ -120,13 +181,13 @@ export function LookupCreate({ closeAction }) {
                   "-500 flex w-full justify-center rounded-md p-2 px-4 text-center text-lg  text-white hover:bg-opacity-90"
                 }
               >
-                {loadingCreateCategory && (
+                {loadingCreateLookup && (
                   <img
                     src="/assets/loader.svg"
                     className="my-auto mr-3 h-6 w-6"
                   />
                 )}
-                {loadingCreateCategory ? "Creando..." : "Crear"}
+                {loadingCreateLookup ? "Creando..." : "Crear"}
               </button>
             </div>
           </form>
