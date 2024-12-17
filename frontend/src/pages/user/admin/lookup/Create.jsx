@@ -164,6 +164,7 @@ export function LookupCreate({ closeAction }) {
                   value={newLookup.attributeGroup}
                   setValue={handleChange}
                 >
+                  <option value="">Seleccione un grupo de atributos</option>
                   {groups && groups.length > 0 ? (
                     groups.map((group) => (
                       <option key={group._id} value={group._id}>

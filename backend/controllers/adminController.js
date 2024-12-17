@@ -278,7 +278,7 @@ module.exports.createLookup = asyncHandler(async (req, res) => {
   // Get current user
   const currentUser = await User.findById(req.user._id);
   // Get data from request body
-  const data = req.body;
+  const data = req.body.lookup;
   // Create new lookup
   const lookup = new Lookup(data);
   // Assign current user to lookup
@@ -293,7 +293,7 @@ module.exports.viewLookupsAttributeGroups = asyncHandler(async (req, res) => {
   // Get attribute groups
   const attributeGroups = await Lookup.find({
     isAttributeGroup: true,
-  }).distinct("attributeGroup");
+  });
   // Send response
   res.json({ attributeGroups });
 });

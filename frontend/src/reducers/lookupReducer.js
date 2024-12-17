@@ -116,7 +116,7 @@ export const adminLookupGroupListReducer = (state = { groups: [] }, action) => {
       return {
         loading: false,
         success: true,
-        groups: action.payload,
+        groups: action.payload.attributeGroups,
       };
     case LOOKUP_ADMIN_GROUP_LIST_FAIL:
       return { loading: false, error: action.payload };
