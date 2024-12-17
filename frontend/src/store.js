@@ -7,15 +7,14 @@ import {
   userRegisterReducer,
   userVerifyReducer,
   userVerifyStatusReducer,
+  adminUserCreateReducer,
+  adminUserDetailsReducer,
+  adminUserUpdateReducer,
+  adminUserDeleteReducer,
+  adminUserListReducer,
 } from "./reducers/userReducer";
 
-import {
-  adminGuestCreateReducer,
-  adminGuestDetailsReducer,
-  adminGuestUpdateReducer,
-  adminGuestDeleteReducer,
-  adminGuestListReducer,
-} from "./reducers/guestReducer";
+
 import {
   adminProductCreateReducer,
   adminProductDeleteReducer,
@@ -42,12 +41,12 @@ const reducers = combineReducers({
   userVerifyStatus: userVerifyStatusReducer,
   userVerify: userVerifyReducer,
 
-  // GUEST
-  adminGuestCreate: adminGuestCreateReducer,
-  adminGuestDetails: adminGuestDetailsReducer,
-  adminGuestUpdate: adminGuestUpdateReducer,
-  adminGuestDelete: adminGuestDeleteReducer,
-  adminGuestList: adminGuestListReducer,
+  // USER
+  adminUserCreate: adminUserCreateReducer,
+  adminUserDetails: adminUserDetailsReducer,
+  adminUserUpdate: adminUserUpdateReducer,
+  adminUserDelete: adminUserDeleteReducer,
+  adminUserList: adminUserListReducer,
   // PRODUCT
   adminProductCreate: adminProductCreateReducer,
   adminProductDelete: adminProductDeleteReducer,

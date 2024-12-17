@@ -7,12 +7,12 @@ const Product = require("../models/productModel");
 const { cloudinary } = require("../cloudinary");
 const { unlink } = require("node:fs/promises");
 
-// GUEST
-//GUEST CRUD
+// USER
+//USER CRUD
 module.exports.createUser = asyncHandler(async (req, res) => {
   // Find the current user
   const currentUser = await User.findById(req.user._id);
-  // Fetch Guest data from the request body
+  // Fetch User data from the request body
   const data = req.body.user;
   const password = req.body.password;
   console.log(data);
@@ -20,21 +20,21 @@ module.exports.createUser = asyncHandler(async (req, res) => {
   data.username = data.email;
   data.createdBy = currentUser;
   await User.register(data, password);
-  res.status(201).json({ message: "Guest created" });
+  res.status(201).json({ message: "User created" });
 });
 module.exports.deleteUser = asyncHandler(async (req, res) => {
-  const guest = await User.findById(req.params.id);
-  guest.deleted = true;
-  await guest.save();
-  res.json({ message: "Guest deleted" });
+  const user = await User.findById(req.params.id);
+  user.deleted = true;
+  await user.save();
+  res.json({ message: "User deleted" });
 });
 module.exports.editUser = asyncHandler(async (req, res) => {
-  const data = req.body.guest;
+  const data = req.body.user;
   data.username = data.email;
   const password = req.body.password;
-  const guest = await User.findByIdAndUpdate({ _id: req.params.id }, data);
-  await guest.save();
-  res.status(201).json(guest);
+  const user = await User.findByIdAndUpdate({ _id: req.params.id }, data);
+  await user.save();
+  res.status(201).json(user);
 });
 module.exports.viewUsers = asyncHandler(async (req, res) => {
   // Si se pasa el parámetro `all`, devolver todos los usuarios sin paginación
@@ -105,12 +105,12 @@ module.exports.viewUsers = asyncHandler(async (req, res) => {
 });
 
 module.exports.viewUser = asyncHandler(async (req, res) => {
-  const guest = await User.findById(req.params.id);
-  if (guest) {
-    res.json(guest);
+  const user = await User.findById(req.params.id);
+  if (user) {
+    res.json(user);
   } else {
     res.status(404);
-    throw new Error("Guest not found");
+    throw new Error("User not found");
   }
 });
 
