@@ -51,7 +51,7 @@ export function UserDelete({ closeAction, id }) {
         ) : (
           <div className="relative max-h-[90%]  w-11/12 overflow-hidden rounded-md bg-white shadow lg:w-1/2 2xl:w-2/6">
             <div className="flex w-full items-center justify-between rounded-t-md bg-blue-gray-800 p-2 px-4 text-white">
-              <h2 className="text-2xl  text-white">Eliminar Asesor</h2>
+              <h2 className="text-2xl  text-white">Eliminar Usuario</h2>
               <button
                 type="button"
                 onClick={closeHandler}
@@ -72,7 +72,7 @@ export function UserDelete({ closeAction, id }) {
                   <AiOutlineWarning className="h-24 w-24 fill-red-600" />
                 </div>
                 <div className="my-3 flex justify-center">
-                  ¿Seguro que deseas eliminar este asesor?
+                  ¿Seguro que deseas eliminar este usuario?
                 </div>
 
                 <div className="flex w-full justify-center px-6 text-2xl">

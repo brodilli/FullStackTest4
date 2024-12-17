@@ -13,7 +13,8 @@ const PaymentMethodSchema = new mongoose.Schema({
   bank: { type: String },                 // Bank Name
   priority: { type: Number },             // Priority
   maxAmount: { type: Number },            // Maximum Amount
-  maxPercentage: { type: Number }         // Maximum Percentage
+  maxPercentage: { type: Number },         // Maximum Percentage
+  paymentDate:{ type: Date}              // Payment Date
 }, { timestamps: true });
 
 module.exports = mongoose.model("PaymentMethod", PaymentMethodSchema);

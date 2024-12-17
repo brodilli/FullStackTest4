@@ -32,8 +32,8 @@ export const routes = [
     pages: [
       {
         icon: <UserGroupIcon {...icon} />,
-        name: "Invitados",
-        path: "/invitados",
+        name: "Usuarios",
+        path: "/usuarios",
         isList: true,
         element: <UserList />,
         subpages: [

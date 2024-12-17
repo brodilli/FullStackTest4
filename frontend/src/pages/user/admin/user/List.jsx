@@ -100,7 +100,7 @@ export function UserList() {
               Usuarios
             </Typography>
             <div className="flex w-full flex-wrap items-center justify-end gap-3">
-              <Link to="/admin/users/crear" className="justify-end">
+              <Link to="/admin/usuarios/crear" className="justify-end">
                 <Button variant="gradient" color="white">
                   Crear
                 </Button>
@@ -190,12 +190,12 @@ export function UserList() {
                             </Typography>
                           </td>
                           <td className={className}>
-                            <Link to={`/admin/users/${_id}/editar`}>
+                            <Link to={`/admin/usuarios/${_id}/editar`}>
                               <Typography className="text-blue-gray-600 hover:text-blue-500">
                                 Editar
                               </Typography>
                             </Link>
-                            <Link to={`/admin/users/${_id}/eliminar`}>
+                            <Link to={`/admin/usuarios/${_id}/eliminar`}>
                               <Typography className="text-red-500 hover:text-red-700">
                                 Eliminar
                               </Typography>
