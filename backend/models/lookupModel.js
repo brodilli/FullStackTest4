@@ -21,7 +21,7 @@ const lookupSchema = mongoose.Schema(
       required: true,
       default: false,
     },
-    attribeGroup: {
+    attributeGroup: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Lookup",
     },

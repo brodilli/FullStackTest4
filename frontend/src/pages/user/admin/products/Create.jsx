@@ -140,7 +140,6 @@ export function ProductCreate() {
           <ComboBoxSingle
             title="Marca"
             name="brand"
-            createOptionModal={"Crear Marca"}
             data={brands}
             selectedItem={product.brand}
             setAction={handleComboboxChange}
@@ -157,7 +156,6 @@ export function ProductCreate() {
           <ComboBoxSingle
             title="Categoría"
             name="category"
-            createOptionModal={"Crear Categoría"}
             data={categories}
             selectedItem={product.category}
             setAction={handleComboboxChange}
