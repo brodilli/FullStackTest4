@@ -37,10 +37,13 @@ module.exports.editUser = asyncHandler(async (req, res) => {
   res.status(201).json(guest);
 });
 module.exports.viewUsers = asyncHandler(async (req, res) => {
-  // Si se pasa el parámetro `all`, devolver todos los invitados
+  // Si se pasa el parámetro `all`, devolver todos los usuarios sin paginación
   if (req.query.all) {
-    const guests = await User.find({ userType: "Guest" });
-    return res.json({ guests });
+    const users = await User.find({
+      userType: { $in: ["Administrador", "Supplier", "Client"] },
+      deleted: false,
+    });
+    return res.json({ users });
   }
 
   // Paginación y ordenamiento
@@ -57,6 +60,7 @@ module.exports.viewUsers = asyncHandler(async (req, res) => {
     "phone",
     "username",
     "tradename",
+    "userType",
   ];
   const sortCondition = validSortFields.includes(sortField)
     ? { [sortField]: order }
@@ -77,14 +81,14 @@ module.exports.viewUsers = asyncHandler(async (req, res) => {
   // Contar el total de documentos para paginación
   const count = await User.countDocuments({
     deleted: false,
-    userType: "Guest",
+    userType: { $in: ["Administrador", "Supplier", "Client"] },
     ...keyword,
   });
 
-  // Obtener los invitados con paginación y ordenamiento
-  const guests = await User.find({
+  // Obtener los usuarios con paginación y ordenamiento
+  const users = await User.find({
     deleted: false,
-    userType: "Guest",
+    userType: { $in: ["Administrador", "Supplier", "Client"] },
     ...keyword,
   })
     .sort(sortCondition)
@@ -93,12 +97,13 @@ module.exports.viewUsers = asyncHandler(async (req, res) => {
 
   // Enviar respuesta
   res.json({
-    guests,
+    users,
     page,
     pages: Math.ceil(count / pageSize),
-    totalGuests: count,
+    totalUsers: count,
   });
 });
+
 
 module.exports.viewUser = asyncHandler(async (req, res) => {
   const guest = await User.findById(req.params.id);

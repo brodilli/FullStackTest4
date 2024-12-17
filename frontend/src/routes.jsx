@@ -5,13 +5,13 @@ import {
   BuildingOfficeIcon,
 } from "@heroicons/react/24/solid";
 import {
-  GuestList,
   GuestEdit,
   LookupList,
   ProductCreate,
   ProductEdit,
   ProductList,
   UserCreate,
+  UserList,
 } from "./pages/user/admin";
 
 const icon = {
@@ -35,7 +35,7 @@ export const routes = [
         name: "Invitados",
         path: "/invitados",
         isList: true,
-        element: <GuestList />,
+        element: <UserList />,
         subpages: [
           {
             icon: <PlusCircleIcon {...icon} />,
@@ -54,7 +54,7 @@ export const routes = [
             icon: <UserGroupIcon {...icon} />,
             name: "Eliminar",
             path: "/:id/eliminar",
-            element: <GuestList />,
+            element: <UserList />,
             hide: true,
           },
         ],

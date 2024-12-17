@@ -16,7 +16,7 @@ import {
 import { adminListGuests } from "../../../../actions/guestActions";
 import Delete from "./Delete";
 
-export function GuestList() {
+export function UserList() {
   const keyword = useParams().keyword;
   const pageNumber = useParams().pageNumber || 1;
   const sort = useParams().sort;
@@ -29,7 +29,7 @@ export function GuestList() {
   const {
     loading: loadingGuests,
     error: errorGuests,
-    guests,
+    users,
     page,
     pages,
   } = adminGuestList;
@@ -41,9 +41,9 @@ export function GuestList() {
   const submitSearch = () => {
     dispatch({ type: GUEST_ADMIN_LIST_RESET });
     if (keywordSearch.trim()) {
-      navigate(`/admin/guests/search/${keywordSearch}`);
+      navigate(`/admin/users/search/${keywordSearch}`);
     } else {
-      navigate(`/admin/guests`);
+      navigate(`/admin/users`);
     }
   };
 
@@ -57,16 +57,16 @@ export function GuestList() {
     dispatch({ type: GUEST_ADMIN_LIST_RESET });
     const newOrder = order === "ascending" ? "descending" : "ascending";
     if (keyword) {
-      navigate(`/admin/guests/search/${keyword}/sort/${field}/order/${newOrder}`);
+      navigate(`/admin/users/search/${keyword}/sort/${field}/order/${newOrder}`);
     } else {
-      navigate(`/admin/guests/sort/${field}/order/${newOrder}`);
+      navigate(`/admin/users/sort/${field}/order/${newOrder}`);
     }
   };
 
   const newSize = (size) => {
     setPageSize(size);
     dispatch({ type: GUEST_ADMIN_LIST_RESET });
-    navigate("/admin/guests");
+    navigate("/admin/users");
   };
 
   const actionOpenDeleteModal = () => {
@@ -97,10 +97,10 @@ export function GuestList() {
         <CardHeader variant="gradient" color="blue" className="mb-8 p-6">
           <div className="flex items-center">
             <Typography variant="h6" color="white">
-              Invitados
+              Usuarios
             </Typography>
             <div className="flex w-full flex-wrap items-center justify-end gap-3">
-              <Link to="/admin/invitados/crear" className="justify-end">
+              <Link to="/admin/users/crear" className="justify-end">
                 <Button variant="gradient" color="white">
                   Crear
                 </Button>
@@ -132,7 +132,14 @@ export function GuestList() {
               <table className="w-full min-w-[640px] table-auto">
                 <thead>
                   <tr>
-                    {["Nombre", "Email", "Nombre Comercial", "Acciones"].map((el) => (
+                    {[
+                      "Nombre",
+                      "Apellido",
+                      "Correo Electrónico",
+                      "Tipo de Usuario",
+                      "Teléfono",
+                      "Acciones",
+                    ].map((el) => (
                       <th
                         key={el}
                         className="border-b border-blue-gray-50 py-3 px-5 text-left"
@@ -148,42 +155,56 @@ export function GuestList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {guests?.map(({ _id, name, email, tradename }, key) => {
-                    const className = `py-3 px-5 ${
-                      key === guests.length - 1 ? "" : "border-b border-blue-gray-50"
-                    }`;
-                    return (
-                      <tr key={_id}>
-                        <td className={className}>
-                          <Typography variant="small" className="font-semibold">
-                            {name}
-                          </Typography>
-                        </td>
-                        <td className={className}>
-                          <Typography variant="small" className="font-semibold">
-                            {email}
-                          </Typography>
-                        </td>
-                        <td className={className}>
-                          <Typography variant="small" className="font-semibold">
-                            {tradename}
-                          </Typography>
-                        </td>
-                        <td className={className}>
-                          <Link to={`/admin/invitados/${_id}/editar`}>
-                            <Typography className="text-blue-gray-600 hover:text-blue-500">
-                              Editar
+                  {users?.map(
+                    ({ _id, name, lastName, email, phone, userType }, key) => {
+                      const className = `py-3 px-5 ${
+                        key === users.length - 1
+                          ? ""
+                          : "border-b border-blue-gray-50"
+                      }`;
+                      return (
+                        <tr key={_id}>
+                          <td className={className}>
+                            <Typography variant="small" className="font-semibold">
+                              {name}
                             </Typography>
-                          </Link>
-                          <Link to={`/admin/invitados/${_id}/eliminar`}>
-                            <Typography className="text-red-500 hover:text-red-700">
-                              Eliminar
+                          </td>
+                          <td className={className}>
+                            <Typography variant="small" className="font-semibold">
+                              {lastName}
                             </Typography>
-                          </Link>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                          </td>
+                          <td className={className}>
+                            <Typography variant="small" className="font-semibold">
+                              {email}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography variant="small" className="font-semibold">
+                              {userType}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography variant="small" className="font-semibold">
+                              {phone}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Link to={`/admin/users/${_id}/editar`}>
+                              <Typography className="text-blue-gray-600 hover:text-blue-500">
+                                Editar
+                              </Typography>
+                            </Link>
+                            <Link to={`/admin/users/${_id}/eliminar`}>
+                              <Typography className="text-red-500 hover:text-red-700">
+                                Eliminar
+                              </Typography>
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    }
+                  )}
                 </tbody>
               </table>
             </>
@@ -194,5 +215,4 @@ export function GuestList() {
   );
 }
 
-export default GuestList;
-
+export default UserList;

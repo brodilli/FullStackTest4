@@ -78,14 +78,14 @@ export const adminGuestDetailsReducer = (state = {}, action) => {
       return state;
   }
 };
-export const adminGuestListReducer = (state = { guests: [] }, action) => {
+export const adminGuestListReducer = (state = { users: [] }, action) => {
   switch (action.type) {
     case GUEST_ADMIN_LIST_REQUEST:
       return { loading: true };
     case GUEST_ADMIN_LIST_SUCCESS:
       return {
         loading: false,
-        guests: action.payload.guests,
+        users: action.payload.guests,
         page: action.payload.page,
         pages: action.payload.pages,
         success: true,
