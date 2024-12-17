@@ -13,7 +13,6 @@ const bodyParser = require("body-parser");
 const { connectDB } = require("./config/db");
 const User = require("./models/userModel");
 const userRoutes = require("./routes/userRoutes");
-const lookupRoutes = require("./routes/lookupRoutes");
 const productRoutes = require("./routes/productRoutes");
 
 const adminRoutes = require("./routes/adminRoutes");
@@ -67,7 +66,6 @@ passport.use(LocalStrategy);
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/lookup", lookupRoutes);
 app.use("/api/products", productRoutes);
 
 if (process.env.NODE_ENV === "production") {

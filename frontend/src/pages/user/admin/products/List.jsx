@@ -34,13 +34,28 @@ export function ProductList() {
   const location = useLocation();
 
   const adminProductsList = useSelector((state) => state.adminProductsList);
-  const { loading, error, products, page, pages } = adminProductsList;
+  const { loading, error, products, page, pages, success } = adminProductsList;
 
   useEffect(() => {
+    dispatch({ type: PRODUCT_ADMIN_DELETE_RESET });
     dispatch(
-      adminListProducts(keywordSearch, pageNumber, pageSize, sortField, sortOrder)
+      adminListProducts(
+        keywordSearch,
+        pageNumber,
+        pageSize,
+        sortField,
+        sortOrder
+      )
     );
   }, [dispatch, keywordSearch, pageNumber, pageSize, sortField, sortOrder]);
+
+  useEffect(() => {
+    if (!loading && !error && !success) {
+      dispatch(
+        adminListProducts(keyword, pageNumber, pageSize, sortField, sortOrder)
+      );
+    }
+  }, [dispatch, loading, error, success]);
 
   const submitSort = (field) => {
     const newOrder =
@@ -62,6 +77,7 @@ export function ProductList() {
 
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
+      {location.pathname.includes("eliminar") && <Delete />}
       <Card>
         <CardHeader variant="gradient" color="blue" className="mb-8 p-6">
           <div className="flex items-center justify-between">
@@ -93,13 +109,12 @@ export function ProductList() {
               <thead>
                 <tr>
                   {[
+                    { field: "image", text: "Imagen" },
                     { field: "name", text: "Nombre" },
-                    { field: "brand", text: "Marca" },
-                    { field: "model", text: "Modelo" },
-                    { field: "price", text: "Precio" },
-                    { field: "discount", text: "Descuento" },
-                    { field: "countInStock", text: "Stock" },
-                    { field: "onSale", text: "En Venta" },
+                    { field: "type", text: "Tipo" },
+                    { field: "appearance", text: "Apariencia" },
+                    { field: "category", text: "Categoría" },
+                    { field: "code", text: "Código" },
                     { field: null, text: "Acciones" },
                   ].map((el) => (
                     <th
@@ -107,7 +122,10 @@ export function ProductList() {
                       onClick={() => el.field && submitSort(el.field)}
                       className="cursor-pointer border-b border-blue-gray-50 py-3 px-5 text-left"
                     >
-                      <Typography variant="small" className="flex text-xs font-bold uppercase text-blue-gray-400">
+                      <Typography
+                        variant="small"
+                        className="flex text-xs font-bold uppercase text-blue-gray-400"
+                      >
                         {el.text}
                         {sortField === el.field && (
                           <>
@@ -125,22 +143,49 @@ export function ProductList() {
               </thead>
               <tbody>
                 {products?.map((product) => (
-                  <tr key={product._id} className="border-b border-blue-gray-50">
+                  <tr
+                    key={product._id}
+                    className="border-b border-blue-gray-50"
+                  >
+                    {/* Product Image */}
+                    <td className="py-3 px-5">
+                      <img
+                        src={product.image?.url || "/placeholder.png"} // Fallback image if URL is missing
+                        alt={product.name}
+                        className="h-12 w-12 rounded object-cover shadow-md"
+                      />
+                    </td>
+
+                    {/* Product Name */}
                     <td className="py-3 px-5">{product.name}</td>
-                    <td className="py-3 px-5">{product.brand?.name}</td>
-                    <td className="py-3 px-5">{product.model}</td>
-                    <td className="py-3 px-5">${product.price}</td>
-                    <td className="py-3 px-5">{product.discount}%</td>
-                    <td className="py-3 px-5">{product.countInStock}</td>
-                    <td className="py-3 px-5">{product.onSale ? "Sí" : "No"}</td>
-                    <td className="py-3 px-5 flex gap-2">
+
+                    {/* Product Type */}
+                    <td className="py-3 px-5">{product.type}</td>
+
+                    {/* Product Appearance */}
+                    <td className="py-3 px-5">{product.appearance}</td>
+
+                    {/* Product Category */}
+                    <td className="py-3 px-5">{product.category}</td>
+
+                    {/* Product Code */}
+                    <td className="py-3 px-5">{product.code}</td>
+
+                    {/* Actions */}
+                    <td className="flex flex-col py-3 px-5">
                       <Link to={`/admin/productos/${product._id}/editar`}>
-                        <Typography as="a" className="text-blue-500 hover:underline">
+                        <Typography
+                          as="a"
+                          className="text-blue-500 hover:underline"
+                        >
                           Editar
                         </Typography>
                       </Link>
                       <Link to={`/admin/productos/${product._id}/eliminar`}>
-                        <Typography as="a" className="text-red-500 hover:underline">
+                        <Typography
+                          as="a"
+                          className="text-red-500 hover:underline"
+                        >
                           Eliminar
                         </Typography>
                       </Link>

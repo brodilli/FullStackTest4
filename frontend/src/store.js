@@ -14,7 +14,6 @@ import {
   adminUserListReducer,
 } from "./reducers/userReducer";
 
-
 import {
   adminProductCreateReducer,
   adminProductDeleteReducer,
@@ -25,14 +24,6 @@ import {
   productSearchReducer,
   productLimitsReducer,
 } from "./reducers/productReducer";
-import {
-  adminLookupCreateReducer,
-  adminLookupDetailsReducer,
-  adminLookupUpdateReducer,
-  adminLookupDeleteReducer,
-  adminLookupListReducer,
-  adminLookupGroupListReducer,
-} from "./reducers/lookupReducer";
 
 const reducers = combineReducers({
   // USER
@@ -56,13 +47,6 @@ const reducers = combineReducers({
   productsList: productsListReducer,
   productSearch: productSearchReducer,
   productLimits: productLimitsReducer,
-  // LOOKUP
-  adminLookupCreate: adminLookupCreateReducer,
-  adminLookupDetails: adminLookupDetailsReducer,
-  adminLookupUpdate: adminLookupUpdateReducer,
-  adminLookupDelete: adminLookupDeleteReducer,
-  adminLookupList: adminLookupListReducer,
-  adminLookupGroupList: adminLookupGroupListReducer,
 });
 
 const initialState = {

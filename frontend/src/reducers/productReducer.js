@@ -74,7 +74,7 @@ export const adminProductUpdateReducer = (state = {}, action) => {
     case PRODUCT_ADMIN_UPDATE_REQUEST:
       return { loading: true };
     case PRODUCT_ADMIN_UPDATE_SUCCESS:
-      return { loading: false, message: action.payload };
+      return { loading: false, message: action.payload, success: true };
     case PRODUCT_ADMIN_UPDATE_FAIL:
       return { loading: false, error: action.payload };
     default:
@@ -88,7 +88,8 @@ export const adminProductDetailsReducer = (state = {}, action) => {
     case PRODUCT_ADMIN_DETAILS_SUCCESS:
       return {
         loading: false,
-        productDetails: action.payload,
+        success: true,
+        productDetails: action.payload.product,
       };
     case PRODUCT_ADMIN_DETAILS_FAIL:
       return { loading: false, error: action.payload };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { AiOutlineWarning } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoginData } from "../../../../actions/userActions";
 import {
@@ -10,7 +10,8 @@ import {
 } from "../../../../actions/productActions";
 import Loader from "../../../../components/Loader";
 
-export function ProductDelete({ closeAction, id }) {
+export function ProductDelete() {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -77,7 +78,7 @@ export function ProductDelete({ closeAction, id }) {
                 <div className="flex justify-center text-2xl">
                   <img
                     className="h-24 w-24 rounded object-cover"
-                    src={productDetails?.images[0]?.url}
+                    src={productDetails?.image?.url}
                   />
                 </div>
                 <div className="flex w-full justify-center px-6 text-2xl">
@@ -88,18 +89,6 @@ export function ProductDelete({ closeAction, id }) {
                     <input
                       className="mx-2 flex w-full rounded-md border-2 p-2 text-center font-bold outline-none focus:border-blue-500"
                       defaultValue={productDetails?.name}
-                      disabled
-                    />
-                  </div>
-                </div>
-                <div className="flex w-full justify-center px-6 text-2xl">
-                  <div className="flex h-12 w-1/2 justify-end">
-                    <p className="my-auto">Marca</p>
-                  </div>
-                  <div className="mx-3 flex w-1/2 justify-center">
-                    <input
-                      className="mx-2 flex w-full rounded-md border-2 p-2 text-center font-bold outline-none focus:border-blue-500"
-                      defaultValue={productDetails?.brand?.name}
                       disabled
                     />
                   </div>
