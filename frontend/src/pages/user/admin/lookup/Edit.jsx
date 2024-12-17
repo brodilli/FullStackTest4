@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoginData } from "../../../../actions/userActions";
 import {
-  adminUpdateCategory,
-  adminDetailsCategory,
+  adminUpdateLookup,
+  adminDetailsLookup,
 } from "../../../../actions/lookupActions";
 import SuccessAlert from "../../../../components/alerts/SuccessAlert";
 import { Input } from "../../../../components/elements/Inputs";
@@ -38,7 +38,7 @@ export function CategoryEdit({ closeAction, id }) {
   const [showSuccessCategory, setShowSuccessCategory] = useState(false);
 
   const submitCategoryHandler = () => {
-    dispatch(adminUpdateCategory(id, newCategory));
+    dispatch(adminUpdateLookup(id, newCategory));
   };
   const handleCategoryChange = (e) => {
     setNewCategory(e.target.value);
@@ -57,7 +57,7 @@ export function CategoryEdit({ closeAction, id }) {
     } else if (userInfo.userType !== "Admin") {
       navigate("/login");
     } else if (id && (!categoryDetails || categoryDetails._id !== id)) {
-      dispatch(adminDetailsCategory(id));
+      dispatch(adminDetailsLookup(id));
     }
     if (categoryDetails) {
       setNewCategory(categoryDetails.name);

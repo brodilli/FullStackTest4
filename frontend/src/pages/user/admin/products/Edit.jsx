@@ -21,8 +21,8 @@ import {
   adminListBrands,
 } from "../../../../actions/brandActions";
 import {
-  adminCreateCategory,
-  adminListCategories,
+  adminCreateLookup,
+  adminListLookups,
 } from "../../../../actions/lookupActions";
 
 import {
@@ -154,7 +154,7 @@ export function ProductEdit() {
     }));
   };
   const submitCategoryHandler = () => {
-    dispatch(adminCreateCategory(newCategory));
+    dispatch(adminCreateLookup(newCategory));
   };
   const handleCategoryChange = (e) => {
     setNewCategory((prevState) => ({
@@ -214,7 +214,7 @@ export function ProductEdit() {
     } else if (id && (!productDetails || productDetails._id !== id)) {
       dispatch(adminDetailsProduct(id));
       dispatch(adminListBrands());
-      dispatch(adminListCategories());
+      dispatch(adminListLookups());
     }
     if (productDetails) {
       setProduct(productDetails);

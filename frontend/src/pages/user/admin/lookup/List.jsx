@@ -19,15 +19,15 @@ import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
 import Loader from "../../../../components/Loader";
 import Paginate from "../../../../components/Paginate";
 import {
-  CATEGORY_ADMIN_LIST_RESET,
-  CATEGORY_ADMIN_DELETE_RESET,
+  LOOKUP_ADMIN_LIST_RESET,
+  LOOKUP_ADMIN_DELETE_RESET,
 } from "../../../../constants/lookupConstants";
-import { adminListCategories } from "../../../../actions/lookupActions";
+import { adminListLookups } from "../../../../actions/lookupActions";
 import Delete from "./Delete";
 import Edit from "./Edit";
 import Create from "./Create";
 
-export function CategoryList() {
+export function LookupList() {
   const keyword = useParams().keyword;
   const pageNumber = useParams().pageNumber || 1;
   const sort = useParams().sort;
@@ -61,7 +61,7 @@ export function CategoryList() {
   const location = useLocation();
   const { id } = useParams();
   const submitSearch = () => {
-    dispatch({ type: CATEGORY_ADMIN_LIST_RESET });
+    dispatch({ type: LOOKUP_ADMIN_LIST_RESET });
     setPrevSearch(true);
     if (keywordSearch.trim()) {
       navigate(`/admin/categorias/search/${keywordSearch}`);
@@ -73,7 +73,7 @@ export function CategoryList() {
     }
   };
   const submitSort = (field) => {
-    dispatch({ type: CATEGORY_ADMIN_LIST_RESET });
+    dispatch({ type: LOOKUP_ADMIN_LIST_RESET });
     const newSort = field;
     const newOrder =
       field === sortField
@@ -93,7 +93,7 @@ export function CategoryList() {
   };
   const newSize = (size) => {
     setPageSize(size);
-    dispatch({ type: CATEGORY_ADMIN_LIST_RESET });
+    dispatch({ type: LOOKUP_ADMIN_LIST_RESET });
     navigate("/admin/categorias");
   };
 
@@ -107,7 +107,7 @@ export function CategoryList() {
       );
     }
     if (!success && !errorCategories) {
-      dispatch(adminListCategories(keyword, pageNumber, pageSize, sort, order));
+      dispatch(adminListLookups(keyword, pageNumber, pageSize, sort, order));
     }
     var link = location.pathname.split("/");
     if (link[link.length - 1] === "eliminar") {
@@ -119,7 +119,7 @@ export function CategoryList() {
     } else {
       setViewModal(false);
       dispatch({
-        type: CATEGORY_ADMIN_DELETE_RESET,
+        type: LOOKUP_ADMIN_DELETE_RESET,
       });
     }
     setListArticle(newArray ? newArray : []);
@@ -305,7 +305,7 @@ export function CategoryList() {
             keyword={keywordSearch}
             sort={sort}
             order={order}
-            constant={CATEGORY_ADMIN_LIST_RESET}
+            constant={LOOKUP_ADMIN_LIST_RESET}
           />
         )}
       </div>
@@ -313,4 +313,4 @@ export function CategoryList() {
   );
 }
 
-export default CategoryList;
+export default LookupList;

@@ -4,11 +4,11 @@ import { AiOutlineWarning } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoginData } from "../../../../actions/userActions";
-import { adminCreateCategory } from "../../../../actions/lookupActions";
+import { adminCreateLookup } from "../../../../actions/lookupActions";
 import SuccessAlert from "../../../../components/alerts/SuccessAlert";
 import { Input } from "../../../../components/elements/Inputs";
 import { useMaterialTailwindController } from "../../../../context";
-import { CATEGORY_ADMIN_CREATE_RESET } from "../../../../constants/lookupConstants";
+import { LOOKUP_ADMIN_CREATE_RESET } from "../../../../constants/lookupConstants";
 import { Switch } from "@material-tailwind/react";
 
 export function LookupCreate({ closeAction }) {
@@ -30,7 +30,7 @@ export function LookupCreate({ closeAction }) {
   const [keepCreating, setKeepCreating] = useState(false);
 
   const submitCategoryHandler = () => {
-    dispatch(adminCreateCategory(newCategory));
+    dispatch(adminCreateLookup(newCategory));
   };
   const handleCategoryChange = (e) => {
     setNewCategory(e.target.value);
@@ -50,7 +50,7 @@ export function LookupCreate({ closeAction }) {
     if (messageCategory) {
       setShowSuccessCategory(true);
       setTimeout(() => {
-        dispatch({ type: CATEGORY_ADMIN_CREATE_RESET });
+        dispatch({ type: LOOKUP_ADMIN_CREATE_RESET });
         if (!keepCreating) {
           navigate("/admin/categorias");
         }

@@ -23,7 +23,7 @@ import {
   LOOKUP_LIST_SUCCESS,
 } from "../constants/lookupConstants";
 
-export const adminCreateCategory = (category) => async (dispatch) => {
+export const adminCreateLookup = (lookup) => async (dispatch) => {
   try {
     dispatch({
       type: LOOKUP_ADMIN_CREATE_REQUEST,
@@ -33,11 +33,7 @@ export const adminCreateCategory = (category) => async (dispatch) => {
         "Content-Type": "application/json",
       },
     };
-    const { data } = await axios.post(
-      "/api/admin/lookups",
-      { category },
-      config
-    );
+    const { data } = await axios.post("/api/admin/lookups", { lookup }, config);
 
     dispatch({
       type: LOOKUP_ADMIN_CREATE_SUCCESS,
@@ -56,7 +52,7 @@ export const adminCreateCategory = (category) => async (dispatch) => {
     });
   }
 };
-export const adminDetailsCategory = (id) => async (dispatch) => {
+export const adminDetailsLookup = (id) => async (dispatch) => {
   try {
     dispatch({
       type: LOOKUP_ADMIN_DETAILS_REQUEST,

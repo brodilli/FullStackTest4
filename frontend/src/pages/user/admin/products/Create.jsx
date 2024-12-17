@@ -10,12 +10,8 @@ import ComboBoxSingle from "../../../../components/elements/ComboBoxSingle";
 
 import { PRODUCT_ADMIN_CREATE_RESET } from "../../../../constants/productConstants";
 import {
-  adminCreateBrand,
-  adminListBrands,
-} from "../../../../actions/brandActions";
-import {
-  adminCreateCategory,
-  adminListCategories,
+  adminCreateLookup,
+  adminListLookups,
 } from "../../../../actions/lookupActions";
 import { adminCreateProduct } from "../../../../actions/productActions";
 
@@ -99,14 +95,8 @@ export function ProductCreate() {
     dispatch(adminCreateProduct(formData));
   };
 
-  const submitBrandHandler = () => {
-    dispatch(adminCreateBrand(newBrand));
-    setNewBrand({ name: "" });
-    setShowSuccessBrand(true);
-  };
-
   const submitCategoryHandler = () => {
-    dispatch(adminCreateCategory(newCategory));
+    dispatch(adminCreateLookup(newCategory));
     setNewCategory({ name: "" });
     setShowSuccessCategory(true);
   };
@@ -119,8 +109,7 @@ export function ProductCreate() {
     if (!userInfo) {
       dispatch(getLoginData());
     } else {
-      dispatch(adminListBrands());
-      dispatch(adminListCategories());
+      dispatch(adminListLookups());
     }
   }, [dispatch, userInfo, messageCreateProduct, navigate]);
 

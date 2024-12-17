@@ -84,14 +84,14 @@ export const adminLookupDeleteReducer = (state = {}, action) => {
       return state;
   }
 };
-export const adminLookupListReducer = (state = { categories: [] }, action) => {
+export const adminLookupListReducer = (state = { lookups: [] }, action) => {
   switch (action.type) {
     case LOOKUP_ADMIN_LIST_REQUEST:
       return { loading: true };
     case LOOKUP_ADMIN_LIST_SUCCESS:
       return {
         loading: false,
-        categories: action.payload.categories,
+        lookups: action.payload.lookups,
         page: action.payload.page,
         pages: action.payload.pages,
         success: true,
@@ -99,7 +99,7 @@ export const adminLookupListReducer = (state = { categories: [] }, action) => {
     case LOOKUP_ADMIN_LIST_FAIL:
       return { loading: false, error: action.payload };
     case LOOKUP_ADMIN_LIST_RESET:
-      return { categories: [] };
+      return { lookups: [] };
     default:
       return state;
   }

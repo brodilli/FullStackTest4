@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoginData } from "../../../../actions/userActions";
 import {
-  adminDeleteCategory,
-  adminDetailsCategory,
+  adminDeleteLookup,
+  adminDetailsLookup,
 } from "../../../../actions/lookupActions";
 import Loader from "../../../../components/Loader";
 
@@ -33,14 +33,14 @@ export function CategoryDelete({ closeAction, id }) {
 
   useEffect(() => {
     if ((id && !categoryDetails) || (id && categoryDetails._id !== id)) {
-      dispatch(adminDetailsCategory(id));
+      dispatch(adminDetailsLookup(id));
     }
     if (message) {
       navigate("/admin/categorias");
     }
   }, [categoryDetails, message]);
   const submitHandler = () => {
-    dispatch(adminDeleteCategory(id));
+    dispatch(adminDeleteLookup(id));
   };
   const closeHandler = () => {
     navigate("/admin/categorias");
