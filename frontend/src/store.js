@@ -15,6 +15,18 @@ import {
 } from "./reducers/userReducer";
 
 import {
+  adminPaymentMethodCreateReducer,
+  adminPaymentMethodDeleteReducer,
+  adminPaymentMethodUpdateReducer,
+  adminPaymentMethodDetailsReducer,
+  adminPaymentMethodsListReducer,
+  paymentMethodsListReducer,
+  paymentMethodSearchReducer,
+  paymentMethodLimitsReducer,
+} from "./reducers/paymentMethodReducer";
+
+
+import {
   adminProductCreateReducer,
   adminProductDeleteReducer,
   adminProductUpdateReducer,
@@ -31,13 +43,6 @@ const reducers = combineReducers({
   userRegister: userRegisterReducer,
   userVerifyStatus: userVerifyStatusReducer,
   userVerify: userVerifyReducer,
-
-  // USER
-  adminUserCreate: adminUserCreateReducer,
-  adminUserDetails: adminUserDetailsReducer,
-  adminUserUpdate: adminUserUpdateReducer,
-  adminUserDelete: adminUserDeleteReducer,
-  adminUserList: adminUserListReducer,
   // PRODUCT
   adminProductCreate: adminProductCreateReducer,
   adminProductDelete: adminProductDeleteReducer,
@@ -47,6 +52,24 @@ const reducers = combineReducers({
   productsList: productsListReducer,
   productSearch: productSearchReducer,
   productLimits: productLimitsReducer,
+
+
+
+  // USER
+  adminUserCreate: adminUserCreateReducer,
+  adminUserDetails: adminUserDetailsReducer,
+  adminUserUpdate: adminUserUpdateReducer,
+  adminUserDelete: adminUserDeleteReducer,
+  adminUserList: adminUserListReducer,
+  // PRODUCT
+  adminPaymentMethodCreate: adminPaymentMethodCreateReducer,
+  adminPaymentMethodDelete: adminPaymentMethodDeleteReducer,
+  adminPaymentMethodUpdate: adminPaymentMethodUpdateReducer,
+  adminPaymentMethodDetails: adminPaymentMethodDetailsReducer,
+  adminPaymentMethodsList: adminPaymentMethodsListReducer,
+  paymentMethodsList: paymentMethodsListReducer,
+  paymentMethodSearch: paymentMethodSearchReducer,
+  paymentMethodLimits: paymentMethodLimitsReducer,
 });
 
 const initialState = {

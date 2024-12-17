@@ -12,6 +12,9 @@ import {
   ProductList,
   UserCreate,
   UserList,
+  PaymentMethodCreate,
+  PaymentMethodList,
+  PaymentMethodEdit,
 } from "./pages/user/admin";
 
 const icon = {
@@ -57,6 +60,36 @@ export const routes = [
             element: <UserList />,
             hide: true,
           },
+        ],
+      },
+      {
+        icon: <BuildingStorefrontIcon {...icon} />,
+        name: "Metodos de Pago",
+        path: "/metodosDePago",
+        isList: true,
+        element: <PaymentMethodList />,
+        subpages: [
+          {
+            icon: <PlusCircleIcon {...icon} />,
+            name: "Crear",
+            path: "/crear",
+            element: <PaymentMethodCreate />,
+          },
+          {
+            icon: <BuildingStorefrontIcon {...icon} />,
+            name: "Editar",
+            path: "/:id/editar",
+            element: <PaymentMethodEdit />,
+            hide: true,
+          },
+          {
+            icon: <BuildingStorefrontIcon {...icon} />,
+            name: "Eliminar",
+            path: "/:id/eliminar",
+            element: <PaymentMethodList />,
+            hide: true,
+          },
+
         ],
       },
       {

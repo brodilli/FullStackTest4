@@ -6,6 +6,8 @@ const wrapAsync = require("../errors/wrapAsync");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
+
+
 // User Routes
 router
   .route("/user")
@@ -17,6 +19,20 @@ router
   .get(isLoggedIn, isAdmin, adminController.viewUser)
   .put(isLoggedIn, isAdmin, adminController.editUser)
   .delete(isLoggedIn, isAdmin, adminController.deleteUser);
+
+
+router
+.route("/payment-methods")
+.get(isLoggedIn, isAdmin, wrapAsync(adminController.viewPaymentMethods))
+.post(isLoggedIn, isAdmin, wrapAsync(adminController.createPaymentMethod));
+
+router
+.route("/payment-methods/:id")
+.get(isLoggedIn, isAdmin, wrapAsync(adminController.viewPaymentMethod))
+.put(isLoggedIn, isAdmin, wrapAsync(adminController.editPaymentMethod))
+.delete(isLoggedIn, isAdmin, wrapAsync(adminController.deletePaymentMethod));
+
+
 
 /* ------------------------------- Product Routes ------------------------------------ */
 router

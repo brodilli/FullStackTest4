@@ -2,9 +2,52 @@ const asyncHandler = require("express-async-handler");
 const dotenv = require("dotenv");
 const User = require("../models/userModel");
 const Product = require("../models/productModel");
+const PaymentMethod = require("../models/paymentMethodModel");
 
 const { cloudinary } = require("../cloudinary");
 const { unlink } = require("node:fs/promises");
+
+
+
+//PAYMENT METHOD
+//PAYMENT METHOD CRUD
+module.exports.createPaymentMethod = asyncHandler(async (req, res) => {
+  console.log("Creating Payment Method");
+  const data = req.body.paymentMethod;
+  const currentUser = await User.findById(req.user._id);
+  const paymentMethod = new PaymentMethod(data);
+  console.log("Payment Method :", paymentMethod);
+  paymentMethod.user = currentUser;
+  console.log("paymentMethod.user :", paymentMethod);
+  await paymentMethod.save();
+  res.status(201).json({ message: "Payment Method created" });
+}
+);
+module.exports.deletePaymentMethod = asyncHandler(async (req, res) => {
+  const paymentMethod = await PaymentMethod.findById(req.params.id);
+  paymentMethod.deleted = true;
+  await paymentMethod.save();
+  res.json({ message: "Payment Method deleted" });
+});
+module.exports.editPaymentMethod = asyncHandler(async (req, res) => {
+  const data = req.body.paymentMethod;
+  const paymentMethod = await PaymentMethod.findByIdAndUpdate({ _id: req.params.id }, data);
+  await paymentMethod.save();
+  res.status(201).json(paymentMethod);
+});
+module.exports.viewPaymentMethods = asyncHandler(async (req, res) => {
+  const paymentMethods = await PaymentMethod.find({});
+  res.json({ paymentMethods });
+});
+module.exports.viewPaymentMethod = asyncHandler(async (req, res) => {
+  const paymentMethod = await PaymentMethod.findById(req.params.id);
+  if (paymentMethod) {
+    res.json(paymentMethod);
+  } else {
+    res.status(404);
+    throw new Error("Payment Method not found");
+  }
+});
 
 // USER
 //USER CRUD

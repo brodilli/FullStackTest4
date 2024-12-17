@@ -6,6 +6,12 @@ const PaymentMethodSchema = new mongoose.Schema({
     enum: ['Cash', 'Transfer', 'Credit Card'], 
     required: true 
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
+  },
+  deleted: { type: Boolean, default: false },
   alias: { type: String },                // Alias
   clabe: { type: String },                // Bank Code (CLABE)
   accountNumber: { type: String },        // Account Number

@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const PriceListSchema = new mongoose.Schema({
   name: { type: String, required: true }, // Name of the Price List
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
+  }, // Reference to the User
+  deleted: { type: Boolean, default: false }, // Soft delete
   products: [
     {
       productId: { 
