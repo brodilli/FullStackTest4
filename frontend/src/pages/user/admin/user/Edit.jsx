@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  adminDetailsGuest,
-  adminUpdateGuest,
-} from "../../../../actions/guestActions";
+  adminDetailsUser,
+  adminUpdateUser,
+} from "../../../../actions/userActions";
 import { getLoginData } from "../../../../actions/userActions";
 
 import {
@@ -17,8 +17,8 @@ import { Button, Typography } from "@material-tailwind/react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
-export function GuestEdit() {
-  const [guest, setGuest] = useState({
+export function UserEdit() {
+  const [user, setUser] = useState({
     name: "",
     lastName: "",
     email: "",
@@ -37,36 +37,36 @@ export function GuestEdit() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const adminGuestDetails = useSelector((state) => state.adminGuestDetails);
+  const adminUserDetails = useSelector((state) => state.adminUserDetails);
   const {
     loading: loadingDetails,
     error: errorDetails,
-    guestDetails,
-    success: guestDetailsSuccess,
-  } = adminGuestDetails;
+    userDetails,
+    success: userDetailsSuccess,
+  } = adminUserDetails;
 
-  const adminGuestUpdate = useSelector((state) => state.adminGuestUpdate);
+  const adminUserUpdate = useSelector((state) => state.adminUserUpdate);
   const {
     loading: loadingUpdate,
     error: errorUpdate,
     messageUpdate,
-  } = adminGuestUpdate;
+  } = adminUserUpdate;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setGuest((prevState) => ({ ...prevState, [name]: value }));
+    setUser((prevState) => ({ ...prevState, [name]: value }));
   };
 
   const handlePhoneChange = (value) => {
-    setGuest((prevState) => ({ ...prevState, phone: value }));
+    setUser((prevState) => ({ ...prevState, phone: value }));
   };
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
-    setGuest((prevState) => ({ ...prevState, [name]: checked }));
+    setUser((prevState) => ({ ...prevState, [name]: checked }));
   };
 
   const submitHandler = () => {
-    dispatch(adminUpdateGuest(id, guest));
+    dispatch(adminUpdateUser(id, user));
   };
 
   useEffect(() => {
@@ -78,22 +78,22 @@ export function GuestEdit() {
       dispatch(getLoginData());
     } else if (userInfo.userType !== "Admin") {
       navigate("/login");
-    } else if (!guestDetails || guestDetails._id !== id) {
-      dispatch(adminDetailsGuest(id));
+    } else if (!userDetails || userDetails._id !== id) {
+      dispatch(adminDetailsUser(id));
     } else {
-      setGuest({
-        name: guestDetails.name || "",
-        lastName: guestDetails.lastName || "",
-        email: guestDetails.email || "",
-        phone: guestDetails.phone || "",
-        tradename: guestDetails.tradename || "",
-        allowPlusOne: guestDetails.allowPlusOne || false,
-        plusOne: guestDetails.plusOne || false,
-        allergies: guestDetails.allergies || "",
-        status: guestDetails.status || "Pending",
+      setUser({
+        name: userDetails.name || "",
+        lastName: userDetails.lastName || "",
+        email: userDetails.email || "",
+        phone: userDetails.phone || "",
+        tradename: userDetails.tradename || "",
+        allowPlusOne: userDetails.allowPlusOne || false,
+        plusOne: userDetails.plusOne || false,
+        allergies: userDetails.allergies || "",
+        status: userDetails.status || "Pending",
       });
     }
-  }, [dispatch, userInfo, guestDetails, id, messageUpdate]);
+  }, [dispatch, userInfo, userDetails, id, messageUpdate]);
 
   return (
     <div className="bg-slate-50 p-4">
@@ -121,7 +121,7 @@ export function GuestEdit() {
               name="name"
               type="text"
               required={true}
-              value={guest.name}
+              value={user.name}
               setValue={handleChange}
             />
             <Input
@@ -129,7 +129,7 @@ export function GuestEdit() {
               name="lastName"
               type="text"
               required={true}
-              value={guest.lastName}
+              value={user.lastName}
               setValue={handleChange}
             />
             <Input
@@ -137,7 +137,7 @@ export function GuestEdit() {
               name="email"
               type="email"
               required={true}
-              value={guest.email}
+              value={user.email}
               setValue={handleChange}
             />
             <div>
@@ -146,7 +146,7 @@ export function GuestEdit() {
               </label>
               <PhoneInput
                 country="ar"
-                value={guest.phone}
+                value={user.phone}
                 onChange={handlePhoneChange}
                 inputStyle={{ width: "100%" }}
               />
@@ -156,7 +156,7 @@ export function GuestEdit() {
               name="tradename"
               type="text"
               required={true}
-              value={guest.tradename}
+              value={user.tradename}
               setValue={handleChange}
             />
           </div>
@@ -164,25 +164,25 @@ export function GuestEdit() {
             <Typography className="text-lg font-semibold hover:text-gray-800">
               Datos de la invitación
             </Typography>
-            {guestDetailsSuccess && (
+            {userDetailsSuccess && (
               <CheckBox
                 title="Permitir un acompañante"
                 name="allowPlusOne"
                 type="checkbox"
                 required={true}
-                checked={guestDetails.allowPlusOne}
+                checked={userDetails.allowPlusOne}
                 setValue={handleCheckboxChange}
               />
             )}
-            {guest.allowPlusOne && (
+            {user.allowPlusOne && (
               <Input
                 title="Confirmación de Acompañante"
                 name="plusOne"
                 type="text"
                 value={
-                  guest.status === "Pending"
+                  user.status === "Pending"
                     ? "Aún no ha respondido"
-                    : guest.plusOne
+                    : user.plusOne
                     ? "Aceptó"
                     : "Rechazó"
                 }
@@ -195,7 +195,7 @@ export function GuestEdit() {
               name="name"
               type="text"
               required={true}
-              value={guest.name}
+              value={user.name}
               disab
               setValue={handleChange}
             />
@@ -223,4 +223,4 @@ export function GuestEdit() {
   );
 }
 
-export default GuestEdit;
+export default UserEdit;
