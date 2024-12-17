@@ -16,15 +16,22 @@ import { Button, Typography, Switch } from "@material-tailwind/react";
 export function ProductCreate() {
   const [product, setProduct] = useState({
     name: "",
-    brand: "",
-    model: "",
-    category: "",
-    description: "",
-    price: 0,
-    discount: 0,
-    countInStock: 0,
+    type: "Tubo", // Default enum value
+    appearance: "Color", // Default enum value
+    category: "Economico", // Default enum value
+    diameter: 0,
+    thickness: 0,
+    length: 1.5, // Default value
+    initialQuantity: 0,
+    piecesPerBox: 0,
+    weightPerBox: 0,
+    tubeQuantityPerBox: 0,
+    minimumQuantity: 0,
+    unitOfMeasure: "Pieza", // Default enum value
+    code: "",
     taxesIncluded: false,
     onSale: false,
+    image: null, // For the product image file
   });
 
   const [selectedImages, setSelectedImages] = useState();
@@ -110,93 +117,176 @@ export function ProductCreate() {
         Agregar Producto
       </h2>
       <form
-        className="grid gap-6 md:grid-cols-2"
+        className=""
         onSubmit={(e) => {
           e.preventDefault();
           submitHandler();
         }}
       >
-        <div className="flex flex-col gap-3">
-          <Input
-            title="Nombre"
-            name="name"
-            value={product.name}
-            setValue={handleChange}
-            required
-          />
+        <div className="grid grid-cols-2 gap-6">
+          {/* Column 1 */}
+          <div className="flex flex-col gap-3">
+            <Input
+              title="Nombre"
+              name="name"
+              value={product.name}
+              setValue={handleChange}
+              required
+            />
 
-          <ComboBoxSingle
-            title="Marca"
-            name="brand"
-            data={brands}
-            selectedItem={product.brand}
-            setAction={handleComboboxChange}
-          />
+            {/* Select for Tipo */}
+            <div>
+              <label className="mb-1 block text-sm font-medium">Tipo</label>
+              <select
+                name="type"
+                value={product.type}
+                onChange={handleChange}
+                className="w-full rounded-md border p-2"
+                required
+              >
+                <option value="Tubo">Tubo</option>
+                <option value="Varilla">Varilla</option>
+              </select>
+            </div>
 
-          <Input
-            title="Modelo"
-            name="model"
-            value={product.model}
-            setValue={handleChange}
-            required
-          />
+            {/* Select for Apariencia */}
+            <div>
+              <label className="mb-1 block text-sm font-medium">
+                Apariencia
+              </label>
+              <select
+                name="appearance"
+                value={product.appearance}
+                onChange={handleChange}
+                className="w-full rounded-md border p-2"
+                required
+              >
+                <option value="Color">Color</option>
+                <option value="Transparente">Transparente</option>
+              </select>
+            </div>
 
-          <ComboBoxSingle
-            title="Categoría"
-            name="category"
-            data={categories}
-            selectedItem={product.category}
-            setAction={handleComboboxChange}
-          />
+            {/* Select for Categoría */}
+            <div>
+              <label className="mb-1 block text-sm font-medium">
+                Categoría
+              </label>
+              <select
+                name="category"
+                value={product.category}
+                onChange={handleChange}
+                className="w-full rounded-md border p-2"
+                required
+              >
+                <option value="Economico">Económico</option>
+                <option value="Premiun">Premium</option>
+              </select>
+            </div>
 
-          <Input
-            title="Descripción"
-            name="description"
-            value={product.description}
-            setValue={handleChange}
-            required
-          />
-          <Input
-            title="Precio"
-            name="price"
-            type="number"
-            value={product.price}
-            setValue={handleChange}
-            required
-          />
-          <Input
-            title="Descuento"
-            name="discount"
-            type="number"
-            value={product.discount}
-            setValue={handleChange}
-          />
-          <Input
-            title="Cantidad en Inventario"
-            name="countInStock"
-            type="number"
-            value={product.countInStock}
-            setValue={handleChange}
-          />
+            <Input
+              title="Diámetro"
+              name="diameter"
+              type="number"
+              value={product.diameter}
+              setValue={handleChange}
+              required
+            />
 
-          <Switch
-            id="taxesIncluded"
-            name="taxesIncluded"
-            label="Impuestos Incluidos"
-            checked={product.taxesIncluded}
-            onChange={handleCheckboxChange}
-          />
+            <Input
+              title="Espesor"
+              name="thickness"
+              type="number"
+              value={product.thickness}
+              setValue={handleChange}
+              required
+            />
 
-          <Switch
-            id="onSale"
-            name="onSale"
-            label="En Venta"
-            checked={product.onSale}
-            onChange={handleCheckboxChange}
-          />
+            <Input
+              title="Longitud"
+              name="length"
+              type="number"
+              value={product.length}
+              setValue={handleChange}
+              required
+            />
+          </div>
+
+          {/* Column 2 */}
+          <div className="flex flex-col gap-3">
+            <Input
+              title="Cantidad Inicial"
+              name="initialQuantity"
+              type="number"
+              value={product.initialQuantity}
+              setValue={handleChange}
+              required
+            />
+
+            <Input
+              title="Piezas por Caja"
+              name="piecesPerBox"
+              type="number"
+              value={product.piecesPerBox}
+              setValue={handleChange}
+              required
+            />
+
+            <Input
+              title="Peso por Caja"
+              name="weightPerBox"
+              type="number"
+              value={product.weightPerBox}
+              setValue={handleChange}
+              required
+            />
+
+            <Input
+              title="Tubos por Caja"
+              name="tubeQuantityPerBox"
+              type="number"
+              value={product.tubeQuantityPerBox}
+              setValue={handleChange}
+              required
+            />
+
+            <Input
+              title="Cantidad Mínima"
+              name="minimumQuantity"
+              type="number"
+              value={product.minimumQuantity}
+              setValue={handleChange}
+              required
+            />
+
+            {/* Select for Unidad de Medida */}
+            <div>
+              <label className="mb-1 block text-sm font-medium">
+                Unidad de Medida
+              </label>
+              <select
+                name="unitOfMeasure"
+                value={product.unitOfMeasure}
+                onChange={handleChange}
+                className="w-full rounded-md border p-2"
+                required
+              >
+                <option value="Kg">Kg</option>
+                <option value="Pieza">Pieza</option>
+              </select>
+            </div>
+
+            <Input
+              title="Código"
+              name="code"
+              value={product.code}
+              setValue={handleChange}
+              required
+            />
+          </div>
         </div>
 
-        <div className="flex flex-col gap-4">
+        {/* Full-width Row for Image */}
+        <div className="mt-6 flex flex-col gap-3">
           <InputFile
             name="product_image"
             title="Imagen del Producto"

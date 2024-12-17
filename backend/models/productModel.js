@@ -32,7 +32,7 @@ const productSchema = mongoose.Schema(
       default: "Color",
       required: true,
     },
-    categoy: {
+    category: {
       type: String,
       enum: ["Economico", "Premiun"],
       default: "Economico",
