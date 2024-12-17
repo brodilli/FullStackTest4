@@ -19,6 +19,10 @@ import {
   LOOKUP_ADMIN_UPDATE_REQUEST,
   LOOKUP_ADMIN_UPDATE_RESET,
   LOOKUP_ADMIN_UPDATE_SUCCESS,
+  LOOKUP_ADMIN_GROUP_LIST_REQUEST,
+  LOOKUP_ADMIN_GROUP_LIST_SUCCESS,
+  LOOKUP_ADMIN_GROUP_LIST_FAIL,
+  LOOKUP_ADMIN_GROUP_LIST_RESET,
   LOOKUP_LIST_FAIL,
   LOOKUP_LIST_REQUEST,
   LOOKUP_LIST_RESET,
@@ -100,6 +104,24 @@ export const adminLookupListReducer = (state = { lookups: [] }, action) => {
       return { loading: false, error: action.payload };
     case LOOKUP_ADMIN_LIST_RESET:
       return { lookups: [] };
+    default:
+      return state;
+  }
+};
+export const adminLookupGroupListReducer = (state = { groups: [] }, action) => {
+  switch (action.type) {
+    case LOOKUP_ADMIN_GROUP_LIST_REQUEST:
+      return { loading: true };
+    case LOOKUP_ADMIN_GROUP_LIST_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        groups: action.payload,
+      };
+    case LOOKUP_ADMIN_GROUP_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    case LOOKUP_ADMIN_GROUP_LIST_RESET:
+      return { groups: [] };
     default:
       return state;
   }

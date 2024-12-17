@@ -32,6 +32,7 @@ import {
   adminLookupUpdateReducer,
   adminLookupDeleteReducer,
   adminLookupListReducer,
+  adminLookupGroupListReducer,
 } from "./reducers/lookupReducer";
 
 const reducers = combineReducers({
@@ -62,6 +63,7 @@ const reducers = combineReducers({
   adminLookupUpdate: adminLookupUpdateReducer,
   adminLookupDelete: adminLookupDeleteReducer,
   adminLookupList: adminLookupListReducer,
+  adminLookupGroupList: adminLookupGroupListReducer,
 });
 
 const initialState = {
