@@ -1,4 +1,5 @@
 const path = require("path");
+const cors = require("cors");
 const express = require("express");
 const dotenv = require("dotenv");
 const colors = require("colors");
@@ -42,6 +43,8 @@ app.use(session(sessionOption));
 //Use ROute for Scripts
 //use Mongo Sanitize
 app.use(mongoSanitize());
+
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
