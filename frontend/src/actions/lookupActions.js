@@ -10,6 +10,9 @@ import {
   LOOKUP_ADMIN_DETAILS_REQUEST,
   LOOKUP_ADMIN_DETAILS_RESET,
   LOOKUP_ADMIN_DETAILS_SUCCESS,
+  LOOKUP_ADMIN_GROUP_LIST_FAIL,
+  LOOKUP_ADMIN_GROUP_LIST_REQUEST,
+  LOOKUP_ADMIN_GROUP_LIST_SUCCESS,
   LOOKUP_ADMIN_LIST_FAIL,
   LOOKUP_ADMIN_LIST_REQUEST,
   LOOKUP_ADMIN_LIST_RESET,
@@ -132,6 +135,27 @@ export const adminDeleteLookup = (id) => async (dispatch) => {
     });
   }
 };
+export const adminListGroupsLookups = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: LOOKUP_ADMIN_GROUP_LIST_REQUEST,
+    });
+    const { data } = await axios.get("/api/admin/lookups-groups");
+    dispatch({
+      type: LOOKUP_ADMIN_GROUP_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: LOOKUP_ADMIN_GROUP_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.response.data,
+    });
+  }
+};
+
 export const adminListLookups =
   (
     keyword = "",

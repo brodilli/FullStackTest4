@@ -4,7 +4,10 @@ import { AiOutlineWarning } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getLoginData } from "../../../../actions/userActions";
-import { adminCreateLookup } from "../../../../actions/lookupActions";
+import {
+  adminCreateLookup,
+  adminListGroupsLookups,
+} from "../../../../actions/lookupActions";
 import SuccessAlert from "../../../../components/alerts/SuccessAlert";
 import {
   Input,
@@ -14,7 +17,6 @@ import {
 import { useMaterialTailwindController } from "../../../../context";
 import { LOOKUP_ADMIN_CREATE_RESET } from "../../../../constants/lookupConstants";
 import { Switch } from "@material-tailwind/react";
-import { act } from "react";
 
 export function LookupCreate({ closeAction }) {
   const userLogin = useSelector((state) => state.userLogin);
@@ -25,6 +27,15 @@ export function LookupCreate({ closeAction }) {
     error: errorCreateLookup,
     message: messageLookup,
   } = adminLookupCreate;
+  const adminLookupGroupList = useSelector(
+    (state) => state.adminLookupGroupList
+  );
+  const {
+    loading: loadingGroupList,
+    error: errorGroupList,
+    groups,
+    success: successGroupList,
+  } = adminLookupGroupList;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [controller, setController] = useMaterialTailwindController();
@@ -76,12 +87,15 @@ export function LookupCreate({ closeAction }) {
         setShowSuccessLookup(false);
       }, 1000);
     }
+    if (!successGroupList && !errorGroupList && !loadingGroupList) {
+      dispatch(adminListGroupsLookups());
+    }
     if (!userInfo) {
       dispatch(getLoginData());
     } else if (userInfo.userType !== "Admin") {
       navigate("/login");
     }
-  }, [userInfo, messageLookup]);
+  }, [userInfo, messageLookup, successGroupList]);
   return (
     <>
       <div className="fixed top-0 left-0 z-50 flex min-h-screen w-full items-center justify-center bg-black/30">
@@ -150,9 +164,16 @@ export function LookupCreate({ closeAction }) {
                   value={newLookup.attributeGroup}
                   setValue={handleChange}
                 >
-                  <option value="">Seleccionar</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
+                  <option value="">Seleccione un grupo de atributos</option>
+                  {groups && groups.length > 0 ? (
+                    groups.map((group) => (
+                      <option key={group._id} value={group._id}>
+                        {group.code} - {group.meaning}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">No hay grupos de atributos</option>
+                  )}
                 </InputSelect>
               )
             }

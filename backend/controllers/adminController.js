@@ -104,7 +104,6 @@ module.exports.viewUsers = asyncHandler(async (req, res) => {
   });
 });
 
-
 module.exports.viewUser = asyncHandler(async (req, res) => {
   const guest = await User.findById(req.params.id);
   if (guest) {
@@ -279,7 +278,7 @@ module.exports.createLookup = asyncHandler(async (req, res) => {
   // Get current user
   const currentUser = await User.findById(req.user._id);
   // Get data from request body
-  const data = req.body;
+  const data = req.body.lookup;
   // Create new lookup
   const lookup = new Lookup(data);
   // Assign current user to lookup
@@ -289,12 +288,21 @@ module.exports.createLookup = asyncHandler(async (req, res) => {
   // Send response
   res.status(201).json({ message: "Lookup created" });
 });
+// View Lookups Attribute Groups
+module.exports.viewLookupsAttributeGroups = asyncHandler(async (req, res) => {
+  // Get attribute groups
+  const attributeGroups = await Lookup.find({
+    isAttributeGroup: true,
+  });
+  // Send response
+  res.json({ attributeGroups });
+});
 // View Lookups
 module.exports.viewLookups = asyncHandler(async (req, res) => {
   // Get parameters
-  const attribeGroup = req.query.attribeGroup || "";
+  //
   // Get lookups
-  const lookups = await Lookup.find({ attribeGroup });
+  const lookups = await Lookup.find();
   // Send response
   res.json({ lookups });
 });
