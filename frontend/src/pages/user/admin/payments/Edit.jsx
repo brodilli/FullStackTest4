@@ -37,7 +37,8 @@ export function PaymentMethodEdit() {
   const adminPaymentMethodUpdate = useSelector(
     (state) => state.adminPaymentMethodUpdate
   );
-  const { error: errorUpdate, message: messageUpdate } = adminPaymentMethodUpdate;
+  const { error: errorUpdate, message: messageUpdate } =
+    adminPaymentMethodUpdate;
 
   const adminPaymentMethodDetails = useSelector(
     (state) => state.adminPaymentMethodDetails
@@ -63,10 +64,11 @@ export function PaymentMethodEdit() {
       dispatch(getLoginData());
     } else if (!paymentMethodDetails || paymentMethodDetails._id !== id) {
       dispatch(adminDetailsPaymentMethod(id));
-    } else {
+    }
+    if (paymentMethodDetails) {
       // Asegurar que los detalles del método de pago coincidan con el estado inicial
       setPaymentMethod({
-        tipo: paymentMethodDetails.type || "Cash",
+        tipo: paymentMethodDetails.tipo || "Cash",
         alias: paymentMethodDetails.alias || "",
         clabe: paymentMethodDetails.clabe || "",
         accountNumber: paymentMethodDetails.accountNumber || "",
@@ -133,8 +135,18 @@ export function PaymentMethodEdit() {
 
         {paymentMethod.tipo === "Transfer" && (
           <>
-            <Input title="Alias" name="alias" value={paymentMethod.alias} setValue={handleChange} />
-            <Input title="CLABE" name="clabe" value={paymentMethod.clabe} setValue={handleChange} />
+            <Input
+              title="Alias"
+              name="alias"
+              value={paymentMethod.alias}
+              setValue={handleChange}
+            />
+            <Input
+              title="CLABE"
+              name="clabe"
+              value={paymentMethod.clabe}
+              setValue={handleChange}
+            />
             <Input
               title="Número de Cuenta"
               name="accountNumber"
@@ -147,7 +159,12 @@ export function PaymentMethodEdit() {
               value={paymentMethod.holder}
               setValue={handleChange}
             />
-            <Input title="Banco" name="bank" value={paymentMethod.bank} setValue={handleChange} />
+            <Input
+              title="Banco"
+              name="bank"
+              value={paymentMethod.bank}
+              setValue={handleChange}
+            />
             <Input
               title="Prioridad"
               name="priority"
@@ -167,7 +184,12 @@ export function PaymentMethodEdit() {
 
         {paymentMethod.tipo === "Credit Card" && (
           <>
-            <Input title="Alias" name="alias" value={paymentMethod.alias} setValue={handleChange} />
+            <Input
+              title="Alias"
+              name="alias"
+              value={paymentMethod.alias}
+              setValue={handleChange}
+            />
             <Input
               title="Número de Cuenta"
               name="accountNumber"
@@ -180,7 +202,12 @@ export function PaymentMethodEdit() {
               value={paymentMethod.holder}
               setValue={handleChange}
             />
-            <Input title="Banco" name="bank" value={paymentMethod.bank} setValue={handleChange} />
+            <Input
+              title="Banco"
+              name="bank"
+              value={paymentMethod.bank}
+              setValue={handleChange}
+            />
             <Input
               title="Prioridad"
               name="priority"

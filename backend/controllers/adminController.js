@@ -7,22 +7,19 @@ const PaymentMethod = require("../models/paymentMethodModel");
 const { cloudinary } = require("../cloudinary");
 const { unlink } = require("node:fs/promises");
 
-
-
 //PAYMENT METHOD
 //PAYMENT METHOD CRUD
 module.exports.createPaymentMethod = asyncHandler(async (req, res) => {
   console.log("Creating Payment Method");
   const data = req.body;
- 
+
   const currentUser = await User.findById(req.user._id);
   data.user = currentUser;
 
   const paymentMethod = new PaymentMethod(data);
   await paymentMethod.save();
   res.status(201).json({ message: "Payment Method created" });
-}
-);
+});
 module.exports.deletePaymentMethod = asyncHandler(async (req, res) => {
   const paymentMethod = await PaymentMethod.findById(req.params.id);
   paymentMethod.deleted = true;
@@ -31,7 +28,10 @@ module.exports.deletePaymentMethod = asyncHandler(async (req, res) => {
 });
 module.exports.editPaymentMethod = asyncHandler(async (req, res) => {
   const data = req.body.paymentMethod;
-  const paymentMethod = await PaymentMethod.findByIdAndUpdate({ _id: req.params.id }, data);
+  const paymentMethod = await PaymentMethod.findByIdAndUpdate(
+    { _id: req.params.id },
+    data
+  );
   await paymentMethod.save();
   res.status(201).json(paymentMethod);
 });
@@ -82,7 +82,7 @@ module.exports.viewPaymentMethods = asyncHandler(async (req, res) => {
 module.exports.viewPaymentMethod = asyncHandler(async (req, res) => {
   const paymentMethod = await PaymentMethod.findById(req.params.id);
   if (paymentMethod) {
-    res.json(paymentMethod);
+    res.json({ paymentMethod });
   } else {
     res.status(404);
     throw new Error("Payment Method not found");
