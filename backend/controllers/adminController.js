@@ -1,7 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const dotenv = require("dotenv");
 const User = require("../models/userModel");
-const Lookup = require("../models/lookupModel");
 const Product = require("../models/productModel");
 
 const { cloudinary } = require("../cloudinary");
@@ -151,11 +150,13 @@ module.exports.viewBrands = asyncHandler(async (req, res) => {
 /* -------------------------- PRODUCT CRUD ---------------------------- */
 // --------------- Create Product ---------------
 module.exports.createProduct = asyncHandler(async (req, res) => {
+  // Get the data from the request body
   const data = JSON.parse(req.body.product);
-
-  //  product
+  // Create a new product
   const newProduct = new Product(data);
+  // Find the current user
   const currentUser = await User.findById(req.user._id);
+  // Assign the current user as the creator of the product
   newProduct.user = currentUser;
   if (req.files?.length >= 1) {
     for (const file of req.files) {
@@ -167,7 +168,7 @@ module.exports.createProduct = asyncHandler(async (req, res) => {
           url: imageProduct.secure_url,
           filename: imageProduct.public_id,
         };
-        newProduct.images.push(uploadImage);
+        newProduct.image = uploadImage;
       }
       try {
         await unlink(file.path);
@@ -202,8 +203,7 @@ module.exports.editProduct = asyncHandler(async (req, res) => {
           url: imageProduct.secure_url,
           filename: imageProduct.public_id,
         };
-        product.images = [];
-        product.images.push(uploadImage);
+        product.image = uploadImage;
       }
       try {
         await unlink(file.path);
@@ -248,8 +248,6 @@ module.exports.viewProducts = asyncHandler(async (req, res) => {
     ...keyword,
   })
     .sort(sortCondition)
-    .populate("category") // Poblamos la categoría
-    .populate("brand") // Poblamos la marca
     .limit(pageSize)
     .skip(pageSize * (page - 1));
 
@@ -271,66 +269,3 @@ module.exports.viewProduct = asyncHandler(async (req, res) => {
   }
 });
 /* -------------------------- END PRODUCT CRUD ---------------------------- */
-
-/* -------------------------- START LOOKUP CRUD ---------------------------- */
-// Create Lookup
-module.exports.createLookup = asyncHandler(async (req, res) => {
-  // Get current user
-  const currentUser = await User.findById(req.user._id);
-  // Get data from request body
-  const data = req.body.lookup;
-  // Create new lookup
-  const lookup = new Lookup(data);
-  // Assign current user to lookup
-  lookup.user = currentUser;
-  // Save lookup
-  await lookup.save();
-  // Send response
-  res.status(201).json({ message: "Lookup created" });
-});
-// View Lookups Attribute Groups
-module.exports.viewLookupsAttributeGroups = asyncHandler(async (req, res) => {
-  // Get attribute groups
-  const attributeGroups = await Lookup.find({
-    isAttributeGroup: true,
-  });
-  // Send response
-  res.json({ attributeGroups });
-});
-// View Lookups
-module.exports.viewLookups = asyncHandler(async (req, res) => {
-  // Get parameters
-  //
-  // Get lookups
-  const lookups = await Lookup.find();
-  // Send response
-  res.json({ lookups });
-});
-// Edit Lookup
-module.exports.editLookup = asyncHandler(async (req, res) => {
-  // Get data from request body
-  const data = req.body;
-  // Update lookup
-  const lookup = await Lookup.findOneAndUpdate({ _id: req.params.id }, data);
-  // Save lookup
-  await lookup.save();
-  // Send response
-  res.status(204).json({ message: "Lookup updated" });
-});
-// Delete Lookup
-module.exports.deleteLookup = asyncHandler(async (req, res) => {
-  // Get lookup
-  const lookup = await Lookup.findById(req.params.id);
-  // Delete lookup
-  await lookup.remove();
-  // Send response
-  res.json({ message: "Lookup deleted" });
-});
-// View Lookup
-module.exports.viewLookup = asyncHandler(async (req, res) => {
-  // Get lookup
-  const lookup = await Lookup.findById(req.params.id);
-  // Send response
-  res.json(lookup);
-});
-/* -------------------------- END LOOKUP CRUD ---------------------------- */

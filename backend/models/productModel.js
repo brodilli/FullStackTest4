@@ -1,3 +1,4 @@
+const { type } = require("express/lib/response");
 const mongoose = require("mongoose");
 
 const productSchema = mongoose.Schema(
@@ -11,55 +12,74 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    images: [
-      {
-        url: {
-          type: String,
-        },
-        filename: {
-          type: String,
-        },
+    image: {
+      url: {
+        type: String,
       },
-    ],
-    brand: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "Brand",
+      filename: {
+        type: String,
+      },
     },
-    model: {
+    type: {
+      type: String,
+      enum: ["Tubo", "Varilla"],
+      default: "Tubo",
+      required: true,
+    },
+    appearance: {
+      type: String,
+      enum: ["Color", "Transparente"],
+      default: "Color",
+      required: true,
+    },
+    categoy: {
+      type: String,
+      enum: ["Economico", "Premiun"],
+      default: "Economico",
+      required: true,
+    },
+    diameter: {
+      type: Number,
+      required: true,
+    },
+    thickness: {
+      type: Number,
+      required: true,
+    },
+    length: {
+      type: Number,
+      required: true,
+      default: 1.5,
+    },
+    initialQuantity: {
+      type: Number,
+      required: true,
+    },
+    piecesPerBox: {
+      type: Number,
+      required: true,
+    },
+    weightPerBox: {
+      type: Number,
+      required: true,
+    },
+    tubeQuantityPerBox: {
+      type: Number,
+      required: true,
+    },
+    minimumQuantity: {
+      type: Number,
+      required: true,
+    },
+    unitOfMeasure: {
+      type: String,
+      enum: ["Kg", "Pieza"],
+      required: true,
+      default: "Pieza",
+    },
+    code: {
       type: String,
       required: true,
-    },
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "Category",
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    discount: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    countInStock: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    taxesIncluded: {
-      type: Boolean,
-    },
-
-    onSale: {
-      type: Boolean,
     },
     deleted: {
       type: Boolean,
