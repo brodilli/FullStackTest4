@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { adminDetailsUser, adminUpdateUser } from "../../../../actions/userActions";
+import {
+  adminDetailsUser,
+  adminUpdateUser,
+} from "../../../../actions/userActions";
 import { getLoginData } from "../../../../actions/userActions";
 
 import { Input, CheckBox } from "../../../../components/elements/Inputs";
@@ -18,6 +21,8 @@ export function UserEdit() {
     phone: "",
     tradename: "",
     userType: "",
+    paymentMethods: [],
+    priceList: "",
     shippingAddress: {
       street: "",
       number: "",
@@ -54,10 +59,18 @@ export function UserEdit() {
   const dispatch = useDispatch();
 
   const adminUserDetails = useSelector((state) => state.adminUserDetails);
-  const { loading: loadingDetails, error: errorDetails, userDetails } = adminUserDetails;
+  const {
+    loading: loadingDetails,
+    error: errorDetails,
+    userDetails,
+  } = adminUserDetails;
 
   const adminUserUpdate = useSelector((state) => state.adminUserUpdate);
-  const { loading: loadingUpdate, error: errorUpdate, messageUpdate } = adminUserUpdate;
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    messageUpdate,
+  } = adminUserUpdate;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -105,11 +118,17 @@ export function UserEdit() {
         phone: userDetails.phone || "",
         tradename: userDetails.tradename || "",
         userType: userDetails.userType || "Client",
+        paymentMethods: userDetails.paymentMethods || [],
+        priceList: userDetails.priceList || "",
         shippingAddress: userDetails.shippingAddress || {},
         requiresInvoice: userDetails.requiresInvoice || false,
         useShippingAsBilling: userDetails.useShippingAsBilling || true,
         billing: userDetails.billing || {},
-        credit: userDetails.credit || { enabled: false, creditLimit: "", creditUsed: "" },
+        credit: userDetails.credit || {
+          enabled: false,
+          creditLimit: "",
+          creditUsed: "",
+        },
       });
     }
   }, [dispatch, id, userDetails, messageUpdate]);
@@ -131,16 +150,52 @@ export function UserEdit() {
         >
           {/* Información General */}
           <div className="flex flex-col gap-3">
-            <Typography className="text-lg font-semibold">Información General</Typography>
-            <Input title="Nombre" name="name" value={user.name} setValue={handleChange} />
-            <Input title="Apellido" name="lastName" value={user.lastName} setValue={handleChange} />
-            <Input title="Correo Electrónico" name="email" value={user.email} setValue={handleChange} />
-            <PhoneInput country="mx" value={user.phone} onChange={(value) => setUser((prev) => ({ ...prev, phone: value }))} inputStyle={{ width: "100%" }} />
-            <Input title="Alias" name="tradename" value={user.tradename} setValue={handleChange} />
+            <Typography className="text-lg font-semibold">
+              Información General
+            </Typography>
+            <Input
+              title="Nombre"
+              name="name"
+              value={user.name}
+              setValue={handleChange}
+            />
+            <Input
+              title="Apellido"
+              name="lastName"
+              value={user.lastName}
+              setValue={handleChange}
+            />
+            <Input
+              title="Correo Electrónico"
+              name="email"
+              value={user.email}
+              setValue={handleChange}
+            />
+            <PhoneInput
+              country="mx"
+              value={user.phone}
+              onChange={(value) =>
+                setUser((prev) => ({ ...prev, phone: value }))
+              }
+              inputStyle={{ width: "100%" }}
+            />
+            <Input
+              title="Alias"
+              name="tradename"
+              value={user.tradename}
+              setValue={handleChange}
+            />
 
             <div>
-              <label className="text-sm font-medium text-gray-700">Tipo de Usuario</label>
-              <select name="userType" value={user.userType} onChange={handleChange} className="w-full p-2 rounded-md">
+              <label className="text-sm font-medium text-gray-700">
+                Tipo de Usuario
+              </label>
+              <select
+                name="userType"
+                value={user.userType}
+                onChange={handleChange}
+                className="w-full rounded-md p-2"
+              >
                 <option value="Client">Cliente</option>
                 <option value="Admin">Administrador</option>
                 <option value="Supplier">Proveedor</option>
@@ -148,42 +203,149 @@ export function UserEdit() {
             </div>
           </div>
 
-          {/* Dirección de Envío */}
-          <div className="flex flex-col gap-3">
-            <Typography className="text-lg font-semibold">Dirección de Envío</Typography>
-            <Input title="Calle" value={user.shippingAddress.street} setValue={(e) => handleNestedChange(e, "shippingAddress", "street")} />
-            <Input title="Número" value={user.shippingAddress.number} setValue={(e) => handleNestedChange(e, "shippingAddress", "number")} />
-            <Input title="Colonia" value={user.shippingAddress.neighborhood} setValue={(e) => handleNestedChange(e, "shippingAddress", "neighborhood")} />
-            <Input title="Código Postal" value={user.shippingAddress.postalCode} setValue={(e) => handleNestedChange(e, "shippingAddress", "postalCode")} />
-          </div>
+          {/* Mostrar Dirección de Envío y Facturación solo si no es un "Supplier" */}
+          {user.userType !== "Supplier" && (
+            <>
+              {/* Dirección de Envío */}
+              <div className="flex flex-col gap-3">
+                <Typography className="text-lg font-semibold">
+                  Dirección de Envío
+                </Typography>
+                <Input
+                  title="Calle"
+                  value={user.shippingAddress.street}
+                  setValue={(e) =>
+                    handleNestedChange(e, "shippingAddress", "street")
+                  }
+                />
+                <Input
+                  title="Número"
+                  value={user.shippingAddress.number}
+                  setValue={(e) =>
+                    handleNestedChange(e, "shippingAddress", "number")
+                  }
+                />
+                <Input
+                  title="Colonia"
+                  value={user.shippingAddress.neighborhood}
+                  setValue={(e) =>
+                    handleNestedChange(e, "shippingAddress", "neighborhood")
+                  }
+                />
+                <Input
+                  title="Código Postal"
+                  value={user.shippingAddress.postalCode}
+                  setValue={(e) =>
+                    handleNestedChange(e, "shippingAddress", "postalCode")
+                  }
+                />
+              </div>
 
-          {/* Facturación */}
-          <div className="flex flex-col gap-3">
-            <Typography className="text-lg font-semibold">Facturación</Typography>
-            <CheckBox title="¿Requiere Factura?" name="requiresInvoice" value={user.requiresInvoice} setValue={handleCheckboxChange} />
-            <CheckBox title="Usar la misma dirección de envío" checked={user.useShippingAsBilling} setValue={(e) => toggleBillingAddress(e.target.checked)} />
-            {!user.useShippingAsBilling && user.requiresInvoice && (
-              <>
-                <Input title="RFC" value={user.billing.taxId} setValue={(e) => handleNestedChange(e, "billing", "taxId")} />
-                <Input title="Razón Social" value={user.billing.businessName} setValue={(e) => handleNestedChange(e, "billing", "businessName")} />
-              </>
-            )}
-          </div>
+              {/* Facturación */}
+              <div className="flex flex-col gap-3">
+                <Typography className="text-lg font-semibold">
+                  Facturación
+                </Typography>
+                <CheckBox
+                  title="¿Requiere Factura?"
+                  name="requiresInvoice"
+                  value={user.requiresInvoice}
+                  setValue={handleCheckboxChange}
+                />
+                <CheckBox
+                  title="Usar la misma dirección de envío"
+                  checked={user.useShippingAsBilling}
+                  setValue={(e) => toggleBillingAddress(e.target.checked)}
+                />
+                {!user.useShippingAsBilling && user.requiresInvoice && (
+                  <>
+                    <Input
+                      title="RFC"
+                      value={user.billing.taxId}
+                      setValue={(e) =>
+                        handleNestedChange(e, "billing", "taxId")
+                      }
+                    />
+                    <Input
+                      title="Razón Social"
+                      value={user.billing.businessName}
+                      setValue={(e) =>
+                        handleNestedChange(e, "billing", "businessName")
+                      }
+                    />
+                  </>
+                )}
+              </div>
+            </>
+          )}
+
+          {/* Métodos de Pago y Lista de Precios para Clientes */}
+          {user.userType === "Client" && (
+            <>
+              <div className="flex flex-col gap-3">
+                <Typography className="text-lg font-semibold">
+                  Métodos de Pago
+                </Typography>
+                <Input
+                  title="Métodos de Pago"
+                  name="paymentMethods"
+                  value={user.paymentMethods}
+                  setValue={handleChange}
+                  placeholder="Seleccionar métodos"
+                />
+              </div>
+              <div className="flex flex-col gap-3">
+                <Typography className="text-lg font-semibold">
+                  Lista de Precios
+                </Typography>
+                <select
+                  name="priceList"
+                  value={user.priceList}
+                  onChange={handleChange}
+                  className="w-full rounded-md p-2"
+                >
+                  <option value="">Seleccionar Lista de Precios</option>
+                  <option value="list1">Lista 1</option>
+                  <option value="list2">Lista 2</option>
+                </select>
+              </div>
+            </>
+          )}
 
           {/* Crédito */}
           <div>
             <Typography className="text-lg font-semibold">Crédito</Typography>
-            <CheckBox title="Habilitar Crédito" name="credit.enabled" value={user.credit.enabled} setValue={handleCheckboxChange} />
+            <CheckBox
+              title="Habilitar Crédito"
+              name="credit.enabled"
+              value={user.credit.enabled}
+              setValue={handleCheckboxChange}
+            />
             {user.credit.enabled && (
               <>
-                <Input title="Límite de Crédito" value={user.credit.creditLimit} setValue={(e) => handleNestedChange(e, "credit", "creditLimit")} />
-                <Input title="Crédito Usado" value={user.credit.creditUsed} setValue={(e) => handleNestedChange(e, "credit", "creditUsed")} />
+                <Input
+                  title="Límite de Crédito"
+                  value={user.credit.creditLimit}
+                  setValue={(e) =>
+                    handleNestedChange(e, "credit", "creditLimit")
+                  }
+                />
+                <Input
+                  title="Crédito Usado"
+                  value={user.credit.creditUsed}
+                  setValue={(e) =>
+                    handleNestedChange(e, "credit", "creditUsed")
+                  }
+                />
               </>
             )}
           </div>
 
           <div className="col-span-full flex justify-center">
-            <Button type="submit" className="bg-blue-500 text-white rounded-md p-2">
+            <Button
+              type="submit"
+              className="rounded-md bg-blue-500 p-2 text-white"
+            >
               {loadingUpdate ? "Actualizando..." : "Actualizar"}
             </Button>
           </div>

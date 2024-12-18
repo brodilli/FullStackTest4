@@ -5,12 +5,18 @@ const User = require("../models/userModel");
 dotenv.config();
 
 module.exports.getUser = asyncHandler(async (req, res) => {
-
-  const user = await User.findById(req.params.id);
-  if (user) {
-    res.json(user);
-  } else {
-    res.status(404).json({ message: "User not found" });
+  try {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 });
 
@@ -92,5 +98,57 @@ module.exports.inviteResponse = asyncHandler(async (req, res) => {
   } catch (error) {
     // Handle other potential errors, e.g., database errors
     res.status(500).json({ message: "Internal server error" });
+  }
+});
+module.exports.createUser = asyncHandler(async (req, res) => {
+  try {
+    const {
+      email,
+      username,
+      password,
+      name,
+      lastName,
+      userType,
+      phone,
+      billing,
+      shippingAddress,
+    } = req.body;
+
+    // Validación de campos obligatorios
+    if (!email || !username || !password || !name || !lastName || !userType) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // Verificar si el usuario ya existe
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res
+        .status(400)
+        .json({ message: "User already exists with this email" });
+    }
+
+    // Crear el nuevo usuario
+    const newUser = new User({
+      email,
+      username,
+      password, // Si estás usando passport-local, el password se hashará automáticamente
+      name,
+      lastName,
+      userType,
+      phone,
+      billing,
+      shippingAddress,
+    });
+
+    // Guardar el usuario en la base de datos
+    const createdUser = await newUser.save();
+    res
+      .status(201)
+      .json({ message: "User created successfully", user: createdUser });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 });

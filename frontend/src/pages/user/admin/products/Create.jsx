@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
+import { useCallback } from "react";
 import { getLoginData } from "../../../../actions/userActions";
 import { Input, InputFile } from "../../../../components/elements/Inputs";
 import Alert from "../../../../components/alerts/Alert";
@@ -18,6 +18,7 @@ export function ProductCreate() {
     name: "",
     type: "Tubo", // Default enum value
     appearance: "Color", // Default enum value
+    color: "", // Default enum value
     category: "Economico", // Default enum value
     diameter: 0,
     thickness: 0,
@@ -32,6 +33,23 @@ export function ProductCreate() {
     taxesIncluded: false,
     onSale: false,
     image: null, // For the product image file
+  });
+  // Función para generar un código compuesto
+  const generateProductCode = useCallback(() => {
+    const {
+      name,
+      type,
+      appearance,
+      color,
+      category,
+      diameter,
+      thickness,
+      length,
+      unitOfMeasure,
+    } = product;
+    const categoryPrefix = category.slice(0, 3); // Obtiene los primeros 3 caracteres de 'category'
+    const code = `${type[0]}${appearance[0]}${color}${categoryPrefix}${diameter}X${thickness}`;
+    return code.toUpperCase(); // Convertir a mayúsculas si es necesario
   });
 
   const [selectedImages, setSelectedImages] = useState();
@@ -96,6 +114,25 @@ export function ProductCreate() {
     }
   }, [dispatch, userInfo, messageCreateProduct, navigate]);
 
+  useEffect(() => {
+    // Actualiza el código cuando los datos cambian
+    setProduct((prev) => ({
+      ...prev,
+      code: generateProductCode(),
+    }));
+  }, [
+    product.name,
+    product.type,
+    product.color,
+    product.appearance,
+    product.category,
+    product.diameter,
+    product.thickness,
+    product.length,
+    product.unitOfMeasure,
+    generateProductCode, // La función de generación de código
+  ]);
+
   return (
     <div className="bg-slate-50 p-4">
       {showErrorMessage && (
@@ -145,7 +182,14 @@ export function ProductCreate() {
               <select
                 name="appearance"
                 value={product.appearance}
-                onChange={handleChange}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setProduct((prev) => ({
+                    ...prev,
+                    appearance: value,
+                    color: value === "Transparente" ? "" : prev.color, // Si "Transparente", vaciar el color
+                  }));
+                }}
                 className="w-full rounded-md border p-2"
                 required
               >
@@ -153,6 +197,16 @@ export function ProductCreate() {
                 <option value="Transparente">Transparente</option>
               </select>
             </div>
+            {/* Show Color input if appearance is Color */}
+            {product.appearance === "Color" && (
+              <Input
+                title="Color"
+                name="color"
+                value={product.color}
+                setValue={handleChange}
+                required
+              />
+            )}
 
             {/* Select for Categoría */}
             <div>
@@ -269,6 +323,7 @@ export function ProductCreate() {
               value={product.code}
               setValue={handleChange}
               required
+              disabled={true}
             />
           </div>
         </div>
